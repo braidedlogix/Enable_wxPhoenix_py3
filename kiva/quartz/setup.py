@@ -29,12 +29,10 @@ def configuration(parent_package='', top_path=None):
                     cython_result.num_errors)
         return target
 
-    frameworks = ['CoreFoundation','ApplicationServices','Foundation']
+    frameworks = ['Cocoa', 'CoreFoundation', 'ApplicationServices',
+                  'Foundation']
     extra_link_args=['-framework %s' % x for x in frameworks]
-    include_dirs = [
-        '/System/Library/Frameworks/%s.framework/Versions/A/Headers' % x
-        for x in frameworks
-    ]
+    extra_compile_args=['-F %s' % x for x in frameworks]
 
     config.add_extension('ABCGI',
                          [generate_c_from_cython],
@@ -61,7 +59,7 @@ def configuration(parent_package='', top_path=None):
 
     config.add_extension("mac_context",
                          ["mac_context.c", "mac_context_cocoa.m"],
-                         include_dirs = include_dirs,
+                         extra_compile_args=extra_compile_args,
                          extra_link_args = extra_link_args,
                          depends = ["mac_context.h"],
                          )
