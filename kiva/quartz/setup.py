@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import os
-import platform
 import sys
+
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
@@ -26,42 +26,42 @@ def configuration(parent_package='', top_path=None):
             cython_result = Main.compile(source, options=options)
             if cython_result.num_errors != 0:
                 raise RuntimeError("%d errors in Cython compile" %
-                    cython_result.num_errors)
+                                   cython_result.num_errors)
         return target
 
     frameworks = ['Cocoa', 'CoreFoundation', 'ApplicationServices',
                   'Foundation']
-    extra_link_args=['-framework %s' % x for x in frameworks]
-    extra_compile_args=['-F %s' % x for x in frameworks]
+    extra_link_args = ['-framework %s' % x for x in frameworks]
+    extra_compile_args = ['-F %s' % x for x in frameworks]
 
     config.add_extension('ABCGI',
                          [generate_c_from_cython],
-                         extra_link_args = extra_link_args,
-                         depends = ["ABCGI.pyx",
-                                    "Python.pxi",
-                                    "numpy.pxi",
-                                    "c_numpy.pxd",
-                                    "CoreFoundation.pxi",
-                                    "CoreGraphics.pxi",
-                                    "CoreText.pxi",
-                                    ]
+                         extra_link_args=extra_link_args,
+                         depends=["ABCGI.pyx",
+                                  "Python.pxi",
+                                  "numpy.pxi",
+                                  "c_numpy.pxd",
+                                  "CoreFoundation.pxi",
+                                  "CoreGraphics.pxi",
+                                  "CoreText.pxi",
+                                  ]
                          )
 
     config.add_extension('CTFont',
                          [generate_c_from_cython],
-                         extra_link_args = extra_link_args,
+                         extra_link_args=extra_link_args,
                          depends=["CTFont.pyx",
                                   "CoreFoundation.pxi",
                                   "CoreGraphics.pxi",
                                   "CoreText.pxi",
                                   ],
-                        )
+                         )
 
     config.add_extension("mac_context",
                          ["mac_context.c", "mac_context_cocoa.m"],
                          extra_compile_args=extra_compile_args,
-                         extra_link_args = extra_link_args,
-                         depends = ["mac_context.h"],
+                         extra_link_args=extra_link_args,
+                         depends=["mac_context.h"],
                          )
 
     wx_info = get_info('wx')
@@ -79,21 +79,24 @@ def configuration(parent_package='', top_path=None):
 
             def get_macport_cpp(extension, build_dir):
                 if sys.platform != 'darwin':
-                    print 'No %s will be built for this platform.'%(extension.name)
+                    msg = 'No {0} will be built for this platform.'.format(
+                        extension.name
+                    )
+                    print msg
                     return None
-    
+
                 elif wx_release not in ('2.6', '2.8'):
                     print ('No %s will be built because we do not recognize '
                            'wx version %s' % (extension.name, wx_release))
                     return None
-    
+
                 return macport_cpp
-    
+
             info = {}
             dict_append(info, define_macros=[("__WXMAC__", 1)])
             dict_append(info, **wx_info)
             config.add_extension('macport', [get_macport_cpp],
-                                 depends = [macport_cpp],
+                                 depends=[macport_cpp],
                                  **wx_info
                                  )
     return config
