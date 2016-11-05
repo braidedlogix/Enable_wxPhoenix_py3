@@ -4,11 +4,10 @@
 from __future__ import absolute_import
 
 # Enthought library imports
-from traits.api import Array, Bool, Enum, Instance, Property, cached_property
+from traits.api import Array, Enum, Property, cached_property
 
 # Local imports
 from enable.component import Component
-from kiva.image import GraphicsContext
 
 
 class Image(Component):
@@ -23,7 +22,7 @@ class Image(Component):
     """
 
     #: the image data as an array
-    data = Array(shape=(None, None, (3,4)), dtype='uint8')
+    data = Array(shape=(None, None, (3, 4)), dtype='uint8')
 
     #: the format of the image data (eg. RGB vs. RGBA)
     format = Property(Enum('rgb24', 'rgba32'), depends_on='data')
@@ -31,8 +30,8 @@ class Image(Component):
     #: the size-hint for constraints-based layout
     layout_size_hint = Property(data, depends_on='data')
 
-    #: the image as an Image GC
-    _image = Property(Instance(GraphicsContext), depends_on='data')
+    #: the image as a C-contiguous ndarray
+    _image = Property(Array(shape=(None, None, None)), depends_on='data')
 
     @classmethod
     def from_file(cls, filename, **traits):
@@ -49,7 +48,8 @@ class Image(Component):
     def _draw_mainlayer(self, gc, view_bounds=None, mode="normal"):
         """ Draws the image. """
         with gc:
-            gc.draw_image(self._image, (self.x, self.y, self.width, self.height))
+            rect = (self.x, self.y, self.width, self.height)
+            gc.draw_image(self._image, rect)
 
     @cached_property
     def _get_format(self):
@@ -70,5 +70,4 @@ class Image(Component):
             data = self.data.copy()
         else:
             data = self.data
-        image_gc = GraphicsContext(data, pix_format=self.format)
-        return image_gc
+        return data
