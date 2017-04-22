@@ -5,7 +5,7 @@ The scrollbar uses images for the pieces of the scrollbar itself and stretches
 them appropriately in the draw phase.
 """
 
-from __future__ import with_statement
+
 
 # PZW: Define a scrollbar that uses the system/wx-native scrollbar instead
 # of drawing our own.
@@ -16,6 +16,7 @@ from traitsui.api import Group, View
 # Relative imports
 from .component import Component
 from .enable_traits import layout_style_trait
+from functools import reduce
 
 
 #------------------------------------------------------------------------------

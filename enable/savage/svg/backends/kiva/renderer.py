@@ -43,7 +43,16 @@ class CompiledPath(KivaCompiledPath):
             self.curve_to(x2,y2, x3,y3, x4,y4)
 
     def elliptical_arc_to(self, rx, ry, phi, large_arc_flag, sweep_flag, x2, y2):
-        x1, y1 = self.GetCurrentPoint()
+        if sys.platform == 'darwin':
+            x1, y1 = self.get_current_point()
+        else:
+            def _get_current_point(path):
+                total_vertices = path.total_vertices()
+                if total_vertices == 0:
+                    return (0.0, 0.0)
+                return path.vertex(total_vertices-1)[0]
+            x1, y1 = _get_current_point(self)
+
         arcs = svg_extras.elliptical_arc_to(self, rx, ry, phi,
                                             large_arc_flag, sweep_flag,
                                             x1, y1, x2, y2)
@@ -292,8 +301,8 @@ def font_style(font):
     elif font.style in [0, 'regular','normal']:
         style = 'regular'
     else:
-        print "Font style '%s' and weight: '%s' not known." \
-              " Using style='regular'" % (font.style, font.weight)
+        print("Font style '%s' and weight: '%s' not known." \
+              " Using style='regular'" % (font.style, font.weight))
         style = 'regular'
 
     return style
@@ -402,7 +411,7 @@ class Renderer(NullRenderer):
 
     @classmethod
     def setFontStyle(cls, font, style):
-        if isinstance(style, basestring):
+        if isinstance(style, str):
             if style not in fonttools.font.font_styles:
                 warnings.warn('font style "%s" not supported' % style)
             else:
@@ -412,7 +421,7 @@ class Renderer(NullRenderer):
 
     @classmethod
     def setFontWeight(cls, font, weight):
-        if isinstance(weight, basestring):
+        if isinstance(weight, str):
             if weight not in fonttools.font.font_weights:
                 warnings.warn('font weight "%s" not supported' % weight)
             else:

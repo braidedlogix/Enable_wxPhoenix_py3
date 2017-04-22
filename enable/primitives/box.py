@@ -1,7 +1,7 @@
 """ Define a simple filled box component.
 """
 
-from __future__ import with_statement
+
 
 # Parent package imports
 from enable.api import border_size_trait, Component, transparent_color

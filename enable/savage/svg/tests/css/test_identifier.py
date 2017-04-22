@@ -26,52 +26,52 @@ class TestHexUnicode(unittest.TestCase):
     parser = (identifier.hex_unicode.copy() + Regex(".+") + StringEnd()).leaveWhitespace()
     def testUnicodeConversion(self):
         self.assertEqual(
-            u"&",
+            "&",
             identifier.hex_unicode.parseString(r"\000026")[0]
         )
         self.assertEqual(
-            u"&",
+            "&",
             identifier.hex_unicode.parseString(r"\26")[0]
         )
     def testDoesntEatMoreThan6Chars(self):
         self.assertEqual(
-            [u"&", "B"],
+            ["&", "B"],
             list(self.parser.parseString(r"\000026B"))
         )
     def testConsumesFinalSpaceWith6Chars(self):
         self.assertEqual(
-            [u"&", "B"],
+            ["&", "B"],
             list(self.parser.parseString(r"\000026 B"))
         )
     def testConsumesFinalSpaceWithShortChars(self):
         self.assertEqual(
-            [u"&", "B"],
+            ["&", "B"],
             list(self.parser.parseString(r"\26 B"))
         )
     def testDoesntConsumeMoreThanOneSpace(self):
         self.assertEqual(
-            [u"&", "  B"],
+            ["&", "  B"],
             list(self.parser.parseString(r"\26   B"))
         )
 
 
 class TestEscape(unittest.TestCase):
     def testEscapeValues(self):
-        self.assertEqual(u"&", identifier.escape.parseString(r"\26")[0])
-        self.assertEqual(u'\x81', identifier.escape.parseString("\\" + unichr(129))[0])
-        self.assertEqual(u"~", identifier.escape.parseString(r'\~')[0])
+        self.assertEqual("&", identifier.escape.parseString(r"\26")[0])
+        self.assertEqual('\x81', identifier.escape.parseString("\\" + chr(129))[0])
+        self.assertEqual("~", identifier.escape.parseString(r'\~')[0])
 
 
 class TestNonAscii(unittest.TestCase):
     def testNoMatchInAsciiRange(self):
-        for c in map(unichr, range(128)):
+        for c in map(chr, list(range(128))):
             self.assertRaises(
                 ParseException,
                 identifier.nonascii.parseString, c
             )
 
     def testMatchesOutsideAsciiRange(self):
-        for c in map(unichr, xrange(128, sys.maxunicode+1)):
+        for c in map(chr, range(128, sys.maxunicode+1)):
             self.assertEqual(
                 c,
                 identifier.nonascii.parseString(c)[0]

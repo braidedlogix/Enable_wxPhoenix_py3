@@ -1,5 +1,5 @@
 
-from __future__ import with_statement
+
 
 # Library imports
 
@@ -9,7 +9,7 @@ from enable.font_metrics_provider import font_metrics_provider
 from traits.api import Enum, Bool, Float, Int, Type, List
 
 # Local imports
-from toolbar_buttons import Button
+from .toolbar_buttons import Button
 
 class ViewportToolbar(Container, AbstractOverlay):
     """

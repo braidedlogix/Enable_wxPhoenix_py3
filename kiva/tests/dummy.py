@@ -1,4 +1,4 @@
-from __future__ import with_statement
+
 
 from enable.kiva_graphics_context import GraphicsContext
 from kiva import affine
@@ -241,7 +241,7 @@ if __name__ == "__main__":
     )
     gcs = { 'eps': ps.PSGC, 'svg': svg.GraphicsContext }
 
-    for fmt, gc in gcs.iteritems():
+    for fmt, gc in gcs.items():
         for test_func in tests:
             context = gc((800, 600))
             test_func(context)

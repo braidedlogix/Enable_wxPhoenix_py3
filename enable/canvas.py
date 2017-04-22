@@ -1,6 +1,6 @@
 """ Defines the enable Canvas class """
 
-from __future__ import with_statement
+
 
 # Enthought library imports
 from traits.api import Bool, Trait, Tuple, List
@@ -81,7 +81,7 @@ class Canvas(Container):
                 component.container = None
                 self._components.remove(component)
             else:
-                raise RuntimeError, "Unable to remove component from container."
+                raise RuntimeError("Unable to remove component from container.")
 
             # Check to see if we need to compact.
             x, y, x2, y2 = self._bounding_box

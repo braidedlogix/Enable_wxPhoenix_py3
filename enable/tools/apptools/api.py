@@ -20,7 +20,7 @@ of the Enable codebase as a whole.
 
 """
 
-from __future__ import absolute_import
+
 
 # Support for Undo/Redo with Enable
 from .commands import ComponentCommand, MoveCommand, ResizeCommand

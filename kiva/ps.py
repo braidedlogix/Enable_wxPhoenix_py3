@@ -24,11 +24,11 @@ from numpy import arange, ravel, array
 import warnings
 
 # Local, relative Kiva imports
-import affine
-import basecore2d
-import constants
-from constants import *
-import agg
+from . import affine
+from . import basecore2d
+from . import constants
+from .constants import *
+from . import agg
 
 # This backend does not have compiled paths, yet.
 CompiledPath = None
@@ -47,15 +47,15 @@ try:
 except ImportError:
     class FakeLogger:
         def debug(self, message):
-            print >> sys.stderr, "DEBUG:", message
+            print("DEBUG:", message, file=sys.stderr)
         def info(self, message):
-            print >> sys.stderr, "INFO:", message
+            print("INFO:", message, file=sys.stderr)
         def warn(self, message):
-            print >> sys.stderr, "WARN:", message
+            print("WARN:", message, file=sys.stderr)
         def error(self, message):
-            print >> sys.stderr, "ERROR:", message
+            print("ERROR:", message, file=sys.stderr)
         def critical(self, message):
-            print >> sys.stderr, "CRITICAL:", message
+            print("CRITICAL:", message, file=sys.stderr)
     log = FakeLogger()
 
 def _strpoints(points):
@@ -65,12 +65,12 @@ def _strpoints(points):
     return c.getvalue()
 
 def _mkstyle(kw):
-    return '"' + '; '.join([str(k) + ':' + str(v) for k,v in kw.items()]) +'"'
+    return '"' + '; '.join([str(k) + ':' + str(v) for k,v in list(kw.items())]) +'"'
 
 
 def default_filter(kw1):
     kw = {}
-    for (k,v) in kw1.items():
+    for (k,v) in list(kw1.items()):
         if type(v) == type(()):
             if v[0] != v[1]:
                 kw[k] = v[0]
@@ -92,7 +92,7 @@ line_join_map = {
 
 font_map = {'Arial': 'Helvetica'}
 
-import _fontdata
+from . import _fontdata
 
 font_map = {'Arial': 'Helvetica'}
 try:
@@ -102,8 +102,8 @@ try:
     _reportlab_loaded = 1
 except ImportError:
     # we support the basic 14
-    import pdfmetrics
-    import _fontdata
+    from . import pdfmetrics
+    from . import _fontdata
     _reportlab_loaded = 0
 
 font_face_map = {'Arial': 'Helvetica', '': 'Helvetica'}
@@ -148,7 +148,7 @@ class PSGC(basecore2d.GraphicsContextBase):
             f.write("%!PS-Adobe-2.0\n")
             f.write(self.contents.getvalue())
         else:
-            raise ValueError, "don't know how to write a %s file" % ext
+            raise ValueError("don't know how to write a %s file" % ext)
 
     # Text handling code
 

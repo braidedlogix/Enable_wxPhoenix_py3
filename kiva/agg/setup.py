@@ -84,6 +84,7 @@ def configuration(parent_package='', top_path=None):
         #plat = 'gtk1'  # use with gtk1, it's fast
         plat = 'x11'  # use with gtk2, it's slow but reliable
         #plat = 'gdkpixbuf2'
+        #plat='gl'
 
 
     #-------------------------------------------------------------------------
@@ -250,8 +251,9 @@ def configuration(parent_package='', top_path=None):
         if sys.platform == 'darwin':
             dict_append(plat_info, **darwin_opengl_opts)
         else:
-            msg = "OpenGL build support only on MacOSX right now."
-            raise NotImplementedError(msg)
+            pass
+            #msg = "OpenGL build support only on MacOSX right now."
+            #raise NotImplementedError(msg)
 
 
     config.add_extension('_plat_support',

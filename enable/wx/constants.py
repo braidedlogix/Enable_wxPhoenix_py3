@@ -9,7 +9,7 @@
 # Thanks for using Enthought open source!
 #------------------------------------------------------------------------------
 
-from __future__ import absolute_import
+
 
 import warnings
 import wx
@@ -61,9 +61,12 @@ pointer_shapes = [
 if len(pointer_names) != len(pointer_shapes):
     warnings.warn("The WX toolkit backend pointer map is out of sync!")
 
-POINTER_MAP = dict(zip(pointer_names, pointer_shapes))
+POINTER_MAP = dict(list(zip(pointer_names, pointer_shapes)))
 
 # Map from wxPython special key names into Enable key names:
+
+
+
 key_symbols = [
     wx.WXK_ADD,
     wx.WXK_BACK,
@@ -121,8 +124,8 @@ key_symbols = [
     wx.WXK_NUMPAD7,
     wx.WXK_NUMPAD8,
     wx.WXK_NUMPAD9,
-    wx.WXK_NEXT,
-    wx.WXK_PRIOR,
+    wx.WXK_PAGEUP,	 
+    wx.WXK_PAGEDOWN,
     wx.WXK_PAUSE,
     wx.WXK_PRINT,
     wx.WXK_RIGHT,
@@ -140,4 +143,4 @@ key_symbols = [
 if len(key_symbols) != len(key_names):
     warnings.warn("The WX toolkit backend keymap is out of sync!")
 
-KEY_MAP = dict(zip(key_symbols, key_names))
+KEY_MAP = dict(list(zip(key_symbols, key_names)))

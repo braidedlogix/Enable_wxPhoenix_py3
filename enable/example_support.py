@@ -2,7 +2,7 @@
 Support class that wraps up the boilerplate toolkit calls that virtually all
 demo programs have to use.
 """
-from __future__ import absolute_import
+
 from traits.etsconfig.api import ETSConfig
 
 
@@ -14,7 +14,7 @@ from traits.etsconfig.api import ETSConfig
 if not ETSConfig.toolkit:
     for toolkit, toolkit_module in (('wx', 'wx'), ('qt4', 'PyQt4')):
         try:
-            exec "import " + toolkit_module
+            exec("import " + toolkit_module)
             ETSConfig.toolkit = toolkit
             break
         except ImportError:
@@ -37,7 +37,7 @@ if ETSConfig.toolkit == 'wx':
             self.enable_win = self._create_window()
 
             # Listen for the Activate event so we can restore keyboard focus.
-            wx.EVT_ACTIVATE( self, self._on_activate )
+            self.Bind( wx.EVT_ACTIVATE, self._on_activate )
 
             sizer = wx.BoxSizer(wx.HORIZONTAL)
             sizer.Add(self.enable_win.control, 1, wx.EXPAND)

@@ -3,7 +3,7 @@ Defines the Kiva Font class and a utility method to parse free-form font
 specification strings into Font instances.
 """
 
-from __future__ import absolute_import, print_function
+
 
 import copy
 from kiva.constants import (DEFAULT, DECORATIVE, ROMAN, SCRIPT, SWISS, MODERN,
@@ -82,13 +82,13 @@ class Font(object):
                  style=NORMAL, underline=0, encoding=DEFAULT):
         if (type(size) != int) or (type(family) != type(SWISS)) or \
             (type(weight) != type(NORMAL)) or (type(style) != type(NORMAL)) or \
-            (type(underline) != int) or (not isinstance(face_name, basestring)) or \
+            (type(underline) != int) or (not isinstance(face_name, str)) or \
             (type(encoding) != type(DEFAULT)):
                 raise RuntimeError("Bad value in Font() constructor.")
         ### HACK:  C++ stuff expects a string (not unicode) for the face_name, so fix
         ###        if needed.  See ticket #2111 in the CP Trac.
         ### Only for python < 3
-        if '' == b'' and isinstance(face_name, unicode):
+        if '' == b'' and isinstance(face_name, str):
             face_name = face_name.encode("latin1")
         self.size = size
         self.family = family

@@ -204,7 +204,7 @@ class SillyStatsWrapper(object):
             self.stats = {}
         elif isinstance(obj, dict):
             self.stats = obj
-        elif isinstance(obj, basestring):
+        elif isinstance(obj, str):
             # Load from a file.
             self.stats = pstats.Stats(obj)
         elif hasattr(obj, 'stats'):
@@ -304,9 +304,9 @@ class Sike(HasTraits):
         """
         records = []
         for file_line_name, (ncalls, nonrec_calls, inline_time, cum_time,
-            calls) in stats.items():
+            calls) in list(stats.items()):
             newcalls = []
-            for sub_file_line_name, sub_call in calls.items():
+            for sub_file_line_name, sub_call in list(calls.items()):
                 newcalls.append(Subrecord((sub_file_line_name,) + sub_call))
             records.append(Record((file_line_name, ncalls, nonrec_calls,
                 inline_time, cum_time, newcalls)))

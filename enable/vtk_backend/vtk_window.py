@@ -290,11 +290,11 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
                 return self._pass_event_to_vtk(vtk_obj, eventname)
 
         if event_type == 'character':
-            key = unicode(self.control.key_sym)
+            key = str(self.control.key_sym)
         else:
             key = KEY_MAP.get(self.control.key_sym, None)
             if key is None:
-                key = unicode(self.control.key_sym)
+                key = str(self.control.key_sym)
             if not key:
                 return
 
@@ -415,7 +415,7 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
         if self._vtk_image_data is None or any(self._vtk_image_data.dimensions != imagedata_dimensions):
             sz = (width, height, 4)
             img = tvtk.ImageData()
-            img.whole_extent = (0, width-1, 0, height-1, 0, 0)
+            img.extent = (0, width-1, 0, height-1, 0, 0)
             # note the transposed height and width for VTK (row, column, depth)
             img.dimensions = imagedata_dimensions
             # create a 2d view of the array.  This is a bit superfluous because
@@ -467,7 +467,7 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
         try:
             ary = ascontiguousarray(self._gc.bmp_array[::-1, :, :4])
             ary_2d = reshape(ary, (width * height, 4))
-        except Exception, e:
+        except Exception as e:
             warnings.warn("Error reshaping array of shape %s to width and height of (%d, %d)" % (str(ary.shape), width, height))
             return
 
@@ -522,7 +522,7 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
         else:
             # assume padding is some sort of array type
             if len(val) != 4:
-                raise RuntimeError, "Padding must be a 4-element sequence type or an int.  Instead, got" + str(val)
+                raise RuntimeError("Padding must be a 4-element sequence type or an int.  Instead, got" + str(val))
             self.padding_left = val[0]
             self.padding_right = val[1]
             self.padding_top = val[2]

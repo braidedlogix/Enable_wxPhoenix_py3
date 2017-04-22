@@ -220,9 +220,9 @@ class test_interpolation_image(unittest.TestCase):
         desired = solid_bgra32(size,self.color)
         img = agg.GraphicsContextArray(desired, pix_format="bgra32",
                                        interpolation=scheme)
-        print(
+        print((
             "{!r} interpolation, ".format(scheme),
-            bench(lambda: gc.draw_image(img)))
+            bench(lambda: gc.draw_image(img))))
 
     def test_simple_timing(self):
         scheme = "nearest"

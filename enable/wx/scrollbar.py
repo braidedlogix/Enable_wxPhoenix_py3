@@ -173,11 +173,11 @@ class NativeScrollBar(Component):
             wxstyle = wx.VERTICAL
         self._control = wx.ScrollBar(window.control, style=wxstyle)
         self._control.SetScrollbar(wxpos, wxthumbsize, wxrange, wxthumbsize, True)
-        wx.EVT_SCROLL(self._control, self._wx_scroll_handler)
-        wx.EVT_SET_FOCUS(self._control, self._yield_focus)
-        wx.EVT_SCROLL_THUMBTRACK(self._control, self._thumbtrack)
-        wx.EVT_SCROLL_THUMBRELEASE(self._control, self._thumbreleased)
-        wx.EVT_SIZE(self._control, self._control_resized)
+        self._control.Bind(wx.EVT_SCROLL, self._wx_scroll_handler)
+        self._control.Bind(wx.EVT_SET_FOCUS, self._yield_focus)
+        self._control.Bind(wx.EVT_SCROLL_THUMBTRACK, self._thumbtrack)
+        self._control.Bind(wx.EVT_SCROLL_THUMBRELEASE, self._thumbreleased)
+        self._control.Bind(wx.EVT_SIZE, self._control_resized)
 
     #------------------------------------------------------------------------
     # WX Event handlers

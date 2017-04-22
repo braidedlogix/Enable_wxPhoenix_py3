@@ -1,5 +1,5 @@
 
-from __future__ import with_statement
+
 
 # Enthought library imports
 from traits.api import Any, Bool, DelegatesTo, Float, Instance, Int
@@ -585,7 +585,7 @@ class Scrolled(Container):
     def __getstate__(self):
         state = super(Scrolled,self).__getstate__()
         for key in ['alternate_vsb', '_vsb', '_hsb', ]:
-            if state.has_key(key):
+            if key in state:
                 del state[key]
         return state
 

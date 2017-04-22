@@ -1,6 +1,6 @@
 """ A line segment component. """
 
-from __future__ import with_statement
+
 
 from numpy import array, resize
 

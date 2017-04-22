@@ -243,7 +243,7 @@ class ConstraintsContainer(Container):
         """ Make sure components that are added can be used with constraints.
         """
         # Clear the component maps
-        for key, item in self._component_map.iteritems():
+        for key, item in self._component_map.items():
             item.on_trait_change(self._component_size_hint_changed,
                                  'layout_size_hint', remove=True)
         self._component_map = {}
@@ -293,7 +293,7 @@ class ConstraintsContainer(Container):
         zero_offset = (0, 0)
         offset_table = [zero_offset]
         layout_table = []
-        queue = deque((0, child) for child in self._component_map.itervalues())
+        queue = deque((0, child) for child in self._component_map.values())
 
         # Micro-optimization: pre-fetch bound methods and store globals
         # as locals. This method is not on the code path of a resize
@@ -321,7 +321,7 @@ class ConstraintsContainer(Container):
                 running_index += 1
                 if isinst(item, Container_):
                     if item.transfer_layout_ownership(self):
-                        for child in item._component_map.itervalues():
+                        for child in item._component_map.values():
                             push((running_index, child))
 
         return offset_table, layout_table

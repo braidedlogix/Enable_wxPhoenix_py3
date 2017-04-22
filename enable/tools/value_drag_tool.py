@@ -123,7 +123,7 @@ class ValueDragTool(DragTool):
         # override button down to handle modifier keys correctly
         if not event.handled and self._drag_state == "nondrag":
             key_states = dict((key, key in self.modifier_keys) for key in keys)
-            if not all(getattr(event, key+'_down') == state for key, state in key_states.items()):
+            if not all(getattr(event, key+'_down') == state for key, state in list(key_states.items())):
                 return False
             self.mouse_down_position = (event.x, event.y)
             if not self.is_draggable(*self.mouse_down_position):
@@ -208,13 +208,13 @@ class AttributeDragTool(ValueDragTool):
         if self.x_attr:
             x_value =  value[0] + delta_x
             if self.x_bounds[0] is not None:
-                if isinstance(self.x_bounds[0], basestring):
+                if isinstance(self.x_bounds[0], str):
                     m = getattr(self.model, self.x_bounds[0])
                 else:
                     m = self.x_bounds[0]
                 x_value = max(x_value, m)
             if self.x_bounds[1] is not None:
-                if isinstance(self.x_bounds[1], basestring):
+                if isinstance(self.x_bounds[1], str):
                     M = getattr(self.model, self.x_bounds[1])
                 else:
                     M = self.x_bounds[1]
@@ -224,13 +224,13 @@ class AttributeDragTool(ValueDragTool):
         if self.y_attr:
             y_value = value[1] + delta_y
             if self.y_bounds[0] is not None:
-                if isinstance(self.y_bounds[0], basestring):
+                if isinstance(self.y_bounds[0], str):
                     m = getattr(self.model, self.y_bounds[0])
                 else:
                     m = self.y_bounds[0]
                 y_value = max(y_value, m)
             if self.y_bounds[1] is not None:
-                if isinstance(self.y_bounds[1], basestring):
+                if isinstance(self.y_bounds[1], str):
                     M = getattr(self.model, self.y_bounds[1])
                 else:
                     M = self.y_bounds[1]

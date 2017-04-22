@@ -1,6 +1,6 @@
 # This is a redirection file that determines what constitutes a color trait
 # in Chaco, and what constitutes the standard colors.
-from __future__ import absolute_import
+
 import sys
 
 from traits.etsconfig.api import ETSConfig
@@ -15,6 +15,7 @@ color_table = {"aliceblue": (0.941, 0.973, 1.000, 1.0),
     "aquamarine": (0.498, 1.000, 0.831, 1.0),
     "azure": (0.941, 1.000, 1.000, 1.0),
     "beige": (0.961, 0.961, 0.863, 1.0),
+    "bg_color" : (0.83137, 0.81569, 0.78431, 1.0),
     "bisque": (1.000, 0.894, 0.769, 1.0),
     "black": (0.000, 0.000, 0.000, 1.0),
     "blanchedalmond": (1.000, 0.922, 0.804, 1.0),
@@ -198,6 +199,9 @@ if ETSConfig.toolkit == 'wx':
                 return value
             else:
                 raise TraitError
+        elif type(value) in (str):
+            if value in list(color_table.keys()):
+                return color_table[value]
         else:
             raise TraitError
 

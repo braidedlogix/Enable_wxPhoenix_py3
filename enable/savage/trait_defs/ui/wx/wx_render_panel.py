@@ -54,7 +54,7 @@ class RenderPanel(wx.PyPanel):
         self.Refresh()
 
     def OnLeftDown(self, evt):
-        self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+        self.SetCursor(wx.Cursor(wx.CURSOR_HAND))
         self.CaptureMouse()
         self.offsetFrom = evt.GetPosition()
         evt.Skip()

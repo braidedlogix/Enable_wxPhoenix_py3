@@ -11,6 +11,7 @@ from numpy import array, dot
 from kiva import affine
 from traits.api import (Any, Bool, Float, HasTraits, Int,
     Event, List, ReadOnly)
+from functools import reduce
 
 
 class BasicEvent(HasTraits):

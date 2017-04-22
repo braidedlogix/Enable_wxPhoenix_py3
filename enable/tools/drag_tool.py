@@ -133,7 +133,7 @@ class DragTool(BaseTool):
 
     def _drag_cancel_keypressed(self, event):
         if self._drag_state != "nondrag" and \
-                         any(map(lambda x: x.match(event), self._cancel_keys)):
+                         any([x.match(event) for x in self._cancel_keys]):
             return self._cancel_drag(event)
         else:
             return False

@@ -1,6 +1,6 @@
 """ Defines the basic Container class """
 
-from __future__ import with_statement
+
 
 # Major library imports
 import warnings
@@ -101,7 +101,7 @@ class Container(Component):
         Component.__init__(self, **traits)
         for component in components:
             self.add(component)
-        if "bounds" in traits.keys() and "auto_size" not in traits.keys():
+        if "bounds" in list(traits.keys()) and "auto_size" not in list(traits.keys()):
             self.auto_size = False
 
         if 'intercept_events' in traits:
@@ -130,7 +130,7 @@ class Container(Component):
                 component.container = None
                 self._components.remove(component)
             else:
-                raise RuntimeError, "Unable to remove component from container."
+                raise RuntimeError("Unable to remove component from container.")
 
             # Check to see if we need to compact.
             if self.auto_size:

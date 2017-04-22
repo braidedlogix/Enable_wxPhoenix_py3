@@ -55,7 +55,7 @@ class Shape(Component):
     def normal_key_pressed(self, event):
         """ Event handler. """
 
-        print 'normal_key_pressed', event.character
+        print('normal_key_pressed', event.character)
 
         return
 
@@ -148,9 +148,10 @@ class Shape(Component):
     # Protected 'Shape' interface
     ###########################################################################
 
-    def _distance_between(self, (x1, y1), (x2, y2)):
+    def _distance_between(self, xxx_todo_changeme, xxx_todo_changeme1):
         """ Return the distance between two points. """
-
+        (x1, y1) = xxx_todo_changeme
+        (x2, y2) = xxx_todo_changeme1
         return math.sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))
 
     def _draw_text(self, gc):

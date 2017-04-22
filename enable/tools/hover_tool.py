@@ -3,7 +3,7 @@ Tool to detect when the user hovers over a specific part of an underlying
 components.
 """
 
-from __future__ import absolute_import
+
 
 # Enthought library imports
 from enable.base_tool import BaseTool
@@ -31,8 +31,8 @@ elif ETSConfig.toolkit == 'qt4':
 
 else:
     def GetGlobalMousePosition():
-        raise NotImplementedError, "GetGlobalMousePosition is not defined for" \
-            "toolkit '%s'." % ETSConfig.toolkit
+        raise NotImplementedError("GetGlobalMousePosition is not defined for" \
+            "toolkit '%s'." % ETSConfig.toolkit)
 
 
 class HoverTool(BaseTool):

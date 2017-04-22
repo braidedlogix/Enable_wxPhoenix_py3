@@ -13,7 +13,7 @@ either
 
 It is pretty easy to use, and requires only built-in python libs
 
-    >>> from afm import AFM
+    >>> from .afm import AFM
     >>> fh = file('ptmr8a.afm')
     >>> afm = AFM(fh)
     >>> afm.string_width_height('What the heck?')
@@ -34,7 +34,7 @@ AUTHOR:
   John D. Hunter <jdhunter@ace.bsd.uchicago.edu>
 """
 
-from __future__ import absolute_import, print_function
+
 
 import os
 import logging
@@ -436,3 +436,4 @@ if __name__ == '__main__':
         fh = file(os.path.join(pathname, fname))
         afm = AFM(fh)
         w, h = afm.string_width_height('John Hunter is the Man!')
+

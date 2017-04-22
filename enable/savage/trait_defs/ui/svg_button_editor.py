@@ -99,7 +99,7 @@ class SVGButtonEditor(BasicEditorFactory):
 
     def _set_value ( self, value ):
         self._value = value
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             try:
                 self._value = int( value )
             except:

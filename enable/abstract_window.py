@@ -14,6 +14,7 @@ from .component import Component
 from .interactor import Interactor
 from .container import Container
 from .colors import ColorTrait
+from functools import reduce
 
 def Alias(name):
     return Property(lambda obj: getattr(obj, name),
@@ -453,6 +454,7 @@ class AbstractWindow(HasTraits):
 
         # Create a new GC if necessary
         size = self._get_control_size()
+
         if (self._size != tuple(size)) or (self._gc is None):
             self._size = tuple(size)
             self._gc = self._create_gc(size)

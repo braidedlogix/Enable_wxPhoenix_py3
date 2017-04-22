@@ -52,7 +52,7 @@ calcsize(format)
 
 # Updated to Python 2.7/3.0, CJW
 
-from __future__ import absolute_import, print_function
+
 
 __version__ = "1.2"
 __copyright__ = "Copyright 1998, Just van Rossum <just@letterror.com>"
@@ -77,7 +77,7 @@ def pack(format, obj):
             # fixed point conversion
             value = int(round(value*fixes[name]))
         elements.append(value)
-    data = apply(struct.pack, (formatstring,) + tuple(elements))
+    data = struct.pack(*(formatstring,) + tuple(elements))
     return data
 
 

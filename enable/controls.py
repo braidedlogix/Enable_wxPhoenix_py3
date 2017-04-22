@@ -15,7 +15,7 @@
 #
 #-------------------------------------------------------------------------------
 
-from __future__ import with_statement
+
 
 # Major library imports
 import os.path

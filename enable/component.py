@@ -1,6 +1,6 @@
 """ Defines the Component class """
 
-from __future__ import with_statement
+
 
 from uuid import uuid4
 
@@ -376,13 +376,13 @@ class Component(CoordinateBox, Interactor):
         # may override the bulk default.
         padding = traits.pop('padding', None)
         padding_traits = {}
-        for name in traits.keys():
+        for name in list(traits.keys()):
             # Use .keys() so we can modify the dict during iteration safely.
             if name in ['padding_top', 'padding_bottom', 'padding_left',
                 'padding_right']:
                 padding_traits[name] = traits.pop(name)
 
-        if traits.has_key("container"):
+        if "container" in traits:
             # After the component is otherwise configured, make sure our
             # container gets notified of our being added to it.
             container = traits.pop("container")

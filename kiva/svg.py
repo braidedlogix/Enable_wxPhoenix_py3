@@ -42,11 +42,11 @@ from numpy import arange, ravel, array
 import warnings
 
 # Local, relative Kiva imports
-import affine
-import basecore2d
-import constants
-from constants import FILL, FILL_STROKE, EOF_FILL_STROKE, EOF_FILL, STROKE
-import agg
+from . import affine
+from . import basecore2d
+from . import constants
+from .constants import FILL, FILL_STROKE, EOF_FILL_STROKE, EOF_FILL, STROKE
+from . import agg
 from base64 import b64encode
 
 def _strpoints(points):
@@ -56,12 +56,12 @@ def _strpoints(points):
     return c.getvalue()
 
 def _mkstyle(kw):
-    return '; '.join([str(k) + ':' + str(v) for k,v in kw.items()])
+    return '; '.join([str(k) + ':' + str(v) for k,v in list(kw.items())])
 
 
 def default_filter(kw1):
     kw = {}
-    for (k,v) in kw1.items():
+    for (k,v) in list(kw1.items()):
         if type(v) == type(()):
             if v[0] != v[1]:
                 kw[k] = v[0]
@@ -83,7 +83,7 @@ line_join_map = {
 
 font_map = {'Arial': 'Helvetica',
             }
-import _fontdata
+from . import _fontdata
 
 xmltemplate = """<?xml version="1.0"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
@@ -126,8 +126,8 @@ try:
     import reportlab.pdfbase._fontdata as _fontdata
     _reportlab_loaded = 1
 except ImportError:
-    import pdfmetrics
-    import _fontdata
+    from . import pdfmetrics
+    from . import _fontdata
     _reportlab_loaded = 0
 
 font_face_map = {'Arial': 'Helvetica', '': 'Helvetica'}
@@ -173,7 +173,7 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
             contents = self.contents.getvalue()
             template = htmltemplate
         else:
-            raise ValueError, "don't know how to write a %s file" % ext
+            raise ValueError("don't know how to write a %s file" % ext)
         f.write(template % locals())
 
 
@@ -340,7 +340,7 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
 
     def _build(self, elname, contents=None, **kw):
         x = '<' + elname + ' '
-        for k,v in kw.items():
+        for k,v in list(kw.items()):
             if type(v) == type(0.0):
                 v = '%3.3f' % v
             elif type(v) == type(0):
@@ -398,9 +398,9 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
 
     def _emit(self, name, contents=None, kw={}, **otherkw):
         self.contents.write('<svg:%(name)s ' % locals())
-        for k, v in kw.items():
+        for k, v in list(kw.items()):
             self.contents.write('%(k)s="%(v)s" ' % locals())
-        for k, v in otherkw.items():
+        for k, v in list(otherkw.items()):
             self.contents.write('%(k)s="%(v)s" ' % locals())
         if contents is None:
             self.contents.write('/>\n')

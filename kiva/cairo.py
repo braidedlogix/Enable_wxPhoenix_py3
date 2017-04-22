@@ -7,10 +7,10 @@
     This is currently under development and is not yet fully functional.
 
 """
-from __future__ import absolute_import
+
 import cairo
 import copy
-from itertools import izip
+
 import numpy
 import warnings
 
@@ -73,13 +73,13 @@ class PixelMap(object):
         if window_dc is None:
             window_dc = wx.PaintDC(window)
         arr = self.convert_to_rgbarray()
-        image = wx.EmptyImage(self.width, self.height)
+        image = wx.Image(self.width, self.height)
         image.SetDataBuffer(arr.data)
-        bmp = wx.BitmapFromImage(image, depth=-1)
+        bmp = wx.Bitmap(image)
 
-        window_dc.BeginDrawing()
+        #window_dc.BeginDrawing()
         window_dc.DrawBitmap(bmp,x,y)
-        window_dc.EndDrawing()
+        #window_dc.EndDrawing()
         return
 
     def convert_to_rgbarray(self):
@@ -588,7 +588,7 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
             N.B. Cairo cannot make disjointed lines as a single subpath,
             thus each line forms it's own subpath
         """
-        for start, end in izip(starts, ends):
+        for start, end in zip(starts, ends):
             self._ctx.move_to(*start)
             self._ctx.line_to(*end)
 
@@ -1039,7 +1039,7 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
                         TEXT_INVISIBLE, TEXT_FILL_CLIP, TEXT_STROKE_CLIP,
                         TEXT_FILL_STROKE_CLIP, TEXT_CLIP, TEXT_OUTLINE):
             msg = "Invalid text drawing mode.  See documentation for valid modes"
-            raise ValueError, msg
+            raise ValueError(msg)
         self.state.text_drawing_mode = mode
 
     def set_text_position(self,x,y):
@@ -1293,7 +1293,7 @@ if __name__=="__main__":
     from chaco.api import ArrayPlotData, Plot, PlotGraphicsContext
     from chaco.example_support import COLOR_PALETTE
 
-    from itertools import cycle, izip
+    from itertools import cycle
 
     DPI = 72.0
     dpi_scale = DPI / 72.0
@@ -1305,7 +1305,7 @@ if __name__=="__main__":
         x = linspace(low, high, numpoints)
         pd = ArrayPlotData(index=x)
         p = Plot(pd, bgcolor="lightgray", padding=50, border_visible=True)
-        for t,i in izip(cycle(['line','scatter']),range(10)):
+        for t,i in zip(cycle(['line','scatter']),list(range(10))):
             pd.set_data("y" + str(i), jn(i,x))
             p.plot(("index", "y" + str(i)), color=tuple(COLOR_PALETTE[i]),
                    width = 2.0 * dpi_scale, type=t)

@@ -3,7 +3,7 @@ Define an Annotater component that allows a user to annotate an underlying
 component
 """
 
-from __future__ import with_statement
+
 
 from traits.api import Event, Trait, TraitPrefixList
 from traitsui.api import Group, View

@@ -1,7 +1,7 @@
 """ Defines the Image component class.
 """
 
-from __future__ import absolute_import
+
 
 # Enthought library imports
 from traits.api import Array, Bool, Enum, Instance, Property, cached_property

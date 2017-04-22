@@ -24,7 +24,7 @@ from enable.events import KeyEvent, MouseEvent, DragEvent
 from traits.api import Instance
 
 # Local imports.
-from constants import BUTTON_NAME_MAP, KEY_MAP, POINTER_MAP, DRAG_RESULTS_MAP
+from .constants import BUTTON_NAME_MAP, KEY_MAP, POINTER_MAP, DRAG_RESULTS_MAP
 
 class _QtWindowHandler(object):
     def __init__(self, qt_window, enable_window):
@@ -356,14 +356,14 @@ class _Window(AbstractWindow):
                 return None
 
         if event_type == 'character':
-            key = unicode(event.text())
+            key = str(event.text())
         else:
             # Convert the keypress to a standard enable key if possible, otherwise
             # to text.
             key_code = event.key()
             key = KEY_MAP.get(key_code)
             if key is None:
-                key = unichr(key_code).lower()
+                key = chr(key_code).lower()
 
         if not key:
             return None

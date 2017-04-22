@@ -1,5 +1,5 @@
 
-from __future__ import with_statement
+
 
 from enable.api import Container, Component, ColorTrait
 from kiva.constants import FILL, FILL_STROKE

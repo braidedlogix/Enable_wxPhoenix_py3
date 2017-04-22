@@ -162,7 +162,7 @@ class CoordinateBox(HasTraits):
 
     def _set_width(self, val):
 
-        if isinstance(val, basestring):
+        if isinstance(val, str):
             try:
                 val = float(val)
             except:
@@ -177,7 +177,7 @@ class CoordinateBox(HasTraits):
         return self.bounds[1]
 
     def _set_height(self, val):
-        if isinstance(val, basestring):
+        if isinstance(val, str):
             try:
                 val = float(val)
             except:

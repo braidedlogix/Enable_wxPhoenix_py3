@@ -385,8 +385,8 @@ def color_editor_for ( editor, parent, update_handler = None ):
         control = wx.Button( panel, -1, '', size = wx.Size( 18, 18 ) )
         control.SetBackgroundColour( color_samples[i] )
         control.update_handler = update_handler
-        wx.EVT_BUTTON( panel, control.GetId(),
-                       swatch_editor.update_object_from_swatch )
+        panel.Bind(wx.EVT_BUTTON,
+                       swatch_editor.update_object_from_swatch, control.GetId() )
         sizer2.Add( control )
         editor.set_tooltip( control )
 
@@ -400,7 +400,7 @@ def color_editor_for ( editor, parent, update_handler = None ):
     slider.SetTickFreq( 10, 1 )
     slider.SetPageSize( 10 )
     slider.SetLineSize( 1 )
-    wx.EVT_SCROLL( slider, swatch_editor.update_object_from_scroll )
+    slider.Bind(wx.EVT_SCROLL, swatch_editor.update_object_from_scroll )
     sizer.Add( slider, 0, wx.EXPAND | wx.LEFT, 6 )
 
     # Set-up the layout:
@@ -425,7 +425,7 @@ class ColorDialog ( wx.Frame ):
         """
         wx.Frame.__init__( self, editor.control, -1, '',
                            style = wx.SIMPLE_BORDER )
-        wx.EVT_ACTIVATE( self, self._on_close_dialog )
+        el.Bind(wx.EVT_ACTIVATE, self._on_close_dialog )
         self._closed    = False
         self._closeable = True
 

@@ -114,7 +114,7 @@ class SVGPathParser(object):
     def parse(self, text):
         """ Parse a string of SVG <path> data.
         """
-        next = self.lexer.lex(text).next
+        next = self.lexer.lex(text).__next__
         token = next()
         return self.rule_svg_path(next, token)
 

@@ -71,7 +71,7 @@ class XMLTree(wx.TreeCtrl):
         for child in element.getchildren():
             self.addElementToTree(child, node)
         #attributes
-        for key, value in element.items():
+        for key, value in list(element.items()):
             item = self.AppendItem(node, "%s:%s"%(key,value))
             self.SetPyData(item, element)
 
@@ -171,7 +171,7 @@ class ViewFrame(wx.Frame):
     def getFileList(self):
         #look for the test files in the w3c dir
         files = os.listdir(self.getSVGDir())
-        splitted = map(os.path.splitext, files)
+        splitted = list(map(os.path.splitext, files))
 
         return sorted(fname for fname, ext in splitted)
 
@@ -244,7 +244,7 @@ class ViewFrame(wx.Frame):
         if element is None:
             return
         path = self.document.paths[element]
-        print path
+        print(path)
 
     def OnUpdateUI(self, evt):
         if self.render.lastRender is not None:
