@@ -56,7 +56,7 @@ class Renderer(NullRenderer):
 
     @staticmethod
     def createAffineMatrix(a,b,c,d,x,y):
-        return wx.GraphicsRenderer_GetDefaultRenderer().CreateMatrix(a,b,c,d,x,y)
+        return wx.GraphicsRenderer.GetDefaultRenderer().CreateMatrix(a,b,c,d,x,y)
 
     @staticmethod
     def createBrush(color_tuple):
@@ -64,7 +64,7 @@ class Renderer(NullRenderer):
 
     @staticmethod
     def createNativePen(pen):
-        return wx.GraphicsRenderer_GetDefaultRenderer().CreatePen(pen)
+        return wx.GraphicsRenderer.GetDefaultRenderer().CreatePen(pen)
 
     @staticmethod
     def createPen(color_tuple):
@@ -156,11 +156,11 @@ class Renderer(NullRenderer):
 
     @staticmethod
     def makeMatrix(*args):
-        return wx.GraphicsRenderer_GetDefaultRenderer().CreateMatrix(*args)
+        return wx.GraphicsRenderer.GetDefaultRenderer().CreateMatrix(*args)
 
     @staticmethod
     def makePath():
-        path = wx.GraphicsRenderer_GetDefaultRenderer().CreatePath()
+        path = wx.GraphicsRenderer.GetDefaultRenderer().CreatePath()
         _fixup_path_methods(path)
         return path
 
