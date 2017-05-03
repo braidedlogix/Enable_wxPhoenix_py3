@@ -14,7 +14,6 @@
 # been on my list of things to do.
 #------------------------------------------------------------------------------
 
-
 # Qt imports.
 from pyface.qt import QtCore, QtGui, QtOpenGL
 
@@ -25,6 +24,7 @@ from traits.api import Instance
 
 # Local imports.
 from .constants import BUTTON_NAME_MAP, KEY_MAP, POINTER_MAP, DRAG_RESULTS_MAP
+
 
 class _QtWindowHandler(object):
     def __init__(self, qt_window, enable_window):
@@ -150,7 +150,6 @@ class _QtWindowHandler(object):
             qt_size_hint.setHeight(height)
 
         return qt_size_hint
-
 
     #------------------------------------------------------------------------
     # Qt Drag and drop event handlers
@@ -335,12 +334,12 @@ class _Window(AbstractWindow):
         self._drag_result = DRAG_RESULTS_MAP[result]
         return
 
-    def _capture_mouse ( self ):
+    def _capture_mouse(self):
         "Capture all future mouse events"
         # Nothing needed with Qt.
         pass
 
-    def _release_mouse ( self ):
+    def _release_mouse(self):
         "Release the mouse capture"
         # Nothing needed with Qt.
         pass
@@ -373,13 +372,16 @@ class _Window(AbstractWindow):
 
         modifiers = event.modifiers()
 
-        return KeyEvent(event_type=event_type, character=key, x=x,
-                        y=self._flip_y(y),
-                        alt_down=bool(modifiers & QtCore.Qt.AltModifier),
-                        shift_down=bool(modifiers & QtCore.Qt.ShiftModifier),
-                        control_down=bool(modifiers & QtCore.Qt.ControlModifier),
-                        event=event,
-                        window=self)
+        return KeyEvent(
+            event_type=event_type,
+            character=key,
+            x=x,
+            y=self._flip_y(y),
+            alt_down=bool(modifiers & QtCore.Qt.AltModifier),
+            shift_down=bool(modifiers & QtCore.Qt.ShiftModifier),
+            control_down=bool(modifiers & QtCore.Qt.ControlModifier),
+            event=event,
+            window=self)
 
     def _create_mouse_event(self, event):
         # If the control no longer exists, don't send mouse event
@@ -410,14 +412,17 @@ class _Window(AbstractWindow):
         else:
             mouse_wheel = 0
 
-        return MouseEvent(x=x, y=self._flip_y(y), mouse_wheel=mouse_wheel,
-                alt_down=bool(modifiers & QtCore.Qt.AltModifier),
-                shift_down=bool(modifiers & QtCore.Qt.ShiftModifier),
-                control_down=bool(modifiers & QtCore.Qt.ControlModifier),
-                left_down=bool(buttons & QtCore.Qt.LeftButton),
-                middle_down=bool(buttons & QtCore.Qt.MidButton),
-                right_down=bool(buttons & QtCore.Qt.RightButton),
-                window=self)
+        return MouseEvent(
+            x=x,
+            y=self._flip_y(y),
+            mouse_wheel=mouse_wheel,
+            alt_down=bool(modifiers & QtCore.Qt.AltModifier),
+            shift_down=bool(modifiers & QtCore.Qt.ShiftModifier),
+            control_down=bool(modifiers & QtCore.Qt.ControlModifier),
+            left_down=bool(buttons & QtCore.Qt.LeftButton),
+            middle_down=bool(buttons & QtCore.Qt.MidButton),
+            right_down=bool(buttons & QtCore.Qt.RightButton),
+            window=self)
 
     def _create_drag_event(self, event):
 
@@ -442,8 +447,13 @@ class _Window(AbstractWindow):
             copy = event.proposedAction() == QtCore.Qt.CopyAction
         except AttributeError:
             # this is a DragLeave event
-            return DragEvent(x=x, y=self._flip_y(y), obj=None, copy=False,
-                        window=self, mimedata=None)
+            return DragEvent(
+                x=x,
+                y=self._flip_y(y),
+                obj=None,
+                copy=False,
+                window=self,
+                mimedata=None)
 
         try:
             from traitsui.qt4.clipboard import PyMimeData
@@ -464,8 +474,13 @@ class _Window(AbstractWindow):
                     except ImportError:
                         pass
 
-        return DragEvent(x=x, y=self._flip_y(y), obj=obj, copy=copy,
-                        window=self, mimedata=mimedata)
+        return DragEvent(
+            x=x,
+            y=self._flip_y(y),
+            obj=obj,
+            copy=copy,
+            window=self,
+            mimedata=mimedata)
 
     def _redraw(self, coordinates=None):
         if self.control:
@@ -511,7 +526,6 @@ class _Window(AbstractWindow):
         x = pos.x()
         y = self._flip_y(pos.y())
         return x, y
-
 
     #------------------------------------------------------------------------
     # Private methods

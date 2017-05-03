@@ -60,11 +60,11 @@ BOLD_ITALIC = 3
 
 # Font families, as defined by the Windows API, and their CSS equivalents
 DEFAULT = 0
-SWISS = 1     # Sans-serif
-ROMAN = 2     # Serif
-MODERN = 3     # Monospace
-DECORATIVE = 4     # Fantasy
-SCRIPT = 5     # Cursive
+SWISS = 1  # Sans-serif
+ROMAN = 2  # Serif
+MODERN = 3  # Monospace
+DECORATIVE = 4  # Fantasy
+SCRIPT = 5  # Cursive
 TELETYPE = 6
 
 # -----------------------------------------------------------------------------
@@ -97,7 +97,6 @@ QUAD_CURVE_TO = 6
 ARC = 7
 ARC_TO = 8
 
-
 # -----------------------------------------------------------------------------
 # Subpath CTM Constants
 #
@@ -110,7 +109,6 @@ TRANSLATE_CTM = 6
 ROTATE_CTM = 7
 CONCAT_CTM = 8
 LOAD_CTM = 9
-
 
 # -----------------------------------------------------------------------------
 # Marker Types

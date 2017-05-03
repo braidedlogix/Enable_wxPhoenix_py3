@@ -10,7 +10,6 @@ from enable.example_support import DemoFrame, demo_main
 from kiva.constants import SWISS
 from kiva.fonttools import Font
 
-
 font = Font(family=SWISS)
 
 
@@ -39,10 +38,11 @@ class Box(Component):
                 gc.stroke_path()
 
                 gc.set_font(font)
-                x,y = self.position
-                dx,dy = self.bounds
+                x, y = self.position
+                dx, dy = self.bounds
                 tx, ty, tdx, tdy = gc.get_text_extent(str(self.delay))
-                gc.set_text_position(x+dx/2-tdx/2, y+dy/2-tdy/2)
+                gc.set_text_position(x + dx / 2 - tdx / 2,
+                                     y + dy / 2 - tdy / 2)
                 gc.show_text(str(self.delay))
 
     def normal_left_down(self, event):
@@ -65,9 +65,9 @@ class MyContainer(Container):
             gc.set_font(font)
             gc.set_fill_color(self.text_color_)
             tx, ty, tdx, tdy = gc.get_text_extent(s)
-            x,y = self.position
-            dx,dy = self.bounds
-            gc.set_text_position(x+dx/2-tdx/2, y+dy-tdy-20)
+            x, y = self.position
+            dx, dy = self.bounds
+            gc.set_text_position(x + dx / 2 - tdx / 2, y + dy - tdy - 20)
             gc.show_text(s)
 
 
@@ -77,12 +77,14 @@ class PlotFrame(DemoFrame):
 
 
 if __name__ == "__main__":
-    times_and_bounds = {0.5 : (60,200,100,100),
-                        0.33 : (240,200,100,100),
-                        0.25: (60,50,100,100),
-                        0.10: (240,50,100,100)}
+    times_and_bounds = {
+        0.5: (60, 200, 100, 100),
+        0.33: (240, 200, 100, 100),
+        0.25: (60, 50, 100, 100),
+        0.10: (240, 50, 100, 100)
+    }
 
-    container = MyContainer(auto_size = False)
+    container = MyContainer(auto_size=False)
     for delay, bounds in list(times_and_bounds.items()):
         box = Box()
         container.add(box)
@@ -92,5 +94,5 @@ if __name__ == "__main__":
 
     # Save demo so that it doesn't get garbage collected when run within
     # existing event loop (i.e. from ipython).
-    demo = demo_main(PlotFrame, size=(400, 400),
-                     title="Latency Test - Click a box")
+    demo = demo_main(
+        PlotFrame, size=(400, 400), title="Latency Test - Click a box")

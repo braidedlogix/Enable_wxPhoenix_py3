@@ -2,16 +2,16 @@
     Parsers for specific attributes
 """
 import six.moves.urllib.parse as urlparse
-from pyparsing import (Literal,
-    Optional, oneOf, Group, StringEnd, Combine, Word, alphas, hexnums,
-    CaselessLiteral, SkipTo
-)
+from pyparsing import (Literal, Optional, oneOf, Group, StringEnd, Combine,
+                       Word, alphas, hexnums, CaselessLiteral, SkipTo)
 from .css.colour import colourValue
 import string
 
 ##Paint values
 none = CaselessLiteral("none").setParseAction(lambda t: ["NONE", ()])
-currentColor = CaselessLiteral("currentColor").setParseAction(lambda t: ["CURRENTCOLOR", ()])
+currentColor = CaselessLiteral("currentColor").setParseAction(
+    lambda t: ["CURRENTCOLOR", ()])
+
 
 def parsePossibleURL(t):
     # Workaround for PyParsing versions < 2.1.0, for which t is wrapped in an
@@ -22,21 +22,16 @@ def parsePossibleURL(t):
     possibleURL, fallback = t
     return [urlparse.urlsplit(possibleURL), fallback]
 
+
 #Normal color declaration
 colorDeclaration = none | currentColor | colourValue
 
-urlEnd = (
-    Literal(")").suppress() +
-    Optional(Group(colorDeclaration), default=()) +
-    StringEnd()
-)
+urlEnd = (Literal(")").suppress() + Optional(
+    Group(colorDeclaration), default=()) + StringEnd())
 
-url = (
-    CaselessLiteral("URL")
-    +
-    Literal("(").suppress()+
-    Group(SkipTo(urlEnd, include=True).setParseAction(parsePossibleURL))
-)
+url = (CaselessLiteral("URL") + Literal("(").suppress() +
+       Group(SkipTo(
+           urlEnd, include=True).setParseAction(parsePossibleURL)))
 
 #paint value will parse into a (type, details) tuple.
 #For none and currentColor, the details tuple will be the empty tuple

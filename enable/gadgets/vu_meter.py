@@ -1,4 +1,3 @@
-
 import math
 
 from traits.api import Float, Property, List, Str, Range
@@ -199,8 +198,7 @@ class VUMeter(Component):
                 tx, ty, tw, th = gc.get_text_extent(self.text)
                 gc.set_fill_color((0, 0, 0, 0.25))
                 gc.set_text_matrix(affine.affine_from_rotation(0))
-                gc.set_text_position(-0.5 * tw,
-                                     (0.75 * beta + 0.25) * R)
+                gc.set_text_position(-0.5 * tw, (0.75 * beta + 0.25) * R)
                 gc.show_text(self.text)
 
             # Draw the red curved axis.
@@ -220,12 +218,12 @@ class VUMeter(Component):
             # Draw the filled arc at the bottom.
             gc.set_line_width(2)
             gc.set_stroke_color((0, 0, 0))
-            gc.arc(0, 0, beta * R, math.radians(self.angle),
-                                     math.radians(180 - self.angle))
+            gc.arc(0, 0, beta * R,
+                   math.radians(self.angle), math.radians(180 - self.angle))
             gc.stroke_path()
             gc.set_fill_color((0, 0, 0, 0.25))
-            gc.arc(0, 0, beta * R, math.radians(self.angle),
-                                     math.radians(180 - self.angle))
+            gc.arc(0, 0, beta * R,
+                   math.radians(self.angle), math.radians(180 - self.angle))
             gc.fill_path()
 
             # Draw the needle.
@@ -236,7 +234,6 @@ class VUMeter(Component):
             needle_theta = self._percent_to_theta(percent)
             gc.rotate_ctm(needle_theta - 0.5 * math.pi)
             self._draw_vertical_needle(gc)
-
 
     #---------------------------------------------------------------------
     # Private methods
@@ -264,7 +261,7 @@ class VUMeter(Component):
             # Draw the thin part of the needle from the blob to the tip.
             gc.move_to(lw, blob_y)
             control_y = blob_y + 0.25 * (tip_y - blob_y)
-            gc.quad_curve_to( 0.2 * lw, control_y, 0, tip_y)
+            gc.quad_curve_to(0.2 * lw, control_y, 0, tip_y)
             gc.quad_curve_to(-0.2 * lw, control_y, -lw, blob_y)
             gc.line_to(lw, blob_y)
             gc.fill_path()
@@ -277,7 +274,7 @@ class VUMeter(Component):
 
         tx, ty, tw, th = gc.get_text_extent(text)
 
-        rr = math.sqrt(radius ** 2 + (0.5 * tw) ** 2)
+        rr = math.sqrt(radius**2 + (0.5 * tw)**2)
         dtheta = math.atan2(0.5 * tw, radius)
         text_theta = theta + dtheta
         x = rr * math.cos(text_theta)
@@ -296,7 +293,7 @@ class VUMeter(Component):
         the horizontal (i.e. the traditional angle of polar coordinates).
         """
         angle = (self.angle + (180.0 - 2 * self.angle) *
-                          (self.max_percent - percent) / self.max_percent)
+                 (self.max_percent - percent) / self.max_percent)
         theta = math.radians(angle)
         return theta
 

@@ -18,8 +18,8 @@
 # MODIFIED from reportlab's version for the sake of easier integration in Kiva -- David Ascher
 
 #$Header $
-__version__=''' $Id: pdfmetrics.py,v 1.1 2002/12/03 08:06:29 da Exp $ '''
-__doc__="""
+__version__ = ''' $Id: pdfmetrics.py,v 1.1 2002/12/03 08:06:29 da Exp $ '''
+__doc__ = """
 This provides a database of font metric information and
 efines Font, Encoding and TypeFace classes aimed at end users.
 
@@ -38,13 +38,13 @@ trap attempts to access them and do it on first access.
 import string, os
 
 # XXX Kiva specific changes
-defaultEncoding = 'WinAnsiEncoding'       # 'WinAnsi' or 'MacRoman'
+defaultEncoding = 'WinAnsiEncoding'  # 'WinAnsi' or 'MacRoman'
 from . import _fontdata
 
 standardFonts = _fontdata.standardFonts
 standardEncodings = _fontdata.standardEncodings
 
-_dummyEncoding=' _not an encoding_ '
+_dummyEncoding = ' _not an encoding_ '
 
 # XXX Kiva-specific changes
 _stringWidth = None
@@ -53,10 +53,14 @@ _typefaces = {}
 _encodings = {}
 _fonts = {}
 
+
 class FontError(Exception):
     pass
+
+
 class FontNotFoundError(Exception):
     pass
+
 
 def parseAFMFile(afmFileName):
     """Quick and dirty - gives back a top-level dictionary
@@ -67,10 +71,10 @@ def parseAFMFile(afmFileName):
     order."""
 
     lines = open(afmFileName, 'r').readlines()
-    if len(lines)<=1:
+    if len(lines) <= 1:
         #likely to be a MAC file
-        lines = string.split(lines,'\r')
-        if len(lines)<=1:
+        lines = string.split(lines, '\r')
+        if len(lines) <= 1:
             raise ValueError('AFM file %s hasn\'t enough data' % afmFileName)
     topLevel = {}
     glyphLevel = []
@@ -115,17 +119,19 @@ def parseAFMFile(afmFileName):
         elif inHeader:
             if line[0:7] == 'Comment': pass
             try:
-                left, right = string.split(line,' ',1)
+                left, right = string.split(line, ' ', 1)
             except:
-                raise ValueError("Header information error in afm %s: line='%s'" % (afmFileName, line))
+                raise ValueError(
+                    "Header information error in afm %s: line='%s'" %
+                    (afmFileName, line))
             try:
                 right = string.atoi(right)
             except:
                 pass
             topLevel[left] = right
 
-
     return (topLevel, glyphLevel)
+
 
 class TypeFace:
     def __init__(self, name):
@@ -153,11 +159,11 @@ class TypeFace:
         We presume they never change so this can be a shared reference."""
         self.glyphWidths = _fontdata.widthsByFontGlyph[name]
         self.glyphNames = list(self.glyphWidths.keys())
-        self.ascent,self.descent = _fontdata.ascent_descent[name]
+        self.ascent, self.descent = _fontdata.ascent_descent[name]
 
     def findT1File(self, ext='.pfb'):
         possible_exts = (string.lower(ext), string.upper(ext))
-        if hasattr(self,'pfbFileName'):
+        if hasattr(self, 'pfbFileName'):
             r_basename = os.path.splitext(self.pfbFileName)[0]
             for e in possible_exts:
                 if os.path.isfile(r_basename + e):
@@ -182,13 +188,15 @@ class TypeFace:
             warnOnce("Can't find %s for face '%s'" % (ext, self.name))
         return r
 
+
 def bruteForceSearchForAFM(faceName):
     """Looks in all AFM files on path for face with given name.
 
     Returns AFM file name or None.  Ouch!"""
     import glob
     # XXX Kiva-specific changes
-    T1SearchPath = [] # XXX should be modified if Kiva wants to support T1 fonts
+    T1SearchPath = [
+    ]  # XXX should be modified if Kiva wants to support T1 fonts
 
     for dirname in T1SearchPath:
         if not os.path.isdir(dirname):
@@ -201,13 +209,13 @@ def bruteForceSearchForAFM(faceName):
     return None
 
 
-
 #for faceName in standardFonts:
 #    registerTypeFace(TypeFace(faceName))
 
 
 class Encoding:
     """Object to help you create and refer to encodings."""
+
     def __init__(self, name, base=None):
         self.name = name
         self.frozen = 0
@@ -239,7 +247,7 @@ class Encoding:
     def __setitem__(self, index, value):
         # should fail if they are frozen
         assert self.frozen == 0, 'Cannot modify a frozen encoding'
-        if self.vector[index]!=value:
+        if self.vector[index] != value:
             L = list(self.vector)
             L[index] = value
             self.vector = tuple(L)
@@ -274,7 +282,7 @@ class Encoding:
         curRange = None
         for i in range(len(self.vector)):
             glyph = self.vector[i]
-            if glyph==otherEnc.vector[i]:
+            if glyph == otherEnc.vector[i]:
                 if curRange:
                     ranges.append(curRange)
                     curRange = []
@@ -291,8 +299,10 @@ class Encoding:
         # XXX Kiva specific change
         raise NotImplementedError
 
+
 #for encName in standardEncodings:
 #    registerEncoding(Encoding(encName))
+
 
 class Font:
     """Represents a font (i.e., combination of face and encoding).
@@ -302,10 +312,11 @@ class Font:
     not clear yet if embedded ones need a new font class or
     just a new typeface class (which would do the job through
     composition)"""
+
     def __init__(self, name, faceName, encName):
         self.fontName = name
         self.face = getTypeFace(faceName)
-        self.encoding= getEncoding(encName)
+        self.encoding = getEncoding(encName)
         self._calcWidths()
 
         # multi byte fonts do their own stringwidth calculations.
@@ -326,10 +337,12 @@ class Font:
                     w[i] = width
                 except KeyError:
                     # XXX Kiva specific change
-                    print('typeface "%s" does not have a glyph "%s", bad font!' % (self.face.name, glyphName))
+                    print('typeface "%s" does not have a glyph "%s", bad font!'
+                          % (self.face.name, glyphName))
         self.widths = w
 
     if not _stringWidth:
+
         def stringWidth(self, text, size):
             """This is the "purist" approach to width.  The practical one
             is to use the stringWidth one which may be optimized
@@ -355,30 +368,39 @@ class Font:
         # XXX Kiva specific change
         raise NotImplementedError
 
-PFB_MARKER=chr(0x80)
-PFB_ASCII=chr(1)
-PFB_BINARY=chr(2)
-PFB_EOF=chr(3)
-def _pfbSegLen(p,d):
-    '''compute a pfb style length from the first 4 bytes of string d'''
-    return ((((ord(d[p+3])<<8)|ord(d[p+2])<<8)|ord(d[p+1]))<<8)|ord(d[p])
 
-def _pfbCheck(p,d,m,fn):
-    if d[p]!=PFB_MARKER or d[p+1]!=m:
-        raise ValueError('Bad pfb file\'%s\' expected chr(%d)chr(%d) at char %d, got chr(%d)chr(%d)' % (fn,ord(PFB_MARKER),ord(m),p,ord(d[p]),ord(d[p+1])))
-    if m==PFB_EOF: return
+PFB_MARKER = chr(0x80)
+PFB_ASCII = chr(1)
+PFB_BINARY = chr(2)
+PFB_EOF = chr(3)
+
+
+def _pfbSegLen(p, d):
+    '''compute a pfb style length from the first 4 bytes of string d'''
+    return ((((ord(d[p + 3]) << 8) | ord(d[p + 2]) << 8) | ord(d[p + 1])) <<
+            8) | ord(d[p])
+
+
+def _pfbCheck(p, d, m, fn):
+    if d[p] != PFB_MARKER or d[p + 1] != m:
+        raise ValueError(
+            'Bad pfb file\'%s\' expected chr(%d)chr(%d) at char %d, got chr(%d)chr(%d)'
+            % (fn, ord(PFB_MARKER), ord(m), p, ord(d[p]), ord(d[p + 1])))
+    if m == PFB_EOF: return
     p = p + 2
-    l = _pfbSegLen(p,d)
+    l = _pfbSegLen(p, d)
     p = p + 4
-    if p+l>len(d):
-        raise ValueError('Bad pfb file\'%s\' needed %d+%d bytes have only %d!' % (fn,p,l,len(d)))
-    return p, p+l
+    if p + l > len(d):
+        raise ValueError('Bad pfb file\'%s\' needed %d+%d bytes have only %d!'
+                         % (fn, p, l, len(d)))
+    return p, p + l
 
 
 class EmbeddedType1Face(TypeFace):
     """A Type 1 font other than one of the basic 14.
 
     Its glyph data will be embedded in the PDF file."""
+
     def __init__(self, afmFileName, pfbFileName):
         # ignore afm file for now
         self.afmFileName = os.path.abspath(afmFileName)
@@ -392,17 +414,16 @@ class EmbeddedType1Face(TypeFace):
         measurements needed for the font descriptor."""
         assert os.path.isfile(pfbFileName), 'file %s not found' % pfbFileName
         d = open(pfbFileName, 'rb').read()
-        s1, l1 = _pfbCheck(0,d,PFB_ASCII,pfbFileName)
-        s2, l2 = _pfbCheck(l1,d,PFB_BINARY,pfbFileName)
-        s3, l3 = _pfbCheck(l2,d,PFB_ASCII,pfbFileName)
-        _pfbCheck(l3,d,PFB_EOF,pfbFileName)
-        self._binaryData = d[s1:l1]+d[s2:l2]+d[s3:l3]
+        s1, l1 = _pfbCheck(0, d, PFB_ASCII, pfbFileName)
+        s2, l2 = _pfbCheck(l1, d, PFB_BINARY, pfbFileName)
+        s3, l3 = _pfbCheck(l2, d, PFB_ASCII, pfbFileName)
+        _pfbCheck(l3, d, PFB_EOF, pfbFileName)
+        self._binaryData = d[s1:l1] + d[s2:l2] + d[s3:l3]
 
         self._length = len(self._binaryData)
-        self._length1 = l1-s1
-        self._length2 = l2-s2
-        self._length3 = l3-s3
-
+        self._length1 = l1 - s1
+        self._length2 = l2 - s2
+        self._length3 = l3 - s3
 
     def _loadMetrics(self, afmFileName):
         """Loads in and parses font metrics."""
@@ -418,7 +439,7 @@ class EmbeddedType1Face(TypeFace):
         self.stemV = topLevel.get('stemV', 0)
         self.xHeight = topLevel.get('XHeight', 1000)
 
-        strBbox = topLevel.get('FontBBox', [0,0,1000,1000])
+        strBbox = topLevel.get('FontBBox', [0, 0, 1000, 1000])
         tokens = string.split(strBbox)
         self.bbox = []
         for tok in tokens:
@@ -436,7 +457,7 @@ class EmbeddedType1Face(TypeFace):
         if topLevel.get('EncodingScheme', None) == 'FontSpecific':
             names = [None] * 256
             for (code, width, name) in glyphData:
-                if code >=0 and code <=255:
+                if code >= 0 and code <= 255:
                     names[code] = name
             encName = self.name + 'Encoding'
             self.requiredEncoding = encName
@@ -447,10 +468,12 @@ class EmbeddedType1Face(TypeFace):
         # XXX Kiva specific changes
         raise NotImplementedError
 
+
 def registerTypeFace(face):
     assert isinstance(face, TypeFace), 'Not a TypeFace: %s' % face
     _typefaces[face.name] = face
     # XXX Kiva specific changes
+
 
 def registerEncoding(enc):
     assert isinstance(enc, Encoding), 'Not an Encoding: %s' % enc
@@ -459,11 +482,14 @@ def registerEncoding(enc):
         if enc.isEqual(_encodings[enc.name]):
             enc.freeze()
         else:
-            raise FontError('Encoding "%s" already registered with a different name vector!' % enc.Name)
+            raise FontError(
+                'Encoding "%s" already registered with a different name vector!'
+                % enc.Name)
     else:
         _encodings[enc.name] = enc
         enc.freeze()
     # have not yet dealt with immutability!
+
 
 def registerFont(font):
     "Registers a font, including setting up info for accelerated stringWidth"
@@ -472,11 +498,9 @@ def registerFont(font):
     _fonts[fontName] = font
     if not font._multiByte:
         if _stringWidth:
-            _rl_accel.setFontInfo(string.lower(fontName),
-                                  _dummyEncoding,
-                                  font.face.ascent,
-                                  font.face.descent,
-                                  font.widths)
+            _rl_accel.setFontInfo(
+                string.lower(fontName), _dummyEncoding, font.face.ascent,
+                font.face.descent, font.widths)
 
 
 def getTypeFace(faceName):
@@ -504,6 +528,7 @@ def getTypeFace(faceName):
             else:
                 raise
 
+
 def getEncoding(encName):
     """Lazily constructs known encodings if not found."""
     try:
@@ -516,6 +541,7 @@ def getEncoding(encName):
             return enc
         else:
             raise
+
 
 def getFont(fontName):
     """Lazily constructs known fonts if not found.
@@ -538,7 +564,6 @@ def getFont(fontName):
         return font
 
 
-
 def _slowStringWidth(text, fontName, fontSize):
     """Define this anyway so it can be tested, but whether it is used or not depends on _rl_accel"""
     font = getFont(fontName)
@@ -550,24 +575,25 @@ def _slowStringWidth(text, fontName, fontSize):
     #    w = w + wid[ord(ch)]
     #return 0.001 * w * fontSize
 
-
 # XXX Kiva specific changes
+
+
 stringWidth = _slowStringWidth
+
 
 def dumpFontData():
     print('Registered Encodings:')
     keys = list(_encodings.keys())
     keys.sort()
     for encName in keys:
-        print('   ',encName)
+        print('   ', encName)
 
     print()
     print('Registered Typefaces:')
     faces = list(_typefaces.keys())
     faces.sort()
     for faceName in faces:
-        print('   ',faceName)
-
+        print('   ', faceName)
 
     print()
     print('Registered Fonts:')
@@ -575,8 +601,8 @@ def dumpFontData():
     k.sort()
     for key in k:
         font = _fonts[key]
-        print('    %s (%s/%s)' % (font.fontName, font.face.name, font.encoding.name))
-
+        print('    %s (%s/%s)' %
+              (font.fontName, font.face.name, font.encoding.name))
 
 
 def test3widths(texts):
@@ -605,6 +631,7 @@ def test3widths(texts):
         print('class lookup and stringWidth took %0.4f' % (t1 - t0))
         print()
 
+
 def testStringWidthAlgorithms():
     rawdata = open('../../rlextra/rml2pdf/doc/rml_user_guide.prep').read()
     print('rawdata length %d' % len(rawdata))
@@ -612,7 +639,8 @@ def testStringWidthAlgorithms():
     test3widths([rawdata])
     print()
     words = string.split(rawdata)
-    print('test %d shorter strings (average length %0.2f chars)...' % (len(words), 1.0*len(rawdata)/len(words)))
+    print('test %d shorter strings (average length %0.2f chars)...' %
+          (len(words), 1.0 * len(rawdata) / len(words)))
     test3widths(words)
 
 
@@ -628,6 +656,6 @@ def test():
     dumpFontData()
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     test()
     testStringWidthAlgorithms()

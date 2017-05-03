@@ -259,16 +259,17 @@ namespace kiva {
         from kiva import fonttools
 
         def handle_unicode(text):
-            "Returns a utf8 encoded 8-bit string from 'text'"
-            # For now we just deal with unicode by converting to utf8
-            # Later we can add full-blown support with wchar_t/Py_UNICODE
-            # typemaps etc.
-            try:
-                if '' == b'' and isinstance(text, unicode):
-                    text = text.encode("utf8")
-                return text
-            except:
-                raise UnicodeError("Error encoding text to utf8.")
+            return text #Python 3 shouldn't need this function
+            #"Returns a utf8 encoded 8-bit string from 'text'"
+            ## For now we just deal with unicode by converting to utf8
+            ## Later we can add full-blown support with wchar_t/Py_UNICODE
+            ## typemaps etc.
+            #try:
+            #    if '' == b'' and isinstance(text, unicode):
+            #        text = text.encode("utf8")
+            #    return text
+            #except:
+            #    raise UnicodeError("Error encoding text to utf8.")
     %}
 
     void cleanup_font_threading_primitives();
@@ -727,6 +728,15 @@ namespace kiva {
                     img = GraphicsContextArray(img, pix_format=pix_format)
                 if rect is None:
                     rect = array((0,0,img.width(),img.height()),float)
+                # The following if block is required to prevent substantial 
+                # segfaulting. It does not really work completely though
+                if isinstance (img, GraphicsContextSystem ):
+                    pass
+                else:
+                    img2 = GraphicsContextSystem((img.width(),img.height()), pix_format=img.format())
+                    img2.bmp_array=img.bmp_array
+                    img2.pixel_map.bmp_array=img.bmp_array
+                    img=img2
                 return _agg.GraphicsContextArray_draw_image(self,img,rect,force_copy)
             %}
 
@@ -942,6 +952,57 @@ class Image(GraphicsContextArray):
             return self
         else:
             return new_img
+
+
+    # The following from __init__.py file to get namespace defined in agg.py
+    pix_format_string_map = {}
+    pix_format_string_map["gray8"] = pix_format_gray8
+    pix_format_string_map["rgb555"] = pix_format_rgb555
+    pix_format_string_map["rgb565"] = pix_format_rgb565
+    pix_format_string_map["rgb24"] = pix_format_rgb24
+    pix_format_string_map["bgr24"] = pix_format_bgr24
+    pix_format_string_map["rgba32"] = pix_format_rgba32
+    pix_format_string_map["argb32"] = pix_format_argb32
+    pix_format_string_map["abgr32"] = pix_format_abgr32
+    pix_format_string_map["bgra32"] = pix_format_bgra32
+
+    default_pix_format = "bgra32"
+
+    import types
+
+    try:
+        # Define a system-dependent GraphicsContext if there is a PixelMap
+        # class defined for the system (i.e. if plat_support was built)
+        from .plat_support import PixelMap
+
+        class GraphicsContextSystem(GraphicsContextArray):
+            def __init__(self,
+                         size,
+                         pix_format=default_pix_format,
+                         interpolation="nearest",
+                         bottom_up=True):
+                assert isinstance(size, tuple), repr(size)
+                width,height = size
+                pixel_map = PixelMap(
+                    width,
+                    height,
+                    pix_format_string_map[pix_format],
+                    255,
+                    bool(bottom_up)
+                ).set_bmp_array()
+                GraphicsContextArray.__init__(self, pixel_map.bmp_array,
+                                              pix_format, interpolation,
+                                              bottom_up)
+                self.pixel_map = pixel_map
+
+    except ImportError as ex:
+        # warn to stderr containing the exception. The warning should
+        # be an ImportWarning, but that is python 2.5+ specific
+        import warnings
+        warnings.warn("Error initializing Agg: %s" % ex, Warning, 2)
+
+        GraphicsContextSystem = None
+
 
 
 %}

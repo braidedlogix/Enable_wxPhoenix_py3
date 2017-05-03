@@ -3,7 +3,6 @@ from enable.example_support import demo_main, DemoFrame
 
 
 class MyFrame(DemoFrame):
-
     def _create_window(self):
         slider = Slider()
         slider.set_slider_pixels(10)

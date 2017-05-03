@@ -26,29 +26,32 @@ from traits.api import HasPrivateTraits, Trait
 #  'RadioStyle' class:
 #-------------------------------------------------------------------------------
 
-class RadioStyle ( HasPrivateTraits ):
+
+class RadioStyle(HasPrivateTraits):
 
     #---------------------------------------------------------------------------
     #  Trait definitions:
     #---------------------------------------------------------------------------
 
-#    radio_group = ARadioGroup
+    #    radio_group = ARadioGroup
 
     #---------------------------------------------------------------------------
     #  Handle the group the radio style component belongs to being changed:
     #---------------------------------------------------------------------------
 
-    def _group_changed ( self, old, new ):
+    def _group_changed(self, old, new):
         if old is not None:
-            old.remove( self )
+            old.remove(self)
         if new is not None:
-            new.add( self )
+            new.add(self)
+
 
 #-------------------------------------------------------------------------------
 #  'RadioGroup' class:
 #-------------------------------------------------------------------------------
 
-class RadioGroup ( HasPrivateTraits ):
+
+class RadioGroup(HasPrivateTraits):
 
     #---------------------------------------------------------------------------
     #  Trait definitions:
@@ -61,7 +64,7 @@ class RadioGroup ( HasPrivateTraits ):
     #  Handle elements being added to the group:
     #---------------------------------------------------------------------------
 
-    def add ( self, *components ):
+    def add(self, *components):
         for component in components:
             component.radio_group = self
             if component.selected and (self.selection is not component):
@@ -74,7 +77,7 @@ class RadioGroup ( HasPrivateTraits ):
     #  Handle components being removed from the group:
     #---------------------------------------------------------------------------
 
-    def remove ( self, *components ):
+    def remove(self, *components):
         for component in components:
             if component is self.selection:
                 self.selection is None
@@ -84,7 +87,7 @@ class RadioGroup ( HasPrivateTraits ):
     #  Handle the selection being changed:
     #---------------------------------------------------------------------------
 
-    def _selection_changed ( self, old, new ):
+    def _selection_changed(self, old, new):
         if old is not None:
             old.selected = False
 

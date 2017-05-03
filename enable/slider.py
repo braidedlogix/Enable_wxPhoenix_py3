@@ -1,12 +1,9 @@
-
-
-
 from numpy import linspace, zeros
 
 # Enthought library imports
 from kiva.constants import STROKE
-from traits.api import (Any, Bool, Enum, Float, Int, Property,
-                                  on_trait_change, Trait)
+from traits.api import (Any, Bool, Enum, Float, Int, Property, on_trait_change,
+                        Trait)
 from traitsui.api import EnumEditor
 
 # Local, relative imports
@@ -15,8 +12,11 @@ from .component import Component
 from .markers import MarkerNameDict, marker_names, CustomMarker
 
 slider_marker_names = list(marker_names) + ["rect"]
-SliderMarkerTrait = Trait("rect", "rect", MarkerNameDict,
-                    editor=EnumEditor(values=slider_marker_names))
+SliderMarkerTrait = Trait(
+    "rect",
+    "rect",
+    MarkerNameDict,
+    editor=EnumEditor(values=slider_marker_names))
 
 
 class Slider(Component):
@@ -130,7 +130,7 @@ class Slider(Component):
 
     # A tuple of (dx, dy) of the difference between the mouse position and
     # center of the slider.
-    _offset = Any((0,0))
+    _offset = Any((0, 0))
 
     def set_range(self, min, max):
         self.min = min
@@ -148,8 +148,9 @@ class Slider(Component):
 
         # The return coordinate.  The return value along the non-primary
         # axis will be the same in all cases.
-        coord = [0,0]
-        coord[other_ndx] = self.position[other_ndx] + self.bounds[other_ndx]/2
+        coord = [0, 0]
+        coord[other_ndx] = self.position[other_ndx] + self.bounds[
+            other_ndx] / 2
 
         # Handle exceptional/boundary cases
         if val <= self.min:
@@ -163,7 +164,8 @@ class Slider(Component):
             return coord
 
         # Handle normal cases
-        coord[axis_ndx] = (val - self.min) / (self.max - self.min) * self.bounds[axis_ndx] + screen_low
+        coord[axis_ndx] = (val - self.min) / (
+            self.max - self.min) * self.bounds[axis_ndx] + screen_low
         return coord
 
     def map_data(self, x, y, clip=True):
@@ -276,14 +278,13 @@ class Slider(Component):
         self._tick_percent = percent
         self._update_sizes()
 
-
     #------------------------------------------------------------------------
     # Rendering methods
     #------------------------------------------------------------------------
 
     def _draw_mainlayer(self, gc, view_bounds=None, mode="normal"):
-        start = [0,0]
-        end = [0,0]
+        start = [0, 0]
+        end = [0, 0]
         axis_ndx = self.axis_ndx
         other_ndx = 1 - axis_ndx
 
@@ -305,12 +306,13 @@ class Slider(Component):
                 gc.move_to(self.x2, start_y)
                 gc.line_to(self.x2, end_y)
             if self.num_ticks > 0:
-                x_pts = linspace(self.x, self.x2, self.num_ticks+2).astype(int)
-                starts = zeros((len(x_pts), 2),dtype=int)
-                starts[:,0] = x_pts
-                starts[:,1] = bar_y - self._cached_tick_size / 2
+                x_pts = linspace(self.x, self.x2,
+                                 self.num_ticks + 2).astype(int)
+                starts = zeros((len(x_pts), 2), dtype=int)
+                starts[:, 0] = x_pts
+                starts[:, 1] = bar_y - self._cached_tick_size / 2
                 ends = starts.copy()
-                ends[:,1] = bar_y + self._cached_tick_size / 2
+                ends[:, 1] = bar_y + self._cached_tick_size / 2
                 gc.line_set(starts, ends)
         else:
             gc.move_to(bar_x, self.y)
@@ -323,12 +325,13 @@ class Slider(Component):
                 gc.move_to(start_x, self.y2)
                 gc.line_to(end_x, self.y2)
             if self.num_ticks > 0:
-                y_pts = linspace(self.y, self.y2, self.num_ticks+2).astype(int)
-                starts = zeros((len(y_pts), 2),dtype=int)
-                starts[:,1] = y_pts
-                starts[:,0] = bar_x - self._cached_tick_size / 2
+                y_pts = linspace(self.y, self.y2,
+                                 self.num_ticks + 2).astype(int)
+                starts = zeros((len(y_pts), 2), dtype=int)
+                starts[:, 1] = y_pts
+                starts[:, 0] = bar_x - self._cached_tick_size / 2
                 ends = starts.copy()
-                ends[:,0] = bar_x + self._cached_tick_size / 2
+                ends[:, 0] = bar_x + self._cached_tick_size / 2
                 gc.line_set(starts, ends)
         gc.stroke_path()
 
@@ -342,7 +345,8 @@ class Slider(Component):
             gc.rect(*rect)
             gc.draw_path()
         else:
-            self._render_marker(gc, pt, self._cached_slider_size, self.slider_(), self.custom_slider)
+            self._render_marker(gc, pt, self._cached_slider_size,
+                                self.slider_(), self.custom_slider)
 
     def _get_rect_slider_bounds(self):
         """ Returns the (x, y, w, h) bounds of the rectangle representing the slider.
@@ -353,13 +357,12 @@ class Slider(Component):
         pt = self.map_screen(self.value)
         if self.orientation == "h":
             slider_height = self._cached_slider_size
-            return (pt[0] - self.slider_thickness, bar_y - slider_height/2,
+            return (pt[0] - self.slider_thickness, bar_y - slider_height / 2,
                     self.slider_thickness, slider_height)
         else:
             slider_width = self._cached_slider_size
-            return (bar_x - slider_width/2, pt[1] - self.slider_thickness,
+            return (bar_x - slider_width / 2, pt[1] - self.slider_thickness,
                     slider_width, self.slider_thickness)
-
 
     def _render_marker(self, gc, point, size, marker, custom_path):
         with gc:
@@ -375,7 +378,7 @@ class Slider(Component):
             if hasattr(gc, "draw_marker_at_points") and \
                     (marker.__class__ != CustomMarker) and \
                     (gc.draw_marker_at_points([point], size, marker.kiva_marker) != 0):
-                        pass
+                pass
             elif hasattr(gc, "draw_path_at_points"):
                 if marker.__class__ != CustomMarker:
                     path = gc.get_empty_path()
@@ -400,7 +403,6 @@ class Slider(Component):
                     gc.translate_ctm(*point)
                     gc.add_path(path)
                     gc.draw_path(STROKE)
-
 
     #------------------------------------------------------------------------
     # Interaction event handlers
@@ -441,8 +443,8 @@ class Slider(Component):
         else:
             x, y = pt
             size = self._cached_slider_size
-            x -= size/2
-            y -= size/2
+            x -= size / 2
+            y -= size / 2
             x2 = x + size
             y2 = y + size
 
@@ -497,13 +499,17 @@ class Slider(Component):
     def _update_sizes(self):
         if self._slider_size_mode == "percent":
             if self.orientation == "h":
-                self._cached_slider_size = int(self.height * self._slider_percent)
+                self._cached_slider_size = int(self.height *
+                                               self._slider_percent)
             else:
-                self._cached_slider_size = int(self.width * self._slider_percent)
+                self._cached_slider_size = int(self.width *
+                                               self._slider_percent)
         if self._endcap_size_mode == "percent":
             if self.orientation == "h":
-                self._cached_endcap_size = int(self.height * self._endcap_percent)
+                self._cached_endcap_size = int(self.height *
+                                               self._endcap_percent)
             else:
-                self._cached_endcap_size = int(self.width * self._endcap_percent)
+                self._cached_endcap_size = int(self.width *
+                                               self._endcap_percent)
 
         return

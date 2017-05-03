@@ -17,12 +17,10 @@ from traits.testing.unittest_tools import UnittestTools
 
 from enable.primitives.image import Image
 
-
 data_dir = resource_filename('enable.tests.primitives', 'data')
 
 
 class ImageTest(unittest.TestCase, UnittestTools):
-
     def setUp(self):
         self.data = np.empty(shape=(128, 256, 4), dtype='uint8')
         self.data[:, :, 0] = np.arange(256)
@@ -55,7 +53,7 @@ class ImageTest(unittest.TestCase, UnittestTools):
             Image(data=data)
 
     def test_init_bad_dtype(self):
-        data = np.array(['red']*65536).reshape(128, 128, 4)
+        data = np.array(['red'] * 65536).reshape(128, 128, 4)
         with self.assertRaises(TraitError):
             Image(data=data)
 
@@ -65,7 +63,7 @@ class ImageTest(unittest.TestCase, UnittestTools):
             self.image_32.data = data
 
     def test_set_bad_dtype(self):
-        data = np.array(['red']*65536).reshape(128, 128, 4)
+        data = np.array(['red'] * 65536).reshape(128, 128, 4)
         with self.assertRaises(TraitError):
             self.image_32.data = data
 
@@ -127,7 +125,7 @@ class ImageTest(unittest.TestCase, UnittestTools):
 
         # smoke test: image isn't all white
         # XXX actually compute what it should look like with alpha transfer
-        white_image = np.ones(shape=(256, 128, 4), dtype='uint8')*255
+        white_image = np.ones(shape=(256, 128, 4), dtype='uint8') * 255
         self.assertFalse(np.array_equal(white_image, gc.bmp_array))
 
     def test_draw_stretched(self):
@@ -140,7 +138,7 @@ class ImageTest(unittest.TestCase, UnittestTools):
 
         # smoke test: image isn't all white
         # XXX actually compute what it should look like with alpha transfer
-        white_image = np.ones(shape=(256, 256, 4), dtype='uint8')*255
+        white_image = np.ones(shape=(256, 256, 4), dtype='uint8') * 255
         self.assertFalse(np.array_equal(white_image, gc.bmp_array))
 
         # left half of the image *should* be white

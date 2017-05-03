@@ -3,10 +3,8 @@
 """ Traits UI tools for viewing the XML tree of SVG files.
 """
 
-
 from traits.api import HasTraits, List, Property, Str
 from traitsui import api as tui
-
 
 known_namespaces = {
     '{http://www.w3.org/2000/svg}': 'svg',
@@ -25,6 +23,7 @@ known_namespaces = {
     '{http://ns.adobe.com/Extensibility/1.0/}': 'adobex',
 }
 
+
 def normalize_name(name):
     """ Normalize XML names to abbreviate namespaces.
     """
@@ -32,6 +31,7 @@ def normalize_name(name):
         if name.startswith(ns):
             name = '%s:%s' % (known_namespaces[ns], name[len(ns):])
     return name
+
 
 class Attribute(HasTraits):
     """ View model for an XML attribute.
@@ -44,6 +44,7 @@ class Attribute(HasTraits):
 
     def _get_label(self):
         return '%s : %s' % (normalize_name(self.name), self.value)
+
 
 class Element(HasTraits):
     """ View model for an XML element.
@@ -82,23 +83,19 @@ def xml_to_tree(root):
 
 
 xml_tree_editor = tui.TreeEditor(
-    nodes = [
+    nodes=[
         tui.TreeNode(
-            node_for = [Element],
-            children = 'kids',
-            label = 'label',
-            menu = False,
-        ),
-        tui.TreeNode(
-            node_for = [Attribute],
-            children = '',
-            label = 'label',
-            menu = False,
-        )
+            node_for=[Element],
+            children='kids',
+            label='label',
+            menu=False, ), tui.TreeNode(
+                node_for=[Attribute],
+                children='',
+                label='label',
+                menu=False, )
     ],
-    editable = False,
-    show_icons = False,
-)
+    editable=False,
+    show_icons=False, )
 
 
 class XMLTree(tui.ModelView):
@@ -106,12 +103,11 @@ class XMLTree(tui.ModelView):
     """
 
     traits_view = tui.View(
-        tui.Item('model', editor=xml_tree_editor, show_label=False),
-
+        tui.Item(
+            'model', editor=xml_tree_editor, show_label=False),
         width=1024,
         height=768,
-        resizable=True,
-    )
+        resizable=True, )
 
     @classmethod
     def fromxml(cls, root, **traits):
@@ -128,6 +124,7 @@ def main():
     xml = ET.parse(args.file).getroot()
     t = XMLTree.fromxml(xml)
     t.configure_traits()
+
 
 if __name__ == '__main__':
     main()

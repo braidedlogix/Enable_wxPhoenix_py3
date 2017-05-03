@@ -5,8 +5,8 @@ from collections import defaultdict
 import os
 import pstats
 
-from traits.api import (Any, Bool, Constant, Dict, Event, Float,
-    HasTraits, Instance, Int, List, Property, Str, on_trait_change)
+from traits.api import (Any, Bool, Constant, Dict, Event, Float, HasTraits,
+                        Instance, Int, List, Property, Str, on_trait_change)
 from traitsui import api as tui
 from traitsui.tabular_adapter import TabularAdapter
 
@@ -15,17 +15,20 @@ class SuperTuple(tuple):
     """ Generic super-tuple using pre-defined attribute names.
     """
     __names__ = []
+
     def __new__(cls, *args, **kwds):
         self = tuple.__new__(cls, *args, **kwds)
         for i, attr in enumerate(cls.__names__):
             setattr(self, attr, self[i])
         return self
 
+
 class Subrecord(SuperTuple):
     """ The records referring to the calls a function makes.
     """
-    __names__ = ['file_line_name', 'ncalls', 'nonrec_calls',
-        'inline_time', 'cum_time']
+    __names__ = [
+        'file_line_name', 'ncalls', 'nonrec_calls', 'inline_time', 'cum_time'
+    ]
 
     @property
     def file(self):
@@ -39,11 +42,14 @@ class Subrecord(SuperTuple):
     def func_name(self):
         return self[0][2]
 
+
 class Record(Subrecord):
     """ The top-level profiling record of a function.
     """
-    __names__ = ['file_line_name', 'ncalls', 'nonrec_calls',
-        'inline_time', 'cum_time', 'callers']
+    __names__ = [
+        'file_line_name', 'ncalls', 'nonrec_calls', 'inline_time', 'cum_time',
+        'callers'
+    ]
 
 
 profile_columns = [
@@ -55,6 +61,7 @@ profile_columns = [
     ('Line', 'line'),
     ('File', 'file'),
 ]
+
 
 class ProfileAdapter(TabularAdapter):
     """ Display profiling records in a TabularEditor.
@@ -113,8 +120,8 @@ def get_profile_editor(adapter):
         operations=[],
         selected='selected_record',
         column_clicked='column_clicked',
-        dclicked='dclicked',
-    )
+        dclicked='dclicked', )
+
 
 class ProfileResults(HasTraits):
     """ Display profiling results.
@@ -139,20 +146,20 @@ class ProfileResults(HasTraits):
 
     def trait_view(self, name=None, view_element=None):
         if name or view_element is not None:
-            return super(ProfileResults, self).trait_view(name=name,
-                view_element=view_element)
+            return super(ProfileResults, self).trait_view(
+                name=name, view_element=view_element)
 
         view = tui.View(
             tui.Group(
-                tui.Item('total_time', style='readonly'),
-            ),
-            tui.Item('records', editor=get_profile_editor(self.adapter),
+                tui.Item(
+                    'total_time', style='readonly'), ),
+            tui.Item(
+                'records',
+                editor=get_profile_editor(self.adapter),
                 show_label=False),
-
             width=1024,
             height=768,
-            resizable=True,
-        )
+            resizable=True, )
         return view
 
     def sorter(self, record):
@@ -168,10 +175,11 @@ class ProfileResults(HasTraits):
             records = records[::-1]
         return records
 
-
     def _adapter_default(self):
-        return ProfileAdapter(basenames=self.basenames,
-            percentages=self.percentages, total_time=self.total_time)
+        return ProfileAdapter(
+            basenames=self.basenames,
+            percentages=self.percentages,
+            total_time=self.total_time)
 
     @on_trait_change('total_time,percentages,basenames')
     def _adapter_traits_changed(self, object, name, old, new):
@@ -199,6 +207,7 @@ class SillyStatsWrapper(object):
     """ Wrap any object with a .stats attribute or a .stats dictionary such that
     it can be passed to a Stats() constructor.
     """
+
     def __init__(self, obj=None):
         if obj is None:
             self.stats = {}
@@ -213,7 +222,7 @@ class SillyStatsWrapper(object):
             obj.create_stats()
             self.stats = obj.stats
         else:
-            raise TypeError("don't know how to fake a Stats with %r" % (obj,))
+            raise TypeError("don't know how to fake a Stats with %r" % (obj, ))
 
     def create_stats(self):
         pass
@@ -245,7 +254,6 @@ class Sike(HasTraits):
     # Map from the (file, lineno, name) tuple to the record.
     record_map = Dict()
 
-
     #### GUI traits ############################################################
 
     basenames = Bool(True)
@@ -258,8 +266,7 @@ class Sike(HasTraits):
         tui.VGroup(
             tui.HGroup(
                 tui.Item('basenames'),
-                tui.Item('percentages'),
-            ),
+                tui.Item('percentages'), ),
             tui.HGroup(
                 tui.UItem('main_results'),
                 tui.VGroup(
@@ -267,19 +274,15 @@ class Sike(HasTraits):
                     tui.UItem('callee_results'),
                     tui.Label('Callers'),
                     tui.UItem('caller_results'),
-                    tui.UItem('filename', style='readonly'),
-                    tui.UItem('code', editor=tui.CodeEditor(line='line')),
-                ),
-                style='custom',
-            ),
-        ),
-
+                    tui.UItem(
+                        'filename', style='readonly'),
+                    tui.UItem(
+                        'code', editor=tui.CodeEditor(line='line')), ),
+                style='custom', ), ),
         width=1024,
         height=768,
         resizable=True,
-        title='Profiling results',
-    )
-
+        title='Profiling results', )
 
     @classmethod
     def fromstats(cls, stats, **traits):
@@ -304,12 +307,13 @@ class Sike(HasTraits):
         """
         records = []
         for file_line_name, (ncalls, nonrec_calls, inline_time, cum_time,
-            calls) in list(stats.items()):
+                             calls) in list(stats.items()):
             newcalls = []
             for sub_file_line_name, sub_call in list(calls.items()):
-                newcalls.append(Subrecord((sub_file_line_name,) + sub_call))
-            records.append(Record((file_line_name, ncalls, nonrec_calls,
-                inline_time, cum_time, newcalls)))
+                newcalls.append(Subrecord((sub_file_line_name, ) + sub_call))
+            records.append(
+                Record((file_line_name, ncalls, nonrec_calls, inline_time,
+                        cum_time, newcalls)))
         return records
 
     def get_callee_map(self, records):
@@ -319,13 +323,14 @@ class Sike(HasTraits):
         for record in records:
             for caller in record.callers:
                 callees[caller.file_line_name].append(
-                    Subrecord((record.file_line_name,)+caller[1:]))
+                    Subrecord((record.file_line_name, ) + caller[1:]))
         return callees
 
     @on_trait_change('percentages,basenames')
     def _adapter_traits_changed(self, object, name, old, new):
-        for obj in [self.main_results, self.callee_results,
-            self.caller_results]:
+        for obj in [
+                self.main_results, self.callee_results, self.caller_results
+        ]:
             setattr(obj, name, new)
 
     @on_trait_change('main_results:selected_record')
@@ -339,7 +344,7 @@ class Sike(HasTraits):
 
         self.callee_results.total_time = new.cum_time
         self.callee_results.records = self.callee_map.get(new.file_line_name,
-            [])
+                                                          [])
         self.callee_results._resort()
         self.callee_results.selected_record = self.callee_results.activated_record = None
 
@@ -352,13 +357,11 @@ class Sike(HasTraits):
             self.line = line
         else:
             self.trait_set(
-                code = '',
-                filename = '',
-                line = 1,
-            )
+                code='',
+                filename='',
+                line=1, )
 
-    @on_trait_change('caller_results:dclicked,'
-        'callee_results:dclicked')
+    @on_trait_change('caller_results:dclicked,' 'callee_results:dclicked')
     def goto_record(self, new):
         if new is None:
             return

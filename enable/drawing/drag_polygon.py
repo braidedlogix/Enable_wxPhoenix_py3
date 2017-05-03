@@ -1,13 +1,12 @@
 """ A drag drawn polygon. """
 
-
-
 from enable.primitives.api import Polygon
 from enable.api import Pointer
 from pyface.action.api import MenuManager
 from traits.api import Delegate, Instance
 
 from .drawing_tool import DrawingTool
+
 
 class DragPolygon(DrawingTool):
     """ A drag drawn polygon. """
@@ -37,15 +36,13 @@ class DragPolygon(DrawingTool):
     # Pointer for the normal state.
     normal_pointer = Pointer('cross')
 
-
     #### Miscellaneous. ####
 
     # The context menu for the polygon.
     menu = Instance(MenuManager)
 
-
     def reset(self):
-        self.vertex_color = (0,0,0,0)
+        self.vertex_color = (0, 0, 0, 0)
         self.vertex_size = 0
         self.poly.model.points = []
         self.event_state = "normal"
@@ -57,20 +54,20 @@ class DragPolygon(DrawingTool):
 
     #### 'complete' state #####################################################
 
-    def complete_draw ( self, gc ):
+    def complete_draw(self, gc):
         """ Draw the completed polygon. """
         with gc:
             self.poly.border_dash = None
             self.poly._draw_closed(gc)
         return
 
-    def complete_left_down ( self, event ):
+    def complete_left_down(self, event):
         """ Draw a new polygon. """
         self.reset()
-        self.normal_left_down( event )
+        self.normal_left_down(event)
         return
 
-    def complete_right_down ( self, event ):
+    def complete_right_down(self, event):
         """ Do the context menu if available. """
         if self.menu is not None:
             if self._is_in((event.x + self.x, event.y - self.y)):
@@ -81,7 +78,7 @@ class DragPolygon(DrawingTool):
 
     #### 'drawing' state ######################################################
 
-    def drawing_draw ( self, gc ):
+    def drawing_draw(self, gc):
         """ Draw the polygon while in 'drawing' state. """
 
         with gc:
@@ -89,7 +86,7 @@ class DragPolygon(DrawingTool):
             self.poly._draw_open(gc)
         return
 
-    def drawing_left_up ( self, event ):
+    def drawing_left_up(self, event):
         """ Handle the left mouse button coming up in 'drawing' state. """
 
         self.event_state = 'complete'
@@ -101,7 +98,7 @@ class DragPolygon(DrawingTool):
 
         return
 
-    def drawing_mouse_move ( self, event ):
+    def drawing_mouse_move(self, event):
         """ Handle the mouse moving in 'drawing' state. """
 
         last_point = self.poly.model.points[-1]
@@ -115,7 +112,7 @@ class DragPolygon(DrawingTool):
 
     #### 'normal' state #######################################################
 
-    def normal_left_down ( self, event ):
+    def normal_left_down(self, event):
         """ Handle the left button down in the 'normal' state. """
 
         self.poly.model.points.append((event.x + self.x, event.y - self.y))
@@ -127,11 +124,12 @@ class DragPolygon(DrawingTool):
 
         return
 
-    def normal_mouse_move ( self, event ):
+    def normal_mouse_move(self, event):
         """ Handle the mouse moving in the 'normal' state. """
 
         self.pointer = self.normal_pointer
 
         return
+
 
 #### EOF ######################################################################

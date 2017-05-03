@@ -7,6 +7,7 @@ from traits.api import Enum, Float
 from .container import Container
 from .stacked_layout import stacked_preferred_size, stack_layout
 
+
 class StackedContainer(Container):
     """ Base class for stacked containers
     """
@@ -66,6 +67,7 @@ class HStackedContainer(StackedContainer):
 
         #import pdb; pdb.set_trace()
         return stack_layout(self, components, align)
+
 
 class VStackedContainer(StackedContainer):
     """

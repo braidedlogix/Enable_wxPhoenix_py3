@@ -17,8 +17,8 @@ import numpy as np
 
 from enable.api import Component
 from enable.component_editor import ComponentEditor
-from traits.api import (Any, Button, Dict, HasTraits, HTML, Instance,
-    List, Property, Str, on_trait_change)
+from traits.api import (Any, Button, Dict, HasTraits, HTML, Instance, List,
+                        Property, Str, on_trait_change)
 from traitsui import api as tui
 
 from enable.savage.svg import document
@@ -32,19 +32,21 @@ from .sike import Sike
 from .svg_component import ImageComponent, SVGComponent
 from .xml_view import xml_to_tree, xml_tree_editor
 
-
 logger = logging.getLogger()
 this_dir = os.path.abspath(os.path.dirname(__file__))
+
 
 class ComponentTrait(Instance):
     """ Convenience trait for Enable Components.
     """
+
     def __init__(self, **kwds):
         kwds.setdefault('klass', Component)
         super(ComponentTrait, self).__init__(**kwds)
 
     def create_editor(self):
         return ComponentEditor()
+
 
 def normalize_text(text):
     """ Utility to normalize the whitespace in text.
@@ -54,6 +56,7 @@ def normalize_text(text):
     """
     return ' '.join(text.strip().split())
 
+
 def activate_tool(component, tool):
     """ Add and activate an overlay tool.
     """
@@ -61,6 +64,7 @@ def activate_tool(component, tool):
     component.overlays.append(tool)
     component.active_tool = tool
     return tool
+
 
 class Comparator(HasTraits):
     """ The main application.
@@ -81,7 +85,6 @@ class Comparator(HasTraits):
     # The name of the default PNG file to display when no reference PNG exists.
     default_png = Str(os.path.join(this_dir, 'images/default.png'))
 
-
     #### State traits ##########################################################
 
     # The currently selected SVG file.
@@ -94,7 +97,6 @@ class Comparator(HasTraits):
 
     # The profilers.
     profile_this = Instance(ProfileThis, args=())
-
 
     #### GUI traits ############################################################
 
@@ -118,57 +120,80 @@ class Comparator(HasTraits):
     # The profiler views.
     parsing_sike = Instance(Sike, args=())
     drawing_sike = Instance(Sike, args=())
-    wx_doc_sike  = Instance(Sike, args=())
-    kiva_doc_sike= Instance(Sike, args=())
-
-
+    wx_doc_sike = Instance(Sike, args=())
+    kiva_doc_sike = Instance(Sike, args=())
 
     traits_view = tui.View(
         tui.Tabbed(
             tui.VGroup(
                 tui.HGroup(
-                    tui.Item('current_file', editor=tui.EnumEditor(name='svg_files'),
-                        style='simple', width=1.0, show_label=False),
-                    tui.Item('move_backward', show_label=False,
+                    tui.Item(
+                        'current_file',
+                        editor=tui.EnumEditor(name='svg_files'),
+                        style='simple',
+                        width=1.0,
+                        show_label=False),
+                    tui.Item(
+                        'move_backward',
+                        show_label=False,
                         enabled_when="svg_files.index(current_file) != 0"),
-                    tui.Item('move_forward', show_label=False,
-                        enabled_when="svg_files.index(current_file) != len(svg_files)-1"),
-                ),
+                    tui.Item(
+                        'move_forward',
+                        show_label=False,
+                        enabled_when="svg_files.index(current_file) != len(svg_files)-1"
+                    ), ),
                 tui.VSplit(
                     tui.HSplit(
-                        tui.Item('description', label='Description', show_label=False),
-                        tui.Item('current_xml_view', editor=xml_tree_editor, show_label=False),
-                    ),
+                        tui.Item(
+                            'description',
+                            label='Description',
+                            show_label=False),
+                        tui.Item(
+                            'current_xml_view',
+                            editor=xml_tree_editor,
+                            show_label=False), ),
                     tui.HSplit(
-                        tui.Item('document', editor=SVGEditor(), show_label=False),
-                        tui.Item('kiva_component', show_label=False),
-                        tui.Item('ref_component', show_label=False),
+                        tui.Item(
+                            'document', editor=SVGEditor(), show_label=False),
+                        tui.Item(
+                            'kiva_component', show_label=False),
+                        tui.Item(
+                            'ref_component', show_label=False),
                         # TODO: tui.Item('agg_component', show_label=False),
-                    ),
-                ),
-                label='SVG',
-            ),
-            tui.Item('parsing_sike', style='custom', show_label=False,
+                    ), ),
+                label='SVG', ),
+            tui.Item(
+                'parsing_sike',
+                style='custom',
+                show_label=False,
                 label='Parsing Profile'),
-            tui.Item('drawing_sike', style='custom', show_label=False,
+            tui.Item(
+                'drawing_sike',
+                style='custom',
+                show_label=False,
                 label='Kiva Drawing Profile'),
-            tui.Item('wx_doc_sike', style='custom', show_label=False,
+            tui.Item(
+                'wx_doc_sike',
+                style='custom',
+                show_label=False,
                 label='Creating WX document'),
-            tui.Item('kiva_doc_sike', style='custom', show_label=False,
-                label='Creating WX document'),
-        ),
-
+            tui.Item(
+                'kiva_doc_sike',
+                style='custom',
+                show_label=False,
+                label='Creating WX document'), ),
         width=1280,
         height=768,
         resizable=True,
         statusbar='mouse_coords',
-        title='SVG Comparator',
-    )
+        title='SVG Comparator', )
 
     def __init__(self, **traits):
         super(Comparator, self).__init__(**traits)
-        kiva_ch = activate_tool(self.kiva_component, Crosshair(self.kiva_component))
-        ref_ch = activate_tool(self.ref_component, Crosshair(self.ref_component))
+        kiva_ch = activate_tool(self.kiva_component,
+                                Crosshair(self.kiva_component))
+        ref_ch = activate_tool(self.ref_component,
+                               Crosshair(self.ref_component))
         self.ch_controller = MultiController(kiva_ch, ref_ch)
 
     @classmethod
@@ -187,7 +212,7 @@ class Comparator(HasTraits):
             png = None
             base = os.path.splitext(os.path.basename(svg))[0]
             for prefix in ('full-', 'basic-', 'tiny-', ''):
-                fn = os.path.join(pngdir, prefix+base+'.png')
+                fn = os.path.join(pngdir, prefix + base + '.png')
                 if os.path.exists(fn):
                     png = os.path.basename(fn)
                     break
@@ -196,7 +221,6 @@ class Comparator(HasTraits):
         x = cls(suitedir=dirname, svg_png=d, svg_files=svgs, **traits)
         x.current_file = svgs[0]
         return x
-
 
     def display_reference_png(self, filename):
         """ Read the image file and shove its data into the display component.
@@ -226,7 +250,9 @@ class Comparator(HasTraits):
         if desc is not None:
             desc_text = desc.text
         else:
-            testcase = self.current_xml.find('.//{http://www.w3.org/2000/02/svg/testsuite/description/}SVGTestCase')
+            testcase = self.current_xml.find(
+                './/{http://www.w3.org/2000/02/svg/testsuite/description/}SVGTestCase'
+            )
             if testcase is not None:
                 desc_text = testcase.get('desc', None)
                 version_text = testcase.get('version', None)
@@ -237,7 +263,9 @@ class Comparator(HasTraits):
             b.tail = normalize_text(desc_text)
 
         if version_text is None:
-            script = self.current_xml.find('.//{http://www.w3.org/2000/02/svg/testsuite/description/}OperatorScript')
+            script = self.current_xml.find(
+                './/{http://www.w3.org/2000/02/svg/testsuite/description/}OperatorScript'
+            )
             if script is not None:
                 version_text = script.get('version', None)
         if version_text is not None:
@@ -246,7 +274,9 @@ class Comparator(HasTraits):
             b.text = 'Version: '
             b.tail = version_text
 
-        paras = self.current_xml.findall('.//{http://www.w3.org/2000/02/svg/testsuite/description/}Paragraph')
+        paras = self.current_xml.findall(
+            './/{http://www.w3.org/2000/02/svg/testsuite/description/}Paragraph'
+        )
         if len(paras) > 0:
             div = ET.SubElement(html, 'div')
             for para in paras:
@@ -283,12 +313,12 @@ class Comparator(HasTraits):
 
     def _move_backward_fired(self):
         idx = self.svg_files.index(self.current_file)
-        idx = max(idx-1, 0)
+        idx = max(idx - 1, 0)
         self.current_file = self.svg_files[idx]
 
     def _move_forward_fired(self):
         idx = self.svg_files.index(self.current_file)
-        idx = min(idx+1, len(self.svg_files)-1)
+        idx = min(idx + 1, len(self.svg_files) - 1)
         self.current_file = self.svg_files[idx]
 
     def _get_abs_current_file(self):
@@ -306,9 +336,8 @@ class Comparator(HasTraits):
         self.profile_this.stop()
         try:
             self.profile_this.start('Creating WX document')
-            self.document = document.SVGDocument(self.current_xml,
-                                                 resources=resources,
-                                                 renderer=WxRenderer)
+            self.document = document.SVGDocument(
+                self.current_xml, resources=resources, renderer=WxRenderer)
         except:
             logger.exception('Error parsing document %s', new)
             self.document = None
@@ -317,15 +346,13 @@ class Comparator(HasTraits):
 
         try:
             self.profile_this.start('Creating Kiva document')
-            self.kiva_component.document = document.SVGDocument(self.current_xml,
-                                                                resources=resources,
-                                                                renderer=KivaRenderer)
+            self.kiva_component.document = document.SVGDocument(
+                self.current_xml, resources=resources, renderer=KivaRenderer)
         except Exception as e:
             logger.exception('Error parsing document %s', new)
             self.kiva_component.document
 
         self.profile_this.stop()
-
 
         png_file = self.svg_png.get(new, None)
         if png_file is None:
@@ -366,9 +393,10 @@ class OpenClipartComparator(Comparator):
         """ Load SVG and reference PNGs from an OpenClipart directory.
         """
         dirname = os.path.abspath(dirname)
+
         def remove_prefix(path, dirname=dirname):
             if path.startswith(dirname + os.path.sep):
-                path = path[len(dirname)+1:]
+                path = path[len(dirname) + 1:]
             return path
 
         svg_png = {}
@@ -377,7 +405,7 @@ class OpenClipartComparator(Comparator):
                 fn = os.path.join(d, fn)
                 base, ext = os.path.splitext(fn)
                 if ext == '.svg':
-                    png = os.path.join(d, base+'.png')
+                    png = os.path.join(d, base + '.png')
                     if os.path.exists(png):
                         png = remove_prefix(png)
                     else:
@@ -397,9 +425,14 @@ class OpenClipartComparator(Comparator):
 def main():
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--openclipart', action='store_true',
-        help="The suite is in OpenClipart layout rather than the SVG test suite layout.")
-    parser.add_argument('--suitedir', nargs='?',
+    parser.add_argument(
+        '--openclipart',
+        action='store_true',
+        help="The suite is in OpenClipart layout rather than the SVG test suite layout."
+    )
+    parser.add_argument(
+        '--suitedir',
+        nargs='?',
         default=os.path.join(this_dir, 'w3c_svg_11'),
         help="The directory with the test suite. [default: %(default)s]")
 
@@ -426,6 +459,7 @@ def main():
     else:
         c = klass.fromsuitedir(args.suitedir)
     c.configure_traits()
+
 
 if __name__ == '__main__':
     main()

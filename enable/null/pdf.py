@@ -11,11 +11,14 @@
 
 from kiva.pdf import CompiledPath, GraphicsContext
 
+
 class NativeScrollBar(object):
     pass
 
+
 class Window(object):
     pass
+
 
 def font_metrics_provider():
     from reportlab.pdfgen.canvas import Canvas

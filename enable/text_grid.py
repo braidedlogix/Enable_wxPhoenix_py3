@@ -2,8 +2,6 @@
 TextGrid is a text grid widget that is meant to be used with Numpy.
 """
 
-
-
 # Major library imports
 from numpy import arange, array, dstack, repeat, newaxis
 
@@ -17,7 +15,6 @@ from .component import Component
 from .colors import black_color_trait, ColorTrait
 from .enable_traits import LineStyle
 from .font_metrics_provider import font_metrics_provider
-
 
 
 class TextGrid(Component):
@@ -106,7 +103,7 @@ class TextGrid(Component):
             gc.set_stroke_color(text_color)
             gc.set_fill_color(text_color)
             gc.set_font(self.font)
-            gc.set_text_position(0,0)
+            gc.set_text_position(0, 0)
 
             width, height = self._get_actual_cell_size()
             numrows, numcols = self.string_array.shape
@@ -115,13 +112,12 @@ class TextGrid(Component):
             # XXX should this be in the background layer?
             for j, row in enumerate(self.string_array):
                 for i, text in enumerate(row):
-                    if (i,j) in self.selected_cells:
+                    if (i, j) in self.selected_cells:
                         gc.set_fill_color(highlight_bgcolor)
-                        ll_x, ll_y = self._cached_cell_coords[i,j+1]
+                        ll_x, ll_y = self._cached_cell_coords[i, j + 1]
                         # render this a bit big, but covered by border
-                        gc.rect(ll_x, ll_y,
-                            width+2*padding + border_width,
-                            height+2*padding + border_width)
+                        gc.rect(ll_x, ll_y, width + 2 * padding + border_width,
+                                height + 2 * padding + border_width)
                         gc.fill_path()
                         gc.set_fill_color(text_color)
 
@@ -132,7 +128,7 @@ class TextGrid(Component):
                     x,y = self._cached_cell_coords[i,j+1] + self._text_offset + \
                         padding + border_width/2.0
 
-                    if (i,j) in self.selected_cells:
+                    if (i, j) in self.selected_cells:
                         gc.set_fill_color(highlight_color)
                         gc.set_stroke_color(highlight_color)
                         gc.set_text_position(x, y)
@@ -149,7 +145,6 @@ class TextGrid(Component):
     # Private methods
     #------------------------------------------------------------------------
 
-
     def _draw_grid_lines(self, gc):
         gc.set_stroke_color(self.cell_border_color_)
         gc.set_line_dash(self.cell_border_style_)
@@ -157,17 +152,17 @@ class TextGrid(Component):
 
         # Skip the leftmost and bottommost cell coords (since Y axis is reversed,
         # the bottommost coord is the last one)
-        x_points = self._cached_cell_coords[:,0,0]
-        y_points = self._cached_cell_coords[0,:,1]
+        x_points = self._cached_cell_coords[:, 0, 0]
+        y_points = self._cached_cell_coords[0, :, 1]
 
         for x in x_points:
             gc.move_to(x, self.y)
-            gc.line_to(x, self.y+self.height)
+            gc.line_to(x, self.y + self.height)
             gc.stroke_path()
 
         for y in y_points:
             gc.move_to(self.x, y)
-            gc.line_to(self.x+self.width, y)
+            gc.line_to(self.x + self.width, y)
             gc.stroke_path()
         return
 
@@ -181,10 +176,10 @@ class TextGrid(Component):
             for text in self.string_array.ravel():
                 gc.set_font(self.font)
                 l, d, w, h = gc.get_text_extent(text)
-                if -l+w > max_w:
-                    max_w = -l+w
-                if -d+h > max_h:
-                    max_h = -d+h
+                if -l + w > max_w:
+                    max_w = -l + w
+                if -d + h > max_h:
+                    max_h = -d + h
                 if l < min_l:
                     min_l = l
                 if d < min_d:
@@ -203,30 +198,35 @@ class TextGrid(Component):
         width, height = self._get_actual_cell_size()
         numrows, numcols = self.string_array.shape
 
-        cell_width = width + 2*self.cell_padding + self.cell_border_width
-        cell_height = height + 2*self.cell_padding + self.cell_border_width
+        cell_width = width + 2 * self.cell_padding + self.cell_border_width
+        cell_height = height + 2 * self.cell_padding + self.cell_border_width
 
-        x_points = arange(numcols+1) * cell_width + self.cell_border_width/2.0 + self.x
-        y_points = arange(numrows+1) * cell_height + self.cell_border_width/2.0 + self.y
+        x_points = arange(
+            numcols + 1) * cell_width + self.cell_border_width / 2.0 + self.x
+        y_points = arange(
+            numrows + 1) * cell_height + self.cell_border_width / 2.0 + self.y
 
-        tmp = dstack((repeat(x_points[:,newaxis], numrows+1, axis=1),
-                      repeat(y_points[:,newaxis].T, numcols+1, axis=0)))
+        tmp = dstack((repeat(
+            x_points[:, newaxis], numrows + 1, axis=1), repeat(
+                y_points[:, newaxis].T, numcols + 1, axis=0)))
 
         # We have to reverse the y-axis (e.g. the 0th row needs to be at the
         # highest y-position).
-        self._cached_cell_coords = tmp[:,::-1]
+        self._cached_cell_coords = tmp[:, ::-1]
         return
 
     def _update_bounds(self):
         if self.string_array is not None and len(self.string_array.shape) == 2:
             rows, cols = self.string_array.shape
-            margin = 2*self.cell_padding + self.cell_border_width
+            margin = 2 * self.cell_padding + self.cell_border_width
             width, height = self._get_actual_cell_size()
-            self.bounds = [ cols * (width + margin) + self.cell_border_width,
-                            rows * (height + margin) + self.cell_border_width ]
+            self.bounds = [
+                cols * (width + margin) + self.cell_border_width,
+                rows * (height + margin) + self.cell_border_width
+            ]
 
         else:
-            self.bounds = [0,0]
+            self.bounds = [0, 0]
 
     def _get_actual_cell_size(self):
         if self._cell_size == "auto":
@@ -254,10 +254,10 @@ class TextGrid(Component):
 
         numrows, numcols = self.string_array.shape
         i = int((x - self.padding_left) / width)
-        j = numrows - (int((y - self.padding_bottom)/ height) + 1)
+        j = numrows - (int((y - self.padding_bottom) / height) + 1)
         shape = self.string_array.shape
         if 0 <= i < shape[1] and 0 <= j < shape[0]:
-            return i,j
+            return i, j
         else:
             return None
 

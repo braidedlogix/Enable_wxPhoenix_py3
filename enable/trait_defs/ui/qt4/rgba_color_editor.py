@@ -9,7 +9,6 @@
 # Thanks for using Enthought open source!
 #
 #------------------------------------------------------------------------------
-
 """ Defines the various RGBA color editors and the color editor factory, for
     the Qt4 user interface toolkit.
 """
@@ -34,8 +33,8 @@ from traitsui.qt4.color_editor \
 #  The PyQt4 ToolkitEditorFactory class:
 #-------------------------------------------------------------------------------
 
-class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
 
+class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
     def to_qt4_color(self, editor):
         """ Gets the PyQt color equivalent of the object trait.
         """
@@ -54,17 +53,17 @@ class ToolkitEditorFactory(BaseColorToolkitEditorFactory):
     def from_qt4_color(self, color):
         """ Gets the application equivalent of a PyQt value.
         """
-        return(color.redF(), color.greenF(), color.blueF(), color.alphaF())
+        return (color.redF(), color.greenF(), color.blueF(), color.alphaF())
 
     def str_color(self, color):
         """ Returns the text representation of a specified color value.
         """
         if type(color) in SequenceTypes:
-            return "(%d,%d,%d,%d)" % (int(color[0] * 255.0),
-                                      int(color[1] * 255.0),
-                                      int(color[2] * 255.0),
-                                      int(color[3] * 255.0))
+            return "(%d,%d,%d,%d)" % (
+                int(color[0] * 255.0), int(color[1] * 255.0),
+                int(color[2] * 255.0), int(color[3] * 255.0))
         return color
+
 
 def RGBAColorEditor(*args, **traits):
     return ToolkitEditorFactory(*args, **traits)

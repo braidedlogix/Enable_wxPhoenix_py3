@@ -23,7 +23,6 @@ from traits.api import Instance, List
 from enable.base_tool import KeySpec
 from .command_tool import BaseUndoTool
 
-
 # default undo/redo/clear key specifications
 ctrl_z = KeySpec('z', 'control')
 ctrl_shift_z = KeySpec('z', 'control', 'shift')

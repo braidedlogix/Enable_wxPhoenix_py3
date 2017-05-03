@@ -172,8 +172,8 @@ class DrawingImageTester(DrawingTester):
         elif image.shape[2] == 4:
             check = numpy.sum(image == [255, 0, 0, 255], axis=2) == 4
         else:
-            self.fail(
-                'Pixel size is not 3 or 4, but {0}'.format(image.shape[2]))
+            self.fail('Pixel size is not 3 or 4, but {0}'.format(image.shape[
+                2]))
         if check.any():
             return
         self.fail('The image looks empty, no red pixels where drawn')

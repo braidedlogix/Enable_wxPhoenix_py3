@@ -8,7 +8,6 @@ from enable.api import Component
 from traits.api import Any, Array, Bool, Float
 from kiva.fonttools import Font
 
-
 if sys.platform == 'win32':
     now = time.clock
 else:
@@ -29,7 +28,6 @@ class SVGComponent(Component):
     profile_this = Any()
     should_profile = Bool(False)
 
-
     def _draw_mainlayer(self, gc, view_bounds=None, mode='default'):
         if self.should_profile and self.profile_this is not None:
             # Only profile the first draw.
@@ -47,7 +45,7 @@ class SVGComponent(Component):
                 gc.select_font("Helvetica", 36)
             else:
                 gc.set_font(Font("Helvetica", 36))
-            gc.show_text_at_point("Could not parse document.", 20, height-56)
+            gc.show_text_at_point("Could not parse document.", 20, height - 56)
             gc.restore_state()
             if self.profile_this is not None:
                 self.profile_this.stop()
@@ -84,7 +82,6 @@ class ImageComponent(Component):
     # The RGB(A) data.
     image = Array()
 
-
     def _draw_mainlayer(self, gc, view_bounds=None, mode='default'):
         gc.clear()
         if len(self.image.shape) != 3:
@@ -94,10 +91,10 @@ class ImageComponent(Component):
         try:
             width, height = self.bounds
             img_height, img_width = self.image.shape[:2]
-            gc.draw_image(self.image, (0.0,height-img_height,img_width,img_height))
+            gc.draw_image(self.image,
+                          (0.0, height - img_height, img_width, img_height))
         finally:
             gc.restore_state()
 
     def _image_changed(self):
         self.invalidate_and_redraw()
-

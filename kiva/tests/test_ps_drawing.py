@@ -6,7 +6,6 @@ from traits.testing.unittest_tools import unittest
 
 
 class TestPSDrawing(DrawingTester, unittest.TestCase):
-
     def create_graphics_context(self, width, height):
         return PSGC((width, height))
 
@@ -21,11 +20,9 @@ class TestPSDrawing(DrawingTester, unittest.TestCase):
         # Just a simple check that the path has been closed or the text has
         # been drawn.
         line = lines[-1].strip()
-        if not any((
-                line.endswith('fill'),
-                line.endswith('stroke'),
-                line.endswith('cliprestore'),
-                '(hello kiva) show\n' in lines)):
+        if not any(
+            (line.endswith('fill'), line.endswith('stroke'),
+             line.endswith('cliprestore'), '(hello kiva) show\n' in lines)):
             self.fail('Path was not closed')
 
 

@@ -1,7 +1,5 @@
 """ A point-to-point drawn polygon. """
 
-
-
 from enable.api import cursor_style_trait, Line
 from traits.api import Event, Int, Instance
 
@@ -39,7 +37,7 @@ class PointLine(DrawingTool):
 
     def get_point(self, index):
         """ Get the point at the specified index. """
-        return self.line.points[ index ]
+        return self.line.points[index]
 
     def set_point(self, index, point):
         """ Set the point at the specified index to point. """
@@ -232,5 +230,6 @@ class PointLine(DrawingTool):
         else:
             result = None
         return result
+
 
 # EOF

@@ -121,4 +121,3 @@ key_names = [
     'Up',
     'Alt',
 ]
-

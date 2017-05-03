@@ -1,6 +1,3 @@
-
-
-
 # Library imports
 
 # Enthought Library imports
@@ -10,6 +7,7 @@ from traits.api import Enum, Bool, Float, Int, Type, List
 
 # Local imports
 from .toolbar_buttons import Button
+
 
 class ViewportToolbar(Container, AbstractOverlay):
     """
@@ -59,18 +57,18 @@ class ViewportToolbar(Container, AbstractOverlay):
             last_button_position = self.width - self.button_spacing
             for b in self.components:
                 x, y, w, h = metrics.get_text_extent(b.label)
-                b.width = w + 2*b.label_padding
+                b.width = w + 2 * b.label_padding
                 b.x = last_button_position - b.width
                 b.y = self.button_vposition
-                last_button_position -= b.width + self.button_spacing*2
+                last_button_position -= b.width + self.button_spacing * 2
         else:
             last_button_position = 0
             for b in self.components:
                 x, y, w, h = metrics.get_text_extent(b.label)
-                b.width = w + 2*b.label_padding
+                b.width = w + 2 * b.label_padding
                 b.x = self.button_spacing + last_button_position
                 b.y = self.button_vposition
-                last_button_position += b.width + self.button_spacing*2
+                last_button_position += b.width + self.button_spacing * 2
 
     def overlay(self, other_component, gc, view_bounds=None, mode="normal"):
         c = other_component
@@ -104,4 +102,3 @@ class HoverToolbar(ViewportToolbar):
             self.component.remove_toolbar()
             self.component.request_redraw()
         return
-

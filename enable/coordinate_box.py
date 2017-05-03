@@ -1,4 +1,3 @@
-
 # Enthought library imports
 from traits.api import HasTraits, Enum, Instance, Property, Tuple
 
@@ -13,8 +12,8 @@ else:
     ENABLE_CONSTRAINTS = True
     from .layout.constraints_namespace import ConstraintsNamespace
     from .layout.ab_constrainable import ABConstrainable
-    from .layout.utils import (
-        add_symbolic_constraints, STRENGTHS, get_from_constraints_namespace)
+    from .layout.utils import (add_symbolic_constraints, STRENGTHS,
+                               get_from_constraints_namespace)
 
     ConstraintPolicyEnum = Enum('ignore', *STRENGTHS)
 
@@ -57,7 +56,6 @@ class CoordinateBox(HasTraits):
     width = Property
 
     height = Property
-
 
     #------------------------------------------------------------------------
     # Constraints-based layout

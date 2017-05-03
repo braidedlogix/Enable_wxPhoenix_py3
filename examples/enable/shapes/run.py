@@ -18,8 +18,7 @@ class MyFrame(DemoFrame):
         """ Create an enable window. """
 
         container = Container(
-            auto_size=False, bgcolor='black', *self._create_shapes()
-        )
+            auto_size=False, bgcolor='black', *self._create_shapes())
 
         return Window(self, component=container)
 
@@ -29,33 +28,27 @@ class MyFrame(DemoFrame):
     def _create_shapes(self):
         """ Create some shapes. """
 
-        box1 = Box(
-            bounds     = [100, 100],
-            position   = [50, 50],
-            fill_color = 'lightpink',
-            text       = 'Box 1'
-        )
+        box1 = Box(bounds=[100, 100],
+                   position=[50, 50],
+                   fill_color='lightpink',
+                   text='Box 1')
 
-        box2 = Box(
-            bounds     = [100, 100],
-            position   = [150, 150],
-            fill_color = 'greenyellow',
-            text       = 'Box 2'
-        )
+        box2 = Box(bounds=[100, 100],
+                   position=[150, 150],
+                   fill_color='greenyellow',
+                   text='Box 2')
 
         circle1 = Circle(
-            radius     = 50,
-            position   = [250,250],
-            fill_color = 'cornflowerblue',
-            text       = 'Circle 1'
-        )
+            radius=50,
+            position=[250, 250],
+            fill_color='cornflowerblue',
+            text='Circle 1')
 
         circle2 = Circle(
-            radius     = 50,
-            position   = [350,350],
-            fill_color = 'khaki',
-            text       = 'Circle 2'
-        )
+            radius=50,
+            position=[350, 350],
+            fill_color='khaki',
+            text='Circle 2')
 
         return box1, box2, circle1, circle2
 
@@ -63,5 +56,5 @@ class MyFrame(DemoFrame):
 if __name__ == "__main__":
     # Save demo so that it doesn't get garbage collected when run within
     # existing event loop (i.e. from ipython).
-    demo = demo_main(MyFrame, size=(500, 500),
-                     title="Click and drag the shapes")
+    demo = demo_main(
+        MyFrame, size=(500, 500), title="Click and drag the shapes")

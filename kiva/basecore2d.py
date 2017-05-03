@@ -7,7 +7,6 @@
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-
 """
 Pure-Python reference implementation of a Kiva graphics context.
 
@@ -30,21 +29,15 @@ transform
 
 """
 
-
-
 import numpy as np
 from numpy import alltrue, array, asarray, float64, shape, pi, concatenate
 
-from .constants import (POINT, LINE, LINES, RECT, NO_DASH, CLOSE,
-                        CAP_ROUND, CAP_BUTT, CAP_SQUARE,
-                        JOIN_ROUND, JOIN_BEVEL, JOIN_MITER,
-                        STROKE, FILL_STROKE, EOF_FILL_STROKE,
-                        FILL, EOF_FILL,
-                        TEXT_FILL, TEXT_STROKE, TEXT_FILL_STROKE,
-                        TEXT_INVISIBLE, TEXT_FILL_CLIP, TEXT_STROKE_CLIP,
-                        TEXT_FILL_STROKE_CLIP, TEXT_CLIP, TEXT_OUTLINE,
-                        SCALE_CTM, TRANSLATE_CTM, ROTATE_CTM, CONCAT_CTM,
-                        LOAD_CTM)
+from .constants import (
+    POINT, LINE, LINES, RECT, NO_DASH, CLOSE, CAP_ROUND, CAP_BUTT, CAP_SQUARE,
+    JOIN_ROUND, JOIN_BEVEL, JOIN_MITER, STROKE, FILL_STROKE, EOF_FILL_STROKE,
+    FILL, EOF_FILL, TEXT_FILL, TEXT_STROKE, TEXT_FILL_STROKE, TEXT_INVISIBLE,
+    TEXT_FILL_CLIP, TEXT_STROKE_CLIP, TEXT_FILL_STROKE_CLIP, TEXT_CLIP,
+    TEXT_OUTLINE, SCALE_CTM, TRANSLATE_CTM, ROTATE_CTM, CONCAT_CTM, LOAD_CTM)
 from .abstract_graphics_context import AbstractGraphicsContext
 from .line_state import LineState, line_state_equal
 from .graphics_state import GraphicsState
@@ -57,6 +50,7 @@ import kiva.affine as affine
 # Simple tests used by drawing methods to determine what kind of
 # drawing command is supposed to be executed.
 # --------------------------------------------------------------------
+
 
 def is_point(tup):
     return tup[0] == POINT
@@ -166,7 +160,7 @@ class GraphicsContextBase(AbstractGraphicsContext):
         """
         self.state.ctm = affine.scale(self.state.ctm, sx, sy)
         self.active_subpath.append((SCALE_CTM, (sx, sy)))
-        self.path_transform_indices.append(len(self.active_subpath)-1)
+        self.path_transform_indices.append(len(self.active_subpath) - 1)
 
     def translate_ctm(self, tx, ty):
         """ Translates the coordinate system by the value given by (tx, ty)
@@ -180,7 +174,7 @@ class GraphicsContextBase(AbstractGraphicsContext):
         """
         self.state.ctm = affine.translate(self.state.ctm, tx, ty)
         self.active_subpath.append((TRANSLATE_CTM, (tx, ty)))
-        self.path_transform_indices.append(len(self.active_subpath)-1)
+        self.path_transform_indices.append(len(self.active_subpath) - 1)
 
     def rotate_ctm(self, angle):
         """ Rotates the coordinate space for drawing by the given angle.
@@ -191,8 +185,8 @@ class GraphicsContextBase(AbstractGraphicsContext):
                 the angle, in radians, to rotate the coordinate system
         """
         self.state.ctm = affine.rotate(self.state.ctm, angle)
-        self.active_subpath.append((ROTATE_CTM, (angle,)))
-        self.path_transform_indices.append(len(self.active_subpath)-1)
+        self.active_subpath.append((ROTATE_CTM, (angle, )))
+        self.path_transform_indices.append(len(self.active_subpath) - 1)
 
     def concat_ctm(self, transform):
         """ Concatenates the transform to current coordinate transform matrix.
@@ -204,8 +198,8 @@ class GraphicsContextBase(AbstractGraphicsContext):
                 the current coordinate matrix.
         """
         self.state.ctm = affine.concat(self.state.ctm, transform)
-        self.active_subpath.append((CONCAT_CTM, (transform,)))
-        self.path_transform_indices.append(len(self.active_subpath)-1)
+        self.active_subpath.append((CONCAT_CTM, (transform, )))
+        self.path_transform_indices.append(len(self.active_subpath) - 1)
 
     def get_ctm(self):
         """ Returns the current coordinate transform matrix.
@@ -216,8 +210,8 @@ class GraphicsContextBase(AbstractGraphicsContext):
         """ Returns the current coordinate transform matrix.
         """
         self.state.ctm = transform
-        self.active_subpath.append((LOAD_CTM, (transform,)))
-        self.path_transform_indices.append(len(self.active_subpath)-1)
+        self.active_subpath.append((LOAD_CTM, (transform, )))
+        self.path_transform_indices.append(len(self.active_subpath) - 1)
 
     # ----------------------------------------------------------------
     # Save/Restore graphics state.
@@ -236,8 +230,8 @@ class GraphicsContextBase(AbstractGraphicsContext):
     def restore_state(self):
         """ Restores the previous graphics state. """
         self.state = self.state_stack.pop(-1)
-        self.active_subpath.append((LOAD_CTM, (self.state.ctm,)))
-        self.path_transform_indices.append(len(self.active_subpath)-1)
+        self.active_subpath.append((LOAD_CTM, (self.state.ctm, )))
+        self.path_transform_indices.append(len(self.active_subpath) - 1)
 
     # ----------------------------------------------------------------
     # context manager interface
@@ -520,10 +514,11 @@ class GraphicsContextBase(AbstractGraphicsContext):
     def rect(self, x, y, sx, sy):
         """ Adds a rectangle as a new subpath.
         """
-        pts = array(((x, y),
-                     (x, y+sy),
-                     (x+sx, y+sy),
-                     (x+sx, y),))
+        pts = array((
+            (x, y),
+            (x, y + sy),
+            (x + sx, y + sy),
+            (x + sx, y), ))
         self.lines(pts)
         self.close_path('rect')
 
@@ -544,7 +539,7 @@ class GraphicsContextBase(AbstractGraphicsContext):
 
             Currently starts a new subpath -- is this what we want?
         """
-        self.active_subpath.append((CLOSE, (tag,)))
+        self.active_subpath.append((CLOSE, (tag, )))
         self._new_subpath()
 
     def curve_to(self, x_ctrl1, y_ctrl1, x_ctrl2, y_ctrl2, x_to, y_to):
@@ -571,16 +566,16 @@ class GraphicsContextBase(AbstractGraphicsContext):
         # (xy_ctrl1, xy_ctrl2), and (xy_ctrl2, xy_to) would be a reasonable
         # approximation.
         n = 100
-        t = np.arange(1, n+1) / float(n)
-        t2 = t*t
-        t3 = t2*t
+        t = np.arange(1, n + 1) / float(n)
+        t2 = t * t
+        t3 = t2 * t
         u = 1 - t
-        u2 = u*u
-        u3 = u2*u
+        u2 = u * u
+        u3 = u2 * u
         x0, y0 = self.state.current_point
         pts = np.column_stack([
-            x0*u3 + 3*(x_ctrl1*t*u2 + x_ctrl2*t2*u) + x_to*t3,
-            y0*u3 + 3*(y_ctrl1*t*u2 + y_ctrl2*t2*u) + y_to*t3,
+            x0 * u3 + 3 * (x_ctrl1 * t * u2 + x_ctrl2 * t2 * u) + x_to * t3,
+            y0 * u3 + 3 * (y_ctrl1 * t * u2 + y_ctrl2 * t2 * u) + y_to * t3,
         ])
         self.active_subpath.append((LINES, pts))
         self.state.current_point = pts[-1]
@@ -637,9 +632,9 @@ class GraphicsContextBase(AbstractGraphicsContext):
         # the radius.
         n = 100
         if end_angle < start_angle and not cw:
-            end_angle += 2*pi
+            end_angle += 2 * pi
         elif start_angle < end_angle and cw:
-            start_angle += 2*pi
+            start_angle += 2 * pi
         theta = np.linspace(start_angle, end_angle, n)
         pts = radius * np.column_stack([np.cos(theta), np.sin(theta)])
         pts += np.array([x, y])
@@ -700,8 +695,7 @@ class GraphicsContextBase(AbstractGraphicsContext):
         """Convert an agg.AffineTransform to a numpy matrix
         representing the affine transform usable by kiva.affine
         and other non-agg parts of kiva"""
-        return array([[aff[0], aff[1], 0],
-                      [aff[2], aff[3], 0],
+        return array([[aff[0], aff[1], 0], [aff[2], aff[3], 0],
                       [aff[4], aff[5], 1]], float64)
 
     def add_path(self, path):
@@ -712,7 +706,7 @@ class GraphicsContextBase(AbstractGraphicsContext):
         from kiva import agg
 
         multi_state = 0  # For multi-element path commands we keep the previous
-        x_ctrl1 = 0      # information in these variables.
+        x_ctrl1 = 0  # information in these variables.
         y_ctrl1 = 0
         x_ctrl2 = 0
         y_ctrl2 = 0
@@ -776,10 +770,10 @@ class GraphicsContextBase(AbstractGraphicsContext):
             yclip_max = min(ymin1 + height1, y + height)
             height_clip = max(0, yclip_max - yclip_min)
             width_clip = max(0, xclip_max - xclip_min)
-            self.state.clipping_path = (xclip_min,  yclip_min,
-                                        width_clip, height_clip)
-            self.device_set_clipping_path(xclip_min,  yclip_min,
-                                          width_clip, height_clip)
+            self.state.clipping_path = (xclip_min, yclip_min, width_clip,
+                                        height_clip)
+            self.device_set_clipping_path(xclip_min, yclip_min, width_clip,
+                                          height_clip)
 
     def clip_to_rects(self):
         """
@@ -1012,7 +1006,7 @@ class GraphicsContextBase(AbstractGraphicsContext):
     def show_text_tanslate(self, text, dx, dy):
         """ Draws text at the specified offset. """
         x, y = self.get_text_position()
-        self.set_text_position(x+dx, y+dy)
+        self.set_text_position(x + dx, y + dy)
         self.device_show_text(text)
         self.set_text_position(x, y)
 
@@ -1035,7 +1029,6 @@ class GraphicsContextBase(AbstractGraphicsContext):
 
         # This is not currently implemented in a device-independent way.
         return
-
 
     def show_glyphs(self):
         """
@@ -1133,8 +1126,10 @@ class GraphicsContextBase(AbstractGraphicsContext):
                     self.draw_subpath(mode)
                     self.device_draw_rect(args[0], args[1], args[2], args[3],
                                           mode)
-                elif func in [SCALE_CTM, ROTATE_CTM, TRANSLATE_CTM,
-                              CONCAT_CTM, LOAD_CTM]:
+                elif func in [
+                        SCALE_CTM, ROTATE_CTM, TRANSLATE_CTM, CONCAT_CTM,
+                        LOAD_CTM
+                ]:
                     self.device_transform_device_ctm(func, args)
                 else:
                     print('oops:', func)
@@ -1183,10 +1178,7 @@ class GraphicsContextBase(AbstractGraphicsContext):
         # on most devices.  We'll need to specialize this on API's that
         # can handle rotated rects such as Quartz and OpenGL(?).
         # All transformations are done in the call to lines().
-        pts = array(((x, y),
-                     (x, y+sy),
-                     (x+sx, y+sy),
-                     (x+sx, y),
+        pts = array(((x, y), (x, y + sy), (x + sx, y + sy), (x + sx, y),
                      (x, y)))
         self.add_point_to_subpath(pts)
         self.draw_subpath(mode)

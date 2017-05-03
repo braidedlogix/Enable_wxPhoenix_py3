@@ -2,6 +2,7 @@
 Interface for scroll handlers.
 """
 
+
 class ScrollHandler:
     """ The interface for scroll handlers.
 
@@ -35,5 +36,6 @@ class ScrollHandler:
         """
 
         raise NotImplementedError
+
 
 #### EOF ######################################################################

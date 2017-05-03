@@ -13,6 +13,7 @@ from enable.abstract_overlay import AbstractOverlay
 from .base_zoom_tool import BaseZoomTool
 from .tool_history_mixin import ToolHistoryMixin
 
+
 class ViewportZoomTool(AbstractOverlay, ToolHistoryMixin, BaseZoomTool):
     """ Selects a range along the index or value axis.
 
@@ -29,7 +30,7 @@ class ViewportZoomTool(AbstractOverlay, ToolHistoryMixin, BaseZoomTool):
     #   Select a range across a single index or value axis.
     # box:
     #   Perform a "box" selection on two axes.
-    tool_mode = Enum("range", "box") #Enum("box", "range")
+    tool_mode = Enum("range", "box")  #Enum("box", "range")
 
     # Is the tool always "on"? If True, left-clicking always initiates
     # a zoom operation; if False, the user must press a key to enter zoom mode.
@@ -58,11 +59,11 @@ class ViewportZoomTool(AbstractOverlay, ToolHistoryMixin, BaseZoomTool):
 
     # The key press to enter zoom mode, if **always_on** is False.  Has no effect
     # if **always_on** is True.
-    enter_zoom_key = Instance(KeySpec, args=("z",))
+    enter_zoom_key = Instance(KeySpec, args=("z", ))
 
     # The key press to leave zoom mode, if **always_on** is False.  Has no effect
     # if **always_on** is True.
-    exit_zoom_key = Instance(KeySpec, args=("z",))
+    exit_zoom_key = Instance(KeySpec, args=("z", ))
 
     # Disable the tool after the zoom is completed?
     disable_on_complete = Bool(True)
@@ -114,7 +115,7 @@ class ViewportZoomTool(AbstractOverlay, ToolHistoryMixin, BaseZoomTool):
     #------------------------------------------------------------------------
 
     # The key that cancels the zoom and resets the view to the original defaults.
-    cancel_zoom_key = Instance(KeySpec, args=("Esc",))
+    cancel_zoom_key = Instance(KeySpec, args=("Esc", ))
 
     #------------------------------------------------------------------------
     # Private traits
@@ -187,7 +188,6 @@ class ViewportZoomTool(AbstractOverlay, ToolHistoryMixin, BaseZoomTool):
         self._screen_start = None
         self._screen_end = None
 
-
     def deactivate(self, component):
         """ Called when this is no longer the active tool.
         """
@@ -253,9 +253,10 @@ class ViewportZoomTool(AbstractOverlay, ToolHistoryMixin, BaseZoomTool):
             x_pos = transformed_x - (transformed_x - position[0]) / zoom
             y_pos = transformed_y - (transformed_y - position[1]) / zoom
 
-            self.component.set(view_position=[x_pos, y_pos], trait_change_notify=False)
+            self.component.set(view_position=[x_pos, y_pos],
+                               trait_change_notify=False)
             bounds = self.component.view_bounds
-            self.component.view_bounds = [bounds[0] / zoom , bounds[1] / zoom]
+            self.component.view_bounds = [bounds[0] / zoom, bounds[1] / zoom]
 
             event.handled = True
             self.component.request_redraw()
@@ -286,6 +287,7 @@ class ViewportZoomTool(AbstractOverlay, ToolHistoryMixin, BaseZoomTool):
                                self.component.view_bounds[i]))
         else:
             self._reset_state((self.component.view_position,
-                                self.component.view_bounds))
+                               self.component.view_bounds))
+
 
 # EOF

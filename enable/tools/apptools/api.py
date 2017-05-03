@@ -5,7 +5,6 @@
 # This file is open source software distributed according to the terms in
 # LICENSE.txt
 #
-
 """
 Enable Apptools Integration
 ===========================
@@ -19,8 +18,6 @@ functionality provided by Apptools, but is optional from the point of view
 of the Enable codebase as a whole.
 
 """
-
-
 
 # Support for Undo/Redo with Enable
 from .commands import ComponentCommand, MoveCommand, ResizeCommand

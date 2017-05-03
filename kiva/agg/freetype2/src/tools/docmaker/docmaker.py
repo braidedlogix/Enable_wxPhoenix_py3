@@ -13,18 +13,18 @@
 # to speed things significantly.
 #
 
-from sources   import *
-from content   import *
-from utils     import *
+from sources import *
+from content import *
+from utils import *
 from formatter import *
-from tohtml    import *
+from tohtml import *
 
 import utils
 
 import sys, os, time, string, glob, getopt
 
 
-def  usage():
+def usage():
     print "\nDocMaker Usage information\n"
     print "  docmaker [options] file1 [file2 ...]\n"
     print "using the following options:\n"
@@ -38,7 +38,7 @@ def  usage():
     print "  --prefix : same as -p, as in '--prefix=ft2'"
 
 
-def  main( argv ):
+def main(argv):
     """main program loop"""
 
     global output_dir
@@ -49,48 +49,48 @@ def  main( argv ):
                                     ["help", "title=", "output=", "prefix="] )
     except getopt.GetoptError:
         usage()
-        sys.exit( 2 )
+        sys.exit(2)
 
     if args == []:
         usage()
-        sys.exit( 1 )
+        sys.exit(1)
 
     # process options
     #
-    project_title  = "Project"
+    project_title = "Project"
     project_prefix = None
-    output_dir     = None
+    output_dir = None
 
     for opt in opts:
-        if opt[0] in ( "-h", "--help" ):
+        if opt[0] in ("-h", "--help"):
             usage()
-            sys.exit( 0 )
+            sys.exit(0)
 
-        if opt[0] in ( "-t", "--title" ):
+        if opt[0] in ("-t", "--title"):
             project_title = opt[1]
 
-        if opt[0] in ( "-o", "--output" ):
+        if opt[0] in ("-o", "--output"):
             utils.output_dir = opt[1]
 
-        if opt[0] in ( "-p", "--prefix" ):
+        if opt[0] in ("-p", "--prefix"):
             project_prefix = opt[1]
 
     check_output()
 
     # create context and processor
-    source_processor  = SourceProcessor()
+    source_processor = SourceProcessor()
     content_processor = ContentProcessor()
 
     # retrieve the list of files to process
-    file_list = make_file_list( args )
+    file_list = make_file_list(args)
     for filename in file_list:
-        source_processor.parse_file( filename )
-        content_processor.parse_sources( source_processor )
+        source_processor.parse_file(filename)
+        content_processor.parse_sources(source_processor)
 
     # process sections
     content_processor.finish()
 
-    formatter = HtmlFormatter( content_processor, project_title, project_prefix )
+    formatter = HtmlFormatter(content_processor, project_title, project_prefix)
 
     formatter.toc_dump()
     formatter.index_dump()
@@ -100,7 +100,6 @@ def  main( argv ):
 # if called from the command line
 #
 if __name__ == '__main__':
-    main( sys.argv )
-
+    main(sys.argv)
 
 # eof

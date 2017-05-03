@@ -89,10 +89,7 @@ class DiamondMarker(AbstractMarker):
     antialias = False
 
     def _add_to_path(self, path, size):
-        path.lines(array(((0, -size),
-                          (-size, 0),
-                          (0, size),
-                          (size, 0))))
+        path.lines(array(((0, -size), (-size, 0), (0, size), (size, 0))))
 
 
 class CircleMarker(AbstractMarker):
@@ -103,31 +100,13 @@ class CircleMarker(AbstractMarker):
     # The Kiva marker type. (Overrides AbstractMarker.)
     kiva_marker = CIRCLE_MARKER
     # Array of points in a circle
-    circle_points = array([[ 1.   ,  0.   ],
-                           [ 0.966,  0.259],
-                           [ 0.866,  0.5  ],
-                           [ 0.707,  0.707],
-                           [ 0.5  ,  0.866],
-                           [ 0.259,  0.966],
-                           [ 0.   ,  1.   ],
-                           [-0.259,  0.966],
-                           [-0.5  ,  0.866],
-                           [-0.707,  0.707],
-                           [-0.866,  0.5  ],
-                           [-0.966,  0.259],
-                           [-1.   ,  0.   ],
-                           [-0.966, -0.259],
-                           [-0.866, -0.5  ],
-                           [-0.707, -0.707],
-                           [-0.5  , -0.866],
-                           [-0.259, -0.966],
-                           [ 0.   , -1.   ],
-                           [ 0.259, -0.966],
-                           [ 0.5  , -0.866],
-                           [ 0.707, -0.707],
-                           [ 0.866, -0.5  ],
-                           [ 0.966, -0.259],
-                           [ 1.   ,  0.   ]])
+    circle_points = array(
+        [[1., 0.], [0.966, 0.259], [0.866, 0.5], [0.707, 0.707], [0.5, 0.866],
+         [0.259, 0.966], [0., 1.], [-0.259, 0.966], [-0.5, 0.866],
+         [-0.707, 0.707], [-0.866, 0.5], [-0.966, 0.259], [-1., 0.],
+         [-0.966, -0.259], [-0.866, -0.5], [-0.707, -0.707], [-0.5, -0.866],
+         [-0.259, -0.966], [0., -1.], [0.259, -0.966], [0.5, -0.866],
+         [0.707, -0.707], [0.866, -0.5], [0.966, -0.259], [1., 0.]])
 
     def _add_to_path(self, path, size):
         if size <= 5:
@@ -150,9 +129,7 @@ class TriangleMarker(AbstractMarker):
     antialias = False
 
     def _add_to_path(self, path, size):
-        path.lines(array(((-size, -size),
-                          (size, -size),
-                          (0,  0.732 * size))))
+        path.lines(array(((-size, -size), (size, -size), (0, 0.732 * size))))
 
 
 class Inverted_TriangleMarker(AbstractMarker):
@@ -166,9 +143,7 @@ class Inverted_TriangleMarker(AbstractMarker):
     antialias = False
 
     def _add_to_path(self, path, size):
-        path.lines(array(((-size, size),
-                          (size, size),
-                          (0, -0.732 * size))))
+        path.lines(array(((-size, size), (size, size), (0, -0.732 * size))))
 
 
 class LeftTriangleMarker(AbstractMarker):
@@ -180,9 +155,7 @@ class LeftTriangleMarker(AbstractMarker):
     antialias = True
 
     def _add_to_path(self, path, size):
-        path.lines(array([(size, -size),
-                          (size, size),
-                          (-0.732 * size, 0)]))
+        path.lines(array([(size, -size), (size, size), (-0.732 * size, 0)]))
 
 
 class RightTriangleMarker(AbstractMarker):
@@ -194,9 +167,7 @@ class RightTriangleMarker(AbstractMarker):
     antialias = True
 
     def _add_to_path(self, path, size):
-        path.lines(array([(-size, -size),
-                          (-size, size),
-                          (0.732 * size, 0)]))
+        path.lines(array([(-size, -size), (-size, size), (0.732 * size, 0)]))
 
 
 class PentagonMarker(AbstractMarker):
@@ -209,11 +180,10 @@ class PentagonMarker(AbstractMarker):
 
     def _add_to_path(self, path, size):
         # xi = size * cos(2*pi*i/5. + pi/2), yi = size * sin(2*pi*i/5. + pi/2)
-        path.lines(array([(0, size),
-                          (0.951 * size, 0.309 * size),
-                          (0.588 * size, -0.809 * size),
-                          (-0.588 * size, -0.809 * size),
-                          (-0.951 * size, 0.309 * size)]))
+        path.lines(
+            array([(0, size), (0.951 * size, 0.309 * size), (
+                0.588 * size, -0.809 * size), (-0.588 * size, -0.809 * size), (
+                    -0.951 * size, 0.309 * size)]))
 
 
 class Hexagon1Marker(AbstractMarker):
@@ -226,12 +196,10 @@ class Hexagon1Marker(AbstractMarker):
 
     def _add_to_path(self, path, size):
         # xi = size * cos(2*pi*i/6.), yi = size * sin(2*pi*i/6.)
-        path.lines(array([(size, 0),
-                          (0.5 * size, 0.866 * size),
-                          (-0.5 * size, 0.866 * size),
-                          (-size, 0),
-                          (-0.5 * size, -0.866 * size),
-                          (0.5 * size, -0.866 * size)]))
+        path.lines(
+            array([(size, 0), (0.5 * size, 0.866 * size), (
+                -0.5 * size, 0.866 * size), (-size, 0), (
+                    -0.5 * size, -0.866 * size), (0.5 * size, -0.866 * size)]))
 
 
 class Hexagon2Marker(AbstractMarker):
@@ -244,12 +212,10 @@ class Hexagon2Marker(AbstractMarker):
 
     def _add_to_path(self, path, size):
         # Like Hexagon1Marker but with an offset of 30 deg.
-        path.lines(array([(0.866 * size, 0.5 * size),
-                          (0., size),
-                          (-0.866 * size, 0.5 * size),
-                          (-0.866 * size, -0.5 * size),
-                          (0., -size),
-                          (0.866 * size, -0.5 * size)]))
+        path.lines(
+            array([(0.866 * size, 0.5 * size), (0., size), (
+                -0.866 * size, 0.5 * size), (-0.866 * size, -0.5 * size), (
+                    0., -size), (0.866 * size, -0.5 * size)]))
 
 
 class PlusMarker(AbstractMarker):
@@ -264,7 +230,7 @@ class PlusMarker(AbstractMarker):
 
     def _add_to_path(self, path, size):
         path.move_to(0, -size)
-        path.line_to(0,  size)
+        path.line_to(0, size)
         path.move_to(-size, 0)
         path.line_to(size, 0)
 
@@ -281,9 +247,9 @@ class CrossMarker(AbstractMarker):
 
     def _add_to_path(self, path, size):
         path.move_to(-size, -size)
-        path.line_to(size,  size)
+        path.line_to(size, size)
         path.move_to(size, -size)
-        path.line_to(-size,  size)
+        path.line_to(-size, size)
 
 
 class StarMarker(AbstractMarker):
@@ -298,16 +264,14 @@ class StarMarker(AbstractMarker):
         # Generated from
         # i = arange(10), thetai = 2*pi * i/10., ri = 0.75 + (-1)**i * 0.25
         # xi = ri * sin(thetai), yi = ri * cos(thetai)
-        path.lines(array([(0.0, size),
-                          (0.294 * size, 0.405 * size),
-                          (0.951 * size, 0.309 * size),
-                          (0.476 * size, -0.155 * size),
-                          (0.588 * size, -0.809 * size),
-                          (0, -0.5 * size),
-                          (-0.588 * size, -0.809 * size),
-                          (-0.476 * size, -0.155 * size),
-                          (-0.951 * size, 0.309 * size),
-                          (-0.294 * size, 0.405 * size)]))
+        path.lines(
+            array([(0.0, size), (0.294 * size, 0.405 * size), (
+                0.951 * size, 0.309 * size), (0.476 * size, -0.155 * size), (
+                    0.588 * size, -0.809 * size), (0, -0.5 * size), (
+                        -0.588 * size, -0.809 * size), (-0.476 * size, -0.155 *
+                                                        size),
+                   (-0.951 * size, 0.309 * size), (-0.294 * size, 0.405 * size
+                                                   )]))
 
 
 class CrossPlusMarker(AbstractMarker):
@@ -321,12 +285,12 @@ class CrossPlusMarker(AbstractMarker):
     def _add_to_path(self, path, size):
         # Darw an X
         path.move_to(-size, -size)
-        path.line_to(size,  size)
+        path.line_to(size, size)
         path.move_to(size, -size)
-        path.line_to(-size,  size)
+        path.line_to(-size, size)
         # Draw a +
         path.move_to(0, -size)
-        path.line_to(0,  size)
+        path.line_to(0, size)
         path.move_to(-size, 0)
         path.line_to(size, 0)
 
@@ -397,6 +361,7 @@ class CustomMarker(AbstractMarker):
         else:
             return self.path
 
+
 # String names for marker types.
 marker_names = ("square", "circle", "triangle", "inverted_triangle",
                 "left_triangle", "right_triangle", "pentagon", "hexagon",
@@ -404,26 +369,28 @@ marker_names = ("square", "circle", "triangle", "inverted_triangle",
                 "dot", "pixel")
 
 # Mapping of marker string names to classes.
-MarkerNameDict = {"square": SquareMarker,
-                  "circle": CircleMarker,
-                  "triangle": TriangleMarker,
-                  "inverted_triangle": Inverted_TriangleMarker,
-                  "left_triangle":LeftTriangleMarker,
-                  "right_triangle": RightTriangleMarker,
-                  "pentagon": PentagonMarker,
-                  "hexagon": Hexagon1Marker,
-                  "hexagon2": Hexagon2Marker,
-                  "plus": PlusMarker,
-                  "cross": CrossMarker,
-                  "star": StarMarker,
-                  "cross_plus": CrossPlusMarker,
-                  "diamond": DiamondMarker,
-                  "dot": DotMarker,
-                  "pixel": PixelMarker,
-                  "custom": CustomMarker}
+MarkerNameDict = {
+    "square": SquareMarker,
+    "circle": CircleMarker,
+    "triangle": TriangleMarker,
+    "inverted_triangle": Inverted_TriangleMarker,
+    "left_triangle": LeftTriangleMarker,
+    "right_triangle": RightTriangleMarker,
+    "pentagon": PentagonMarker,
+    "hexagon": Hexagon1Marker,
+    "hexagon2": Hexagon2Marker,
+    "plus": PlusMarker,
+    "cross": CrossMarker,
+    "star": StarMarker,
+    "cross_plus": CrossPlusMarker,
+    "diamond": DiamondMarker,
+    "dot": DotMarker,
+    "pixel": PixelMarker,
+    "custom": CustomMarker
+}
 
 # A mapped trait that allows string naming of marker classes.
-MarkerTrait = Trait("square", MarkerNameDict,
-                     editor=EnumEditor(values=marker_names))
+MarkerTrait = Trait(
+    "square", MarkerNameDict, editor=EnumEditor(values=marker_names))
 
 marker_trait = MarkerTrait

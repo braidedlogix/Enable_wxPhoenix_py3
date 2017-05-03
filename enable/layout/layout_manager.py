@@ -11,6 +11,7 @@ class LayoutManager(object):
     of constraints.
 
     """
+
     def __init__(self):
         self._solver = kiwi.Solver()
         self._edit_stack = []

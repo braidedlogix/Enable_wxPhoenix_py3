@@ -104,11 +104,11 @@ namespace agg24
         sz = arr.shape[:2]
         image = wx.EmptyImage(*sz)
         image.SetDataBuffer(arr.data)
-        bmp = wx.BitmapFromImage(image, depth=-1)
+        bmp = wx.BitmapFromImage(image)#, depth=-1)
 
-        window_dc.BeginDrawing()
+        #window_dc.BeginDrawing()
         window_dc.DrawBitmap(bmp,x,y)
-        window_dc.EndDrawing()
+        #window_dc.EndDrawing()
         return
 
       %}

@@ -34,14 +34,10 @@ AUTHOR:
   John D. Hunter <jdhunter@ace.bsd.uchicago.edu>
 """
 
-
-
 import os
 import logging
 
-
 logger = logging.getLogger(__name__)
-
 
 # Convert value to a python type
 _to_int = int
@@ -282,7 +278,6 @@ def parse_afm(fh):
 
 
 class AFM(object):
-
     def __init__(self, fh):
         """ Parse the AFM file in file object fh """
         (dhead, dcmetrics, dkernpairs, dcomposite) = parse_afm(fh)
@@ -322,7 +317,7 @@ class AFM(object):
             totalw += wx + kp
 
             # find the max y
-            thismax = b+h
+            thismax = b + h
             if thismax > maxy:
                 maxy = thismax
 
@@ -331,7 +326,7 @@ class AFM(object):
             if thismin < miny:
                 miny = thismin
 
-        return totalw, maxy-miny
+        return totalw, maxy - miny
 
     def get_str_bbox(self, s):
         """
@@ -359,7 +354,7 @@ class AFM(object):
             totalw += wx + kp
 
             # find the max y
-            thismax = b+h
+            thismax = b + h
             if thismax > maxy:
                 maxy = thismax
 
@@ -368,7 +363,7 @@ class AFM(object):
             if thismin < miny:
                 miny = thismin
 
-        return left, miny, totalw, maxy-miny
+        return left, miny, totalw, maxy - miny
 
     def get_name_char(self, c):
         """
@@ -436,4 +431,3 @@ if __name__ == '__main__':
         fh = file(os.path.join(pathname, fname))
         afm = AFM(fh)
         w, h = afm.string_width_height('John Hunter is the Man!')
-

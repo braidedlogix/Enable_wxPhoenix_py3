@@ -10,8 +10,7 @@ class KivaTestAssistant(object):
 
     """
 
-    def create_mock_gc(
-            self, width, height, methods=()):
+    def create_mock_gc(self, width, height, methods=()):
         """ Create an image graphics context that with mocked methods.
 
         Parameters
@@ -53,7 +52,8 @@ class KivaTestAssistant(object):
         compiled_path = gc._get_path()
         total_vertices = compiled_path.total_vertices()
         self.assertEqual(
-            total_vertices, 0,
+            total_vertices,
+            0,
             msg='There are {0} vertices in compiled paths {1} that '
             'have not been processed'.format(total_vertices, compiled_path))
 

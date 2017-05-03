@@ -8,10 +8,9 @@ from enable.tools.resize_tool import ResizeTool
 
 
 class DragToolTestCase(unittest.TestCase):
-
     def setUp(self):
-        self.component = Component(position=[50, 50], bounds=[100, 100],
-                                   padding=10)
+        self.component = Component(
+            position=[50, 50], bounds=[100, 100], padding=10)
         self.tool = ResizeTool(component=self.component)
 
     def test_find_hotspots(self):

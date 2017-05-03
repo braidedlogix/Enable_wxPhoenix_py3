@@ -56,13 +56,13 @@ class ResizeCommandTool(ResizeTool, BaseCommandTool):
         result = super(ResizeCommandTool, self).drag_start(event)
         return result
 
-
     def drag_end(self, event):
         """ End the drag operation, issuing a ResizeCommands """
         if self.component is not None:
             command = self.command(
                 component=self.component,
-                new_rectangle=tuple(self.component.position + self.component.bounds),
+                new_rectangle=tuple(self.component.position +
+                                    self.component.bounds),
                 previous_rectangle=self._initial_rectangle,
                 final=True)
             self.command_stack.push(command)

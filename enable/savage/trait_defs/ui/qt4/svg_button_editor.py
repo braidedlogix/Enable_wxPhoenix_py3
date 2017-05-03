@@ -14,7 +14,6 @@
 #  Date:   06/24/2000
 #
 #-------------------------------------------------------------------------------
-
 """ Traits UI button editor for SVG images.
 """
 
@@ -36,6 +35,7 @@ QtCore.QCoreApplication.addLibraryPath(qt_plugins_dir)
 #-------------------------------------------------------------------------------
 #  'SVGButtonEditor' class:
 #-------------------------------------------------------------------------------
+
 
 class SVGButtonEditor(Editor):
 
@@ -67,12 +67,12 @@ class SVGButtonEditor(Editor):
         else:
             self.toggle_tooltip = self.factory.tooltip
 
-
         control = self.control = QtGui.QToolButton()
         control.setAutoRaise(True)
         control.setIcon(self.icon)
         control.setText(self.factory.label)
-        control.setIconSize(QtCore.QSize(self.factory.width, self.factory.height))
+        control.setIconSize(
+            QtCore.QSize(self.factory.width, self.factory.height))
 
         if self.factory.label:
             control.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
@@ -82,8 +82,8 @@ class SVGButtonEditor(Editor):
             control.setCheckable(True)
             control.toggled.connect(self._toggle_button)
 
-        QtCore.QObject.connect(control, QtCore.SIGNAL('clicked()'),
-                               self.update_object)
+        QtCore.QObject.connect(control,
+                               QtCore.SIGNAL('clicked()'), self.update_object)
 
         if self.factory.tooltip:
             control.setToolTip(self.factory.tooltip)
@@ -97,12 +97,12 @@ class SVGButtonEditor(Editor):
         """
         name = self.extended_name
         if name != 'None':
-            self.context_object.on_trait_change(self._update_editor, name,
-                                                dispatch = 'ui')
+            self.context_object.on_trait_change(
+                self._update_editor, name, dispatch='ui')
         self.init(parent)
         self._sync_values()
 
-    def update_object (self):
+    def update_object(self):
         """ Handles the user clicking the button by setting the factory value
             on the object.
         """

@@ -4,21 +4,25 @@ import wx.py.shell
 import wx.aui
 import wx.grid
 
+
 class PathGrid(wx.grid.Grid):
     def __init__(self, parent, pathOps):
         super(PathGrid, self).__init__(parent)
-        self.CreateGrid(100,10)
+        self.CreateGrid(100, 10)
         firstColAttr = wx.grid.GridCellAttr()
         choices = sorted(pathOps.keys())
         firstColAttr.SetEditor(wx.grid.GridCellChoiceEditor(choices))
-        self.SetColMinimalWidth(0,140)
+        self.SetColMinimalWidth(0, 140)
         self.SetColAttr(0, firstColAttr)
+
 
 class PathPanel(wx.Panel):
     ctx = None
     path = None
+
     def __init__(self, parent, contextSource):
-        super(PathPanel, self).__init__(parent, style=wx.FULL_REPAINT_ON_RESIZE)
+        super(PathPanel, self).__init__(
+            parent, style=wx.FULL_REPAINT_ON_RESIZE)
         self.contextSource = contextSource
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
@@ -39,11 +43,12 @@ class PathPanel(wx.Panel):
         self.ctx.DrawPath(self.path)
 
 
-
 class DrawFrame(wx.Frame):
     def __init__(self, parent, *args, **kwargs):
         wx.Frame.__init__(self, parent, *args, **kwargs)
-        self.pathOps = dict((k,v) for (k,v) in wx.GraphicsPath.__dict__.items() if k.startswith("Add"))
+        self.pathOps = dict((k, v)
+                            for (k, v) in wx.GraphicsPath.__dict__.items()
+                            if k.startswith("Add"))
         self.pathOps["CloseSubpath"] = wx.GraphicsPath.CloseSubpath
         self.pathOps["MoveToPoint"] = wx.GraphicsPath.MoveToPoint
         self.pathOps[""] = None
@@ -54,26 +59,25 @@ class DrawFrame(wx.Frame):
         self.panel = PathPanel(self, self.CreateContext)
 
         self.locals = {
-            "wx":wx,
-            "frame":self,
-            "panel":self.panel,
-            "context":None
+            "wx": wx,
+            "frame": self,
+            "panel": self.panel,
+            "context": None
         }
 
         self.nb = wx.aui.AuiNotebook(self)
 
-        self.shell = wx.py.shell.Shell(self.nb, locals = self.locals)
+        self.shell = wx.py.shell.Shell(self.nb, locals=self.locals)
 
         self.grid = PathGrid(self.nb, self.pathOps)
-
 
         self.nb.AddPage(self.shell, "Shell")
         self.nb.AddPage(self.grid, "Path", True)
 
-
-        self._mgr.AddPane(self.nb,
-            wx.aui.AuiPaneInfo().Bottom().CaptionVisible(False).BestSize((-1,300))
-        )
+        self._mgr.AddPane(
+            self.nb,
+            wx.aui.AuiPaneInfo().Bottom().CaptionVisible(False).BestSize(
+                (-1, 300)))
         self._mgr.AddPane(self.panel, wx.aui.AuiPaneInfo().CenterPane())
 
         self._mgr.Update()
@@ -102,7 +106,7 @@ class DrawFrame(wx.Frame):
                 return
             #~ print operation,
             args = []
-            for col in range(1,20):
+            for col in range(1, 20):
                 v = self.grid.GetCellValue(row, col)
                 if not v:
                     break
@@ -111,11 +115,9 @@ class DrawFrame(wx.Frame):
             #~ print args
 
 
-
-
 if __name__ == '__main__':
     app = wx.App(False)
-    frame = DrawFrame(None, size=(800,600))
+    frame = DrawFrame(None, size=(800, 600))
     frame.Centre()
     frame.Show()
     app.MainLoop()

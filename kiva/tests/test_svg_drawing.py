@@ -7,7 +7,6 @@ from traits.testing.unittest_tools import unittest
 
 
 class TestSVGDrawing(DrawingTester, unittest.TestCase):
-
     def create_graphics_context(self, width, height):
         return GraphicsContext((width, height))
 

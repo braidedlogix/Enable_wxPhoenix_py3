@@ -1,5 +1,3 @@
-
-
 from numpy import array
 from pyglet.window import key, Window
 
@@ -9,9 +7,11 @@ except ImportError as e:
     raise Exception(e)
 from kiva.constants import FILL, STROKE, FILL_STROKE
 
+
 class TestWindow(Window):
     """ Press Q or Escape to exit
     """
+
     def __init__(self, *args, **kw):
         Window.__init__(self, *args, **kw)
         self.init_window()
@@ -28,9 +28,9 @@ class TestWindow(Window):
         gc = self.gc
         with gc:
             gc.clear((0, 1, 0, 1))
-            gc.set_stroke_color((1,1,1,1))
+            gc.set_stroke_color((1, 1, 1, 1))
             gc.set_line_width(2)
-            pts = array([[50, 50], [50,100], [100,100], [100,50]])
+            pts = array([[50, 50], [50, 100], [100, 100], [100, 50]])
             gc.begin_path()
             gc.lines(pts)
             gc.close_path()
@@ -39,7 +39,7 @@ class TestWindow(Window):
 
 
 def main():
-    win = TestWindow(width = 640, height=480)
+    win = TestWindow(width=640, height=480)
     exit = False
     while not exit:
         win.switch_to()
@@ -52,5 +52,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

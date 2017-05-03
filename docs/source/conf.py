@@ -74,7 +74,6 @@ today_fmt = '%B %d, %Y'
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
-
 # Options for HTML output
 # -----------------------
 
@@ -142,7 +141,6 @@ html_last_updated_fmt = '%b %d, %Y'
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'Enabledoc'
 
-
 # Options for LaTeX output
 # ------------------------
 
@@ -155,7 +153,7 @@ htmlhelp_basename = 'Enabledoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'Enable.tex', 'Enable Documentation', 'Enthought', 'manual'),
+    ('index', 'Enable.tex', 'Enable Documentation', 'Enthought', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

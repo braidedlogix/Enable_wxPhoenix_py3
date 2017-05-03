@@ -23,7 +23,7 @@ class BaseRect(tuple):
 
     def __repr__(self):
         template = '%s(x=%s, y=%s, width=%s, height=%s)'
-        values = (self.__class__.__name__,) + self
+        values = (self.__class__.__name__, ) + self
         return template % values
 
     @property
@@ -32,21 +32,21 @@ class BaseRect(tuple):
 
         """
         return self[0]
-    
+
     @property
     def y(self):
         """ The 'y' position component of the rect.
 
         """
         return self[1]
-    
+
     @property
     def width(self):
         """ The 'width' size component of the rect.
 
         """
         return self[2]
-    
+
     @property
     def height(self):
         """ The 'height' size component of the rect.
@@ -64,7 +64,7 @@ class Rect(BaseRect):
     def __new__(cls, x, y, width, height):
         i = int
         return super(Rect, cls).__new__(cls, i(x), i(y), i(width), i(height))
-        
+
     @property
     def box(self):
         """ The equivalent Box for this rect.
@@ -79,14 +79,14 @@ class Rect(BaseRect):
 
         """
         return Pos(self.x, self.y)
-    
+
     @property
     def size(self):
         """ The size of the rect as a Size object.
 
         """
         return Size(self.width, self.height)
-    
+
 
 class RectF(BaseRect):
     """ A BaseRect implementation for floating point values.
@@ -97,7 +97,7 @@ class RectF(BaseRect):
     def __new__(cls, x, y, width, height):
         f = float
         return super(RectF, cls).__new__(cls, f(x), f(y), f(width), f(height))
-    
+
     @property
     def box(self):
         """ The equivalent Box for this rect.
@@ -112,7 +112,7 @@ class RectF(BaseRect):
 
         """
         return PosF(self.x, self.y)
-    
+
     @property
     def size(self):
         """ The size of the rect as a Size object.
@@ -153,13 +153,13 @@ class BaseBox(tuple):
         else:
             left = c(left)
         return super(BaseBox, cls).__new__(cls, (top, right, bottom, left))
-    
+
     def __getnewargs__(self):
         return tuple(self)
 
     def __repr__(self):
         template = '%s(top=%s, right=%s, bottom=%s, left=%s)'
-        values = (self.__class__.__name__,) + self
+        values = (self.__class__.__name__, ) + self
         return template % values
 
     @property
@@ -168,28 +168,28 @@ class BaseBox(tuple):
 
         """
         return self[0]
-    
+
     @property
     def right(self):
         """ The 'right' component of the box.
 
         """
         return self[1]
-    
+
     @property
     def bottom(self):
         """ The 'bottom' component of the box.
 
         """
         return self[2]
-    
+
     @property
     def left(self):
         """ The 'left' component of the box.
 
         """
         return self[3]
-    
+
 
 class Box(BaseBox):
     """ A BaseBox implementation for integer values.
@@ -200,7 +200,7 @@ class Box(BaseBox):
     @staticmethod
     def coerce_type(item):
         return 0 if item is None else int(item)
-    
+
     @property
     def rect(self):
         """ The equivalent Rect for this box.
@@ -208,7 +208,7 @@ class Box(BaseBox):
         """
         top, right, bottom, left = self
         return Rect(left, top, right - left, bottom - top)
-    
+
     @property
     def size(self):
         """ The Size of this box.
@@ -234,7 +234,7 @@ class BoxF(BaseBox):
     @staticmethod
     def coerce_type(item):
         return 0.0 if item is None else float(item)
-    
+
     @property
     def rect(self):
         """ The equivalent Rect for this box.
@@ -242,7 +242,7 @@ class BoxF(BaseBox):
         """
         top, right, bottom, left = self
         return RectF(left, top, right - left, bottom - top)
-    
+
     @property
     def size(self):
         """ The Size of this box.
@@ -271,13 +271,13 @@ class BasePos(tuple):
 
     def __new__(cls, x, y):
         return super(BasePos, cls).__new__(cls, (x, y))
-    
+
     def __getnewargs__(self):
         return tuple(self)
 
     def __repr__(self):
         template = '%s(x=%s, y=%s)'
-        values = (self.__class__.__name__,) + self
+        values = (self.__class__.__name__, ) + self
         return template % values
 
     @property
@@ -286,7 +286,7 @@ class BasePos(tuple):
 
         """
         return self[0]
-    
+
     @property
     def y(self):
         """ The 'y' component of the size.
@@ -347,7 +347,7 @@ class BaseSize(tuple):
 
     def __repr__(self):
         template = '%s(width=%s, height=%s)'
-        values = (self.__class__.__name__,) + self
+        values = (self.__class__.__name__, ) + self
         return template % values
 
     @property
@@ -356,21 +356,21 @@ class BaseSize(tuple):
 
         """
         return self[0]
-    
+
     @property
     def height(self):
         """ The 'height' component of the size.
 
         """
         return self[1]
-    
+
 
 class Size(BaseSize):
     """ A BaseSize implementation for integer values.
 
     """
     __slots__ = ()
-    
+
     @staticmethod
     def coerce_type(item):
         return 0 if item is None else int(item)
@@ -385,4 +385,3 @@ class SizeF(BaseSize):
     @staticmethod
     def coerce_type(item):
         return 0.0 if item is None else float(item)
-

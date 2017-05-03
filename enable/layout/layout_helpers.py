@@ -179,6 +179,7 @@ class DeferredConstraintsFunction(DeferredConstraints):
     call a function to get the constraint list upon request.
 
     """
+
     def __init__(self, func, *args, **kwds):
         """ Initialize a DeferredConstraintsFunction.
 
@@ -212,6 +213,7 @@ class AbutmentHelper(DeferredConstraints):
     lay out its components by abutting them in a given orientation.
 
     """
+
     def __init__(self, orientation, *items, **config):
         """ Initialize an AbutmentHelper.
 
@@ -253,8 +255,9 @@ class AbutmentHelper(DeferredConstraints):
         """
         items = [item for item in self.items if item is not None]
         factories = AbutmentConstraintFactory.from_items(
-            items, self.orientation, self.spacing,
-        )
+            items,
+            self.orientation,
+            self.spacing, )
         cn_lists = (f.constraints() for f in factories)
         return list(cn for cns in cn_lists for cn in cns)
 
@@ -264,6 +267,7 @@ class AlignmentHelper(DeferredConstraints):
     anchor to align.
 
     """
+
     def __init__(self, anchor, *items, **config):
         """ Initialize an AlignmentHelper.
 
@@ -309,8 +313,9 @@ class AlignmentHelper(DeferredConstraints):
         if len(items) < 2:
             return []
         factories = AlignmentConstraintFactory.from_items(
-            items, self.anchor, self.spacing,
-        )
+            items,
+            self.anchor,
+            self.spacing, )
         cn_lists = (f.constraints() for f in factories)
         return list(cn for cns in cn_lists for cn in cns)
 
@@ -324,6 +329,7 @@ class BoxHelper(DeferredConstraints):
     instances to be nested.
 
     """
+
     def __init__(self, name):
         """ Initialize a BoxHelper.
 
@@ -481,9 +487,11 @@ class LinearBoxHelper(BoxHelper):
             # Add the helpers for the ortho constraints
             if isinstance(item, ABConstrainable):
                 abutment_items = (
-                    first_ortho_boundary, first_ortho_spacer,
-                    item, last_ortho_spacer, last_ortho_boundary,
-                )
+                    first_ortho_boundary,
+                    first_ortho_spacer,
+                    item,
+                    last_ortho_spacer,
+                    last_ortho_boundary, )
                 helpers.append(AbutmentHelper(ortho, *abutment_items, **kwds))
             # Pull out nested helpers so that their constraints get
             # generated during the pass over the helpers list.
@@ -502,6 +510,7 @@ class _GridCell(object):
     """ A private class used by a GridHelper to track item cells.
 
     """
+
     def __init__(self, item, row, col):
         """ Initialize a _GridCell.
 
@@ -537,6 +546,7 @@ class GridHelper(BoxHelper):
     """ A layout helper which arranges items in a grid.
 
     """
+
     def __init__(self, *rows, **config):
         """ Initialize a GridHelper.
 
@@ -699,12 +709,10 @@ class GridHelper(BoxHelper):
             sc = cell.start_col
             ec = cell.end_col + 1
             item = cell.item
-            row_item = (
-                row_vars[sr], rspace[sr], item, rspace[er], row_vars[er]
-            )
-            col_item = (
-                col_vars[sc], cspace[sc], item, cspace[ec], col_vars[ec]
-            )
+            row_item = (row_vars[sr], rspace[sr], item, rspace[er],
+                        row_vars[er])
+            col_item = (col_vars[sc], cspace[sc], item, cspace[ec],
+                        col_vars[ec])
             helpers.append(AbutmentHelper('vertical', *row_item))
             helpers.append(AbutmentHelper('horizontal', *col_item))
             if isinstance(item, DeferredConstraints):
@@ -817,6 +825,7 @@ class BaseConstraintFactory(AbstractConstraintFactory):
     subclassed to be useful.
 
     """
+
     def __init__(self, first_anchor, spacer, second_anchor):
         """ Create an base constraint instance.
 
@@ -856,6 +865,7 @@ class SequenceConstraintFactory(BaseConstraintFactory):
     anchor names, and a default spacing.
 
     """
+
     @classmethod
     def _make_cns(cls, items, first_anchor_name, second_anchor_name, spacing):
         """ A classmethod that generates a list of constraints factories
@@ -1028,6 +1038,7 @@ class AlignmentConstraintFactory(SequenceConstraintFactory):
     anchor name, and a default spacing.
 
     """
+
     @classmethod
     def from_items(cls, items, anchor_name, spacing):
         """ A classmethod that will create a seqence of alignment
@@ -1114,6 +1125,7 @@ class EqSpacer(Spacer):
     """ A spacer which represents a fixed amount of space.
 
     """
+
     def _constrain(self, first_anchor, second_anchor):
         """ A constraint of the form (anchor_1 + space == anchor_2)
 
@@ -1125,6 +1137,7 @@ class LeSpacer(Spacer):
     """ A spacer which represents a flexible space with a maximum value.
 
     """
+
     def _constrain(self, first_anchor, second_anchor):
         """ A constraint of the form (anchor_1 + space >= anchor_2)
         That is, the visible space must be less than or equal to the
@@ -1140,6 +1153,7 @@ class GeSpacer(Spacer):
     """ A spacer which represents a flexible space with a minimum value.
 
     """
+
     def _constrain(self, first_anchor, second_anchor):
         """ A constraint of the form (anchor_1 + space <= anchor_2)
         That is, the visible space must be greater than or equal to
@@ -1154,6 +1168,7 @@ class FlexSpacer(Spacer):
     a weaker preference for being that minimum.
 
     """
+
     def __init__(self, amt, min_strength='required', eq_strength='medium'):
         self.amt = max(0, amt)
         self.min_strength = min_strength
@@ -1183,6 +1198,7 @@ class LayoutSpacer(Spacer):
     methods to facilitate specifying spacers in layouts.
 
     """
+
     def __call__(self, *args, **kwargs):
         return self.__class__(*args, **kwargs)
 

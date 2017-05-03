@@ -45,38 +45,48 @@ try:
     log = logging.getLogger('')
     log.setLevel(logging.INFO)
 except ImportError:
+
     class FakeLogger:
         def debug(self, message):
             print("DEBUG:", message, file=sys.stderr)
+
         def info(self, message):
             print("INFO:", message, file=sys.stderr)
+
         def warn(self, message):
             print("WARN:", message, file=sys.stderr)
+
         def error(self, message):
             print("ERROR:", message, file=sys.stderr)
+
         def critical(self, message):
             print("CRITICAL:", message, file=sys.stderr)
+
     log = FakeLogger()
+
 
 def _strpoints(points):
     c = StringIO()
-    for x,y in points:
-        c.write('%3.2f,%3.2f ' % (x,y))
+    for x, y in points:
+        c.write('%3.2f,%3.2f ' % (x, y))
     return c.getvalue()
 
+
 def _mkstyle(kw):
-    return '"' + '; '.join([str(k) + ':' + str(v) for k,v in list(kw.items())]) +'"'
+    return '"' + '; '.join(
+        [str(k) + ':' + str(v) for k, v in list(kw.items())]) + '"'
 
 
 def default_filter(kw1):
     kw = {}
-    for (k,v) in list(kw1.items()):
+    for (k, v) in list(kw1.items()):
         if type(v) == type(()):
             if v[0] != v[1]:
                 kw[k] = v[0]
         else:
             kw[k] = v
     return kw
+
 
 line_cap_map = {
     constants.CAP_BUTT: 0,
@@ -110,16 +120,16 @@ font_face_map = {'Arial': 'Helvetica', '': 'Helvetica'}
 
 _clip_counter = 0
 
-fill_stroke_map = {FILL_STROKE: ('fill', 'stroke'),
-                    EOF_FILL_STROKE: ('eofill', 'stroke'),
-                    FILL: ('fill', None),
-                    STROKE: ('stroke', None),
-                    EOF_FILL: ('eofill', None)
-                   }
+fill_stroke_map = {
+    FILL_STROKE: ('fill', 'stroke'),
+    EOF_FILL_STROKE: ('eofill', 'stroke'),
+    FILL: ('fill', None),
+    STROKE: ('stroke', None),
+    EOF_FILL: ('eofill', None)
+}
 
 
 class PSGC(basecore2d.GraphicsContextBase):
-
     def __init__(self, size, *args, **kwargs):
         super(PSGC, self).__init__(size, *args, **kwargs)
         self.size = size
@@ -154,34 +164,37 @@ class PSGC(basecore2d.GraphicsContextBase):
 
     def set_font(self, font):
         self.face_name = font_face_map.get(font.face_name, font.face_name)
-        self.font = pdfmetrics.Font(self.face_name, self.face_name, pdfmetrics.defaultEncoding)
+        self.font = pdfmetrics.Font(self.face_name, self.face_name,
+                                    pdfmetrics.defaultEncoding)
         self.font_size = font.size
-        self.contents.write("""/%s findfont %3.3f scalefont setfont\n""" % (self.face_name, self.font_size))
+        self.contents.write("""/%s findfont %3.3f scalefont setfont\n""" %
+                            (self.face_name, self.font_size))
 
     def device_show_text(self, text):
         ttm = self.get_text_matrix()
         ctm = self.get_ctm()  # not device_ctm!!
-        m = affine.concat(ctm,ttm)
+        m = affine.concat(ctm, ttm)
         if self.state.clipping_path:
             self.contents.write('clipsave\n')
-            self.contents.write('%3.3f %3.3f %3.3f %3.3f rectclip\n' % self.state.clipping_path)
+            self.contents.write('%3.3f %3.3f %3.3f %3.3f rectclip\n' %
+                                self.state.clipping_path)
         self.contents.write('gsave\n')
         self.device_transform_device_ctm(LOAD_CTM, [m])
-        self.contents.write('%3.3f %3.3f moveto\n' % (0,0))
-        r,g,b,a = self.state.line_color
-        self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' % (r,g,b) )
+        self.contents.write('%3.3f %3.3f moveto\n' % (0, 0))
+        r, g, b, a = self.state.line_color
+        self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' % (r, g, b))
         self.contents.write('(%s) show\n' % text)
         self.contents.write('grestore\n')
         if self.state.clipping_path:
             self.contents.write('cliprestore\n')
 
     def get_full_text_extent(self, text):
-        ascent,descent=_fontdata.ascent_descent[self.face_name]
+        ascent, descent = _fontdata.ascent_descent[self.face_name]
         descent = (-descent) * self.font_size / 1000.0
         ascent = ascent * self.font_size / 1000.0
         height = ascent + descent
         width = pdfmetrics.stringWidth(text, self.face_name, self.font_size)
-        return width, height, descent, height*1.2 # assume leading of 1.2*height
+        return width, height, descent, height * 1.2  # assume leading of 1.2*height
 
     # actual implementation =)
 
@@ -216,14 +229,13 @@ class PSGC(basecore2d.GraphicsContextBase):
             # Should probably take this into account
             # interp = img.get_image_interpolation()
         else:
-            warnings.warn("Cannot render image of type %r into EPS context."
-                          % type(img))
+            warnings.warn("Cannot render image of type %r into EPS context." %
+                          type(img))
             return
 
         # converted_img now holds an Agg graphics context with the image
-        pil_img = pilfromstring(format,
-                                (converted_img.width(),
-                                 converted_img.height()),
+        pil_img = pilfromstring(format, (converted_img.width(),
+                                         converted_img.height()),
                                 piltostring(converted_img.bmp_array))
         if rect == None:
             rect = (0, 0, img.width(), img.height())
@@ -235,7 +247,8 @@ class PSGC(basecore2d.GraphicsContextBase):
         left, top, width, height = rect
         if width != img.width() or height != img.height():
             # This is not strictly required.
-            pil_img = pil_img.resize((int(width), int(height)), PilImage.NEAREST)
+            pil_img = pil_img.resize(
+                (int(width), int(height)), PilImage.NEAREST)
 
         self.contents.write('gsave\n')
         self.contents.write('initmatrix\n')
@@ -247,7 +260,7 @@ class PSGC(basecore2d.GraphicsContextBase):
         pil_img.save(self.contents, 'eps', eps=0)
         self.contents.write('grestore\n')
 
-    def device_transform_device_ctm(self,func,args):
+    def device_transform_device_ctm(self, func, args):
         if func == LOAD_CTM:
             self.contents.write('initmatrix\n')
             func = CONCAT_CTM
@@ -269,7 +282,8 @@ class PSGC(basecore2d.GraphicsContextBase):
     def device_fill_points(self, points, mode):
         if self.state.clipping_path:
             self.contents.write('clipsave\n')
-            self.contents.write('%3.3f %3.3f %3.3f %3.3f rectclip\n' % self.state.clipping_path)
+            self.contents.write('%3.3f %3.3f %3.3f %3.3f rectclip\n' %
+                                self.state.clipping_path)
         linecap = line_cap_map[self.state.line_cap]
         linejoin = line_join_map[self.state.line_join]
         dasharray = self._dasharray()
@@ -279,29 +293,34 @@ class PSGC(basecore2d.GraphicsContextBase):
         self.contents.write('%d setlinecap\n' % linecap)
         self.contents.write('%d setlinejoin\n' % linejoin)
         self.contents.write('newpath\n')
-        x,y = points[0]
-        self.contents.write('    %3.3f %3.3f moveto\n' % (x,y))
-        for (x,y) in points[1:]:
-            self.contents.write('    %3.3f %3.3f lineto\n' % (x,y))
+        x, y = points[0]
+        self.contents.write('    %3.3f %3.3f moveto\n' % (x, y))
+        for (x, y) in points[1:]:
+            self.contents.write('    %3.3f %3.3f lineto\n' % (x, y))
 
         first_pass, second_pass = fill_stroke_map[mode]
 
         if second_pass:
             if first_pass in ('fill', 'eofill'):
-                r,g,b,a = self.state.fill_color
-                self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' % (r,g,b) )
+                r, g, b, a = self.state.fill_color
+                self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' %
+                                    (r, g, b))
             else:
-                r,g,b,a = self.state.line_color
-                self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' % (r,g,b) )
+                r, g, b, a = self.state.line_color
+                self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' %
+                                    (r, g, b))
 
-            self.contents.write('gsave %s grestore %s\n' % (first_pass, second_pass))
+            self.contents.write('gsave %s grestore %s\n' %
+                                (first_pass, second_pass))
         else:
             if first_pass in ('fill', 'eofill'):
-                r,g,b,a = self.state.fill_color
-                self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' % (r,g,b) )
+                r, g, b, a = self.state.fill_color
+                self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' %
+                                    (r, g, b))
             else:
-                r,g,b,a = self.state.line_color
-                self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' % (r,g,b) )
+                r, g, b, a = self.state.line_color
+                self.contents.write('%1.3f %1.3f %1.3f setrgbcolor\n' %
+                                    (r, g, b))
             self.contents.write(first_pass + '\n')
         if self.state.clipping_path:
             self.contents.write('cliprestore\n')
@@ -319,8 +338,8 @@ class PSGC(basecore2d.GraphicsContextBase):
     # utility routines
 
     def _color(self, color):
-        r,g,b,a = color
-        return '#%02x%02x%02x' % (r*255,g*255,b*255)
+        r, g, b, a = color
+        return '#%02x%02x%02x' % (r * 255, g * 255, b * 255)
 
     def _dasharray(self):
         dasharray = ''

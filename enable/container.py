@@ -1,7 +1,5 @@
 """ Defines the basic Container class """
 
-
-
 # Major library imports
 import warnings
 
@@ -29,7 +27,7 @@ class Container(Component):
     """
 
     # The list of components within this frame
-    components = Property    # List(Component)
+    components = Property  # List(Component)
 
     # Whether or not the container should automatically maximize itself to
     # fit inside the Window, if this is a top-level container.
@@ -72,19 +70,20 @@ class Container(Component):
 
     # The layers that the container will draw first, so that they appear
     # under the component layers of the same name.
-    container_under_layers = Tuple("background", "image", "underlay", "mainlayer")
+    container_under_layers = Tuple("background", "image", "underlay",
+                                   "mainlayer")
 
     #------------------------------------------------------------------------
     # Private traits
     #------------------------------------------------------------------------
 
     # Shadow trait for self.components
-    _components = List    # List(Component)
+    _components = List  # List(Component)
 
     # Set of components that last handled a mouse event.  We keep track of
     # this so that we can generate mouse_enter and mouse_leave events of
     # our own.
-    _prev_event_handlers = Instance( set, () )
+    _prev_event_handlers = Instance(set, ())
 
     # This container can render itself in a different mode than what it asks of
     # its contained components.  This attribute stores the rendering mode that
@@ -101,12 +100,13 @@ class Container(Component):
         Component.__init__(self, **traits)
         for component in components:
             self.add(component)
-        if "bounds" in list(traits.keys()) and "auto_size" not in list(traits.keys()):
+        if "bounds" in list(traits.keys()) and "auto_size" not in list(
+                traits.keys()):
             self.auto_size = False
 
         if 'intercept_events' in traits:
             warnings.warn("'intercept_events' is a deprecated trait",
-                    warnings.DeprecationWarning)
+                          warnings.DeprecationWarning)
         return
 
     def add(self, *components):
@@ -130,7 +130,8 @@ class Container(Component):
                 component.container = None
                 self._components.remove(component)
             else:
-                raise RuntimeError("Unable to remove component from container.")
+                raise RuntimeError(
+                    "Unable to remove component from container.")
 
             # Check to see if we need to compact.
             if self.auto_size:
@@ -156,7 +157,7 @@ class Container(Component):
         the parent coordinate frame of this container).
         """
         result = []
-        if self.is_in(x,y):
+        if self.is_in(x, y):
             xprime = x - self.position[0]
             yprime = y - self.position[1]
             for component in self._components[::-1]:
@@ -169,7 +170,7 @@ class Container(Component):
         c = self._components
         ndx = c.index(component)
         if len(c) > 1 and ndx != len(c) - 1:
-            self._components = c[:ndx] + c[ndx+1:] + [component]
+            self._components = c[:ndx] + c[ndx + 1:] + [component]
         return
 
     def lower_component(self, component):
@@ -199,8 +200,9 @@ class Container(Component):
             # Update our position and the positions of all of our components,
             # but do it quietly
             for component in self._components:
-                component.set(position = [component.x-ll_x, component.y-ll_y],
-                              trait_change_notify = False)
+                component.set(
+                    position=[component.x - ll_x, component.y - ll_y],
+                    trait_change_notify=False)
 
             # Change our position (in our parent's coordinate frame) and
             # update our bounds
@@ -237,7 +239,6 @@ class Container(Component):
             if component.y2 > ur_y:
                 ur_y = component.y2
         return (ll_x, ll_y, ur_x, ur_y)
-
 
     def _dispatch_draw(self, layer, gc, view_bounds, mode):
         """ Renders the named *layer* of this component.
@@ -308,8 +309,8 @@ class Container(Component):
         for component in self.components:
             if not component.visible:
                 continue
-            tmp = intersect_bounds(component.outer_position +
-                                   component.outer_bounds, bounds)
+            tmp = intersect_bounds(
+                component.outer_position + component.outer_bounds, bounds)
             if tmp != empty_rectangle:
                 visible_components.append(component)
         return visible_components
@@ -356,7 +357,7 @@ class Container(Component):
             # Compute new_bounds, which is the view_bounds transformed into
             # our coordinate space
             v = view_bounds
-            new_bounds = (v[0]-self.x, v[1]-self.y, v[2], v[3])
+            new_bounds = (v[0] - self.x, v[1] - self.y, v[2], v[3])
         else:
             new_bounds = None
         return new_bounds
@@ -448,8 +449,8 @@ class Container(Component):
             components = self.components_at(event.x, event.y)
 
             # Translate the event's location to be relative to this container
-            event.push_transform(self.get_event_transform(event, suffix),
-                                 caller=self)
+            event.push_transform(
+                self.get_event_transform(event, suffix), caller=self)
 
             try:
                 new_component_set = set(components)
@@ -472,13 +473,14 @@ class Container(Component):
                             pass
                         else:
                             # TODO: think of a better way to handle this rare case?
-                            leave_event = MouseEvent(x=event.x, y=event.y,
-                                                     window=event.window)
+                            leave_event = MouseEvent(
+                                x=event.x, y=event.y, window=event.window)
                             leave_suffix = "mouse_leave"
 
                         if leave_event is not None:
                             for component in components_left:
-                                component.dispatch(leave_event, "pre_" + leave_suffix)
+                                component.dispatch(leave_event,
+                                                   "pre_" + leave_suffix)
                                 component.dispatch(leave_event, leave_suffix)
                                 event.handled = False
 
@@ -495,13 +497,16 @@ class Container(Component):
                             elif isinstance(event, DragEvent):
                                 enter_event = event
                                 enter_suffix = "drag_enter"
-                            elif isinstance(event, (BlobEvent, BlobFrameEvent)):
+                            elif isinstance(event,
+                                            (BlobEvent, BlobFrameEvent)):
                                 # Do not generate an 'enter' event.
                                 pass
                             if enter_event:
                                 for component in components_entered:
-                                    component.dispatch(enter_event, "pre_" + enter_suffix)
-                                    component.dispatch(enter_event, enter_suffix)
+                                    component.dispatch(enter_event,
+                                                       "pre_" + enter_suffix)
+                                    component.dispatch(enter_event,
+                                                       enter_suffix)
                                     event.handled = False
 
                 # Handle the actual event
@@ -524,8 +529,6 @@ class Container(Component):
 
         return
 
-
-
     #------------------------------------------------------------------------
     # Event handlers
     #------------------------------------------------------------------------
@@ -540,16 +543,15 @@ class Container(Component):
 
     def _window_resized(self, newsize):
         if newsize is not None:
-            self.bounds = [newsize[0]-self.x, newsize[1]-self.y]
-
+            self.bounds = [newsize[0] - self.x, newsize[1] - self.y]
 
     #FIXME: Need a _window_changed to remove this handler if the window changes
 
     def _fit_window_changed(self, old, new):
         if self._window is not None:
             if not self.fit_window:
-                self._window.on_trait_change(self._window_resized,
-                                             "resized", remove=True)
+                self._window.on_trait_change(
+                    self._window_resized, "resized", remove=True)
             else:
                 self._window.on_trait_change(self._window_resized, "resized")
         return
@@ -593,7 +595,8 @@ class Container(Component):
             self._draw_container(gc, mode)
             self._draw_background(gc, view_bounds, mode)
             self._draw_underlay(gc, view_bounds, mode)
-            self._draw_children(gc, view_bounds, mode) #This was children_draw_mode
+            self._draw_children(gc, view_bounds,
+                                mode)  #This was children_draw_mode
             self._draw_overlays(gc, view_bounds, mode)
         return
 
@@ -608,8 +611,9 @@ class Container(Component):
             gc.translate_ctm(*self.position)
             for component in self.components:
                 if new_bounds:
-                    tmp = intersect_bounds(component.outer_position +
-                                           component.outer_bounds, new_bounds)
+                    tmp = intersect_bounds(
+                        component.outer_position + component.outer_bounds,
+                        new_bounds)
                     if tmp == empty_rectangle:
                         continue
                 with gc:

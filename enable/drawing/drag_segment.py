@@ -13,6 +13,7 @@ from traits.api import Event, Instance
 
 from .drawing_tool import DrawingTool
 
+
 class DragSegment(DrawingTool):
     """A dragged line segment"""
 
@@ -103,5 +104,6 @@ class DragSegment(DrawingTool):
     def normal_mouse_move(self, event):
         event.window.set_pointer(self.normal_pointer)
         return
+
 
 # EOF

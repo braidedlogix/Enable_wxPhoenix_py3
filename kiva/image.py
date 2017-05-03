@@ -33,9 +33,9 @@ from .agg import GraphicsContextSystem, Image
 # multiple times.
 from .agg import CompiledPath
 
+
 def font_metrics_provider():
     """ Create an object to be used for querying font metrics.
     """
 
     return GraphicsContext((1, 1))
-

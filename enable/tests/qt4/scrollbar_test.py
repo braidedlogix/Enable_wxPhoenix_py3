@@ -1,4 +1,3 @@
-
 from contextlib import contextmanager
 
 from traits.testing.unittest_tools import unittest
@@ -16,7 +15,6 @@ except Exception:
 
 @skip_if_not_qt4
 class ScrollBarTest(unittest.TestCase):
-
     def setUp(self):
         from pyface.qt.QtGui import QApplication
         from pyface.ui.qt4.util.event_loop_helper import EventLoopHelper
@@ -42,7 +40,8 @@ class ScrollBarTest(unittest.TestCase):
             yield
         finally:
             self.gui.process_events()
-            with self.event_loop_helper.delete_widget(window.control, timeout=1.0):
+            with self.event_loop_helper.delete_widget(
+                    window.control, timeout=1.0):
                 window.control.deleteLater()
 
     @contextmanager
@@ -61,8 +60,7 @@ class ScrollBarTest(unittest.TestCase):
             orientation='horizontal',
             bounds=bounds,
             position=position,
-            range=range,
-        )
+            range=range, )
         self.container.add(scrollbar)
         with self.setup_window(self.window):
             with self.setup_scrollbar(scrollbar, self.window):
@@ -86,22 +84,21 @@ class ScrollBarTest(unittest.TestCase):
             orientation='vertical',
             bounds=bounds,
             position=position,
-            range=range,
-        )
+            range=range, )
         self.container.add(scrollbar)
         with self.setup_window(self.window):
             with self.setup_scrollbar(scrollbar, self.window):
-                self.assertEqual(scrollbar._control.value(), 600-375)
+                self.assertEqual(scrollbar._control.value(), 600 - 375)
                 self.assertEqual(scrollbar.scroll_position, 0)
 
                 # move the scrollbar
                 scrollbar._control.setValue(100)
-                self.assertEqual(scrollbar.scroll_position, 600-375-100)
+                self.assertEqual(scrollbar.scroll_position, 600 - 375 - 100)
 
                 # set the scroll & redraw
                 scrollbar.scroll_position = 200
                 scrollbar._draw_mainlayer(self, self.window._gc)
-                self.assertEqual(scrollbar._control.value(), 600-375-200)
+                self.assertEqual(scrollbar._control.value(), 600 - 375 - 200)
 
     def test_minumum_horizontal(self):
         bounds = [600.0, 30.0]
@@ -111,8 +108,7 @@ class ScrollBarTest(unittest.TestCase):
             orientation='horizontal',
             bounds=bounds,
             position=position,
-            range=range,
-        )
+            range=range, )
         self.container.add(scrollbar)
         with self.setup_window(self.window):
             with self.setup_scrollbar(scrollbar, self.window):
@@ -136,20 +132,20 @@ class ScrollBarTest(unittest.TestCase):
             orientation='vertical',
             bounds=bounds,
             position=position,
-            range=range,
-        )
+            range=range, )
         self.container.add(scrollbar)
         with self.setup_window(self.window):
             with self.setup_scrollbar(scrollbar, self.window):
                 # control should be at top
-                self.assertEqual(scrollbar._control.value(), 700-375)
+                self.assertEqual(scrollbar._control.value(), 700 - 375)
                 self.assertEqual(scrollbar.scroll_position, 100)
 
                 # move the scrollbar to the bottom
                 scrollbar._control.setValue(100)
-                self.assertEqual(scrollbar.scroll_position, 700-375)
+                self.assertEqual(scrollbar.scroll_position, 700 - 375)
 
                 # set the scroll & redraw
                 scrollbar.scroll_position = 200
                 scrollbar._draw_mainlayer(self, self.window._gc)
-                self.assertEqual(scrollbar._control.value(), 700-375-(200-100))
+                self.assertEqual(scrollbar._control.value(), 700 - 375 -
+                                 (200 - 100))

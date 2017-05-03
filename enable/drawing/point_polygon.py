@@ -6,6 +6,7 @@ from traits.api import Int, Instance
 
 from .drawing_tool import DrawingTool
 
+
 class PointPolygon(DrawingTool):
     """ A point-to-point drawn polygon. """
 
@@ -130,7 +131,7 @@ class PointPolygon(DrawingTool):
         """ Handle the left mouse button coming up in incomplete state. """
 
         # If the click was over the start vertex, we are done.
-        if self._is_over_start( event ):
+        if self._is_over_start(event):
             del self.polygon.model.points[-1]
             self.event_state = 'complete'
             event.window.set_pointer('right arrow')
@@ -138,7 +139,8 @@ class PointPolygon(DrawingTool):
 
         # Otherwise, add the point and move on.
         else:
-            self.polygon.model.points.append((event.x + self.x, event.y - self.y))
+            self.polygon.model.points.append(
+                (event.x + self.x, event.y - self.y))
 
         self.request_redraw()
         return
@@ -146,14 +148,15 @@ class PointPolygon(DrawingTool):
     def incomplete_mouse_move(self, event):
         """ Handle the mouse moving in incomplete state. """
         # If we move over the initial point, then we change the cursor.
-        if self._is_over_start( event ):
+        if self._is_over_start(event):
             event.window.set_pointer('bullseye')
         else:
             event.window.set_pointer('pencil')
 
         # If the point has actually changed, then we need to update our model.
         if self.polygon.model.points != (event.x + self.x, event.y - self.y):
-            self.polygon.model.points[-1] = (event.x + self.x, event.y - self.y)
+            self.polygon.model.points[-1] = (event.x + self.x,
+                                             event.y - self.y)
 
         self.request_redraw()
         return

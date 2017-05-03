@@ -7,8 +7,6 @@ state (eg. Wx, SVG and PDF backends, but not Agg or QPainter).
 
 """
 
-
-
 from numpy import alltrue, array, asarray, shape, sometrue
 
 from .constants import NO_DASH

@@ -1,4 +1,3 @@
-
 from traits.api import Bool, Enum, Tuple
 
 from .drag_tool import DragTool
@@ -48,5 +47,3 @@ class MoveTool(DragTool):
             self._prev_pos = (event.x, event.y)
             event.handled = True
         return
-
-

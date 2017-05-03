@@ -1,11 +1,9 @@
-
 # Major library imports
 from numpy import dot
 
 # Enthought library imports
 from traits.api import Any, Bool, Event, HasTraits, Instance, \
         Property, Trait, Tuple, List
-
 
 # Local relative imports
 from .base import bounds_to_coordinates, does_disjoint_intersect_coordinates, \
@@ -16,22 +14,24 @@ from .container import Container
 from .colors import ColorTrait
 from functools import reduce
 
+
 def Alias(name):
     return Property(lambda obj: getattr(obj, name),
                     lambda obj, val: setattr(obj, name, val))
 
+
 class AbstractWindow(HasTraits):
 
     # The top-level component that this window houses
-    component     = Instance(Component)
+    component = Instance(Component)
 
     # A reference to the nested component that has focus.  This is part of the
     # manual mechanism for determining keyboard focus.
-    focus_owner   = Instance(Interactor)
+    focus_owner = Instance(Interactor)
 
     # If set, this is the component to which all mouse events are passed,
     # bypassing the normal event propagation mechanism.
-    mouse_owner   = Instance(Interactor)
+    mouse_owner = Instance(Interactor)
 
     # The transform to apply to mouse event positions to put them into the
     # relative coordinates of the mouse_owner component.
@@ -50,8 +50,8 @@ class AbstractWindow(HasTraits):
     # backwards compatibility but should not be used in new code.
     bg_color = Alias("bgcolor")
 
-    alt_pressed   = Bool(False)
-    ctrl_pressed  = Bool(False)
+    alt_pressed = Bool(False)
+    ctrl_pressed = Bool(False)
     shift_pressed = Bool(False)
 
     # A container that gets drawn after & on top of the main component, and
@@ -75,8 +75,6 @@ class AbstractWindow(HasTraits):
 
     # The regions to update upon redraw
     _update_region = Any
-
-
 
     #---------------------------------------------------------------------------
     #  Abstract methods that must be implemented by concrete subclasses
@@ -116,7 +114,7 @@ class AbstractWindow(HasTraits):
         "Get the size of the underlying toolkit control"
         raise NotImplementedError
 
-    def _create_gc(self, size, pix_format = "bgr24"):
+    def _create_gc(self, size, pix_format="bgr24"):
         """ Create a Kiva graphics context of a specified size.  This method
         only gets called when the size of the window itself has changed.  To
         perform pre-draw initialization every time in the paint loop, use
@@ -181,7 +179,8 @@ class AbstractWindow(HasTraits):
 
     def _component_changed(self, old, new):
         if old is not None:
-            old.on_trait_change(self.component_bounds_changed, 'bounds', remove=True)
+            old.on_trait_change(
+                self.component_bounds_changed, 'bounds', remove=True)
             old.window = None
 
         if new is None:
@@ -196,7 +195,7 @@ class AbstractWindow(HasTraits):
         if (size is not None) and hasattr(self.component, "bounds"):
             new.on_trait_change(self.component_bounds_changed, 'bounds')
             if getattr(self.component, "fit_window", False):
-                self.component.outer_position = [0,0]
+                self.component.outer_position = [0, 0]
                 self.component.outer_bounds = list(size)
             elif hasattr(self.component, "resizable"):
                 if "h" in self.component.resizable:
@@ -236,11 +235,13 @@ class AbstractWindow(HasTraits):
             self._update_region += damaged_regions
         else:
             self._update_region = None
+
 #        print damaged_regions
 
-    #---------------------------------------------------------------------------
-    #  Generic keyboard event handler:
-    #---------------------------------------------------------------------------
+#---------------------------------------------------------------------------
+#  Generic keyboard event handler:
+#---------------------------------------------------------------------------
+
     def _handle_key_event(self, event_type, event):
         """ **event** should be a toolkit-specific opaque object that will
         be passed in to the backend's _create_key_event() method. It can
@@ -329,10 +330,13 @@ class AbstractWindow(HasTraits):
             if (not mouse_event.handled) and (self.component is not None):
                 # Test to see if we need to generate a mouse_leave event
                 if self._prev_event_handler:
-                    if not self._prev_event_handler.is_in(mouse_event.x, mouse_event.y):
-                        self._prev_event_handler.dispatch(mouse_event, "pre_mouse_leave")
+                    if not self._prev_event_handler.is_in(mouse_event.x,
+                                                          mouse_event.y):
+                        self._prev_event_handler.dispatch(mouse_event,
+                                                          "pre_mouse_leave")
                         mouse_event.handled = False
-                        self._prev_event_handler.dispatch(mouse_event, "mouse_leave")
+                        self._prev_event_handler.dispatch(mouse_event,
+                                                          "mouse_leave")
                         self._prev_event_handler = None
 
                 if self.component.is_in(mouse_event.x, mouse_event.y):
@@ -347,7 +351,6 @@ class AbstractWindow(HasTraits):
                     self.component.dispatch(mouse_event, "pre_" + event_name)
                     mouse_event.handled = False
                     self.component.dispatch(mouse_event, event_name)
-
 
         # If this event requires setting the keyboard focus, set the first
         # component under the mouse pointer that accepts focus as the new focus
@@ -393,8 +396,10 @@ class AbstractWindow(HasTraits):
         if self.component is not None:
             # Test to see if we need to generate a drag_leave event
             if self._prev_event_handler:
-                if not self._prev_event_handler.is_in(drag_event.x, drag_event.y):
-                    self._prev_event_handler.dispatch(drag_event, "pre_drag_leave")
+                if not self._prev_event_handler.is_in(drag_event.x,
+                                                      drag_event.y):
+                    self._prev_event_handler.dispatch(drag_event,
+                                                      "pre_drag_leave")
                     drag_event.handled = False
                     self._prev_event_handler.dispatch(drag_event, "drag_leave")
                     self._prev_event_handler = None
@@ -433,14 +438,14 @@ class AbstractWindow(HasTraits):
             self.component = None
 
         self.control = None
-        if self._gc is not None :
+        if self._gc is not None:
             self._gc.window = None
             self._gc = None
 
     def _needs_redraw(self, bounds):
         "Determine if a specified region intersects the update region"
-        return does_disjoint_intersect_coordinates( self._update_region,
-                                                    bounds_to_coordinates( bounds ) )
+        return does_disjoint_intersect_coordinates(
+            self._update_region, bounds_to_coordinates(bounds))
 
     def _paint(self, event=None):
         """ This method is called directly by the UI toolkit's callback
@@ -468,7 +473,7 @@ class AbstractWindow(HasTraits):
         gc = self._gc
         self.component.draw(gc, view_bounds=(0, 0, size[0], size[1]))
 
-#        damaged_regions = draw_result['damaged_regions']
+        #        damaged_regions = draw_result['damaged_regions']
         # FIXME: consolidate damaged regions if necessary
         if not self.use_damaged_region:
             self._update_region = None
@@ -491,44 +496,44 @@ class AbstractWindow(HasTraits):
     # Wire up the mouse event handlers
     #---------------------------------------------------------------------------
 
-    def _on_left_down ( self, event ):
-        self._handle_mouse_event( 'left_down', event, set_focus = True )
+    def _on_left_down(self, event):
+        self._handle_mouse_event('left_down', event, set_focus=True)
 
-    def _on_left_up ( self, event ):
-        self._handle_mouse_event( 'left_up', event )
+    def _on_left_up(self, event):
+        self._handle_mouse_event('left_up', event)
 
-    def _on_left_dclick ( self, event ):
-        self._handle_mouse_event( 'left_dclick', event )
+    def _on_left_dclick(self, event):
+        self._handle_mouse_event('left_dclick', event)
 
-    def _on_right_down ( self, event ):
-        self._handle_mouse_event( 'right_down', event, set_focus = True )
+    def _on_right_down(self, event):
+        self._handle_mouse_event('right_down', event, set_focus=True)
 
-    def _on_right_up ( self, event ):
-        self._handle_mouse_event( 'right_up', event )
+    def _on_right_up(self, event):
+        self._handle_mouse_event('right_up', event)
 
-    def _on_right_dclick ( self, event ):
-        self._handle_mouse_event( 'right_dclick', event )
+    def _on_right_dclick(self, event):
+        self._handle_mouse_event('right_dclick', event)
 
-    def _on_middle_down ( self, event ):
-        self._handle_mouse_event( 'middle_down', event )
+    def _on_middle_down(self, event):
+        self._handle_mouse_event('middle_down', event)
 
-    def _on_middle_up ( self, event ):
-        self._handle_mouse_event( 'middle_up', event )
+    def _on_middle_up(self, event):
+        self._handle_mouse_event('middle_up', event)
 
-    def _on_middle_dclick ( self, event ):
-        self._handle_mouse_event( 'middle_dclick', event )
+    def _on_middle_dclick(self, event):
+        self._handle_mouse_event('middle_dclick', event)
 
-    def _on_mouse_move ( self, event ):
-        self._handle_mouse_event( 'mouse_move', event, 1 )
+    def _on_mouse_move(self, event):
+        self._handle_mouse_event('mouse_move', event, 1)
 
-    def _on_mouse_wheel ( self, event ):
-        self._handle_mouse_event( 'mouse_wheel', event )
+    def _on_mouse_wheel(self, event):
+        self._handle_mouse_event('mouse_wheel', event)
 
-    def _on_mouse_enter ( self, event ):
-        self._handle_mouse_event( 'mouse_enter', event )
+    def _on_mouse_enter(self, event):
+        self._handle_mouse_event('mouse_enter', event)
 
-    def _on_mouse_leave ( self, event ):
-        self._handle_mouse_event( 'mouse_leave', event, -1 )
+    def _on_mouse_leave(self, event):
+        self._handle_mouse_event('mouse_leave', event, -1)
 
     # Additional event handlers that are not part of normal Interactors
     def _on_window_enter(self, event):
@@ -547,7 +552,6 @@ class AbstractWindow(HasTraits):
             self._prev_event_handler.dispatch(mouse_event, "mouse_leave")
             self._prev_event_handler = None
         return
-
 
     #---------------------------------------------------------------------------
     # Wire up the keyboard event handlers

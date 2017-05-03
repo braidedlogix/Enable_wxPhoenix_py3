@@ -8,8 +8,6 @@
     nothing is obviously wrong.
 """
 
-
-
 import unittest
 
 from numpy import alltrue, array, ravel
@@ -20,7 +18,6 @@ from kiva import constants
 
 
 class TestIsFullyTransparent(unittest.TestCase):
-
     def test_simple(self):
         self.assertTrue(basecore2d.is_fully_transparent([1, 1, 1, 0]))
         self.assertTrue(not basecore2d.is_fully_transparent([0, 0, 0, 1]))
@@ -28,18 +25,16 @@ class TestIsFullyTransparent(unittest.TestCase):
 
 
 class TestFillEqual(unittest.TestCase):
-
     def test_simple(self):
-        self.assertTrue(basecore2d.fill_equal(array([0, 0, 0, 0]),
-                                           array([0, 0, 0, 0])))
-        self.assertTrue(not basecore2d.fill_equal(array([0, 0, 0, 0]),
-                                               array([0, 0, 0, 1])))
-        self.assertTrue(not basecore2d.fill_equal(array([0, 0, 0, 0]),
-                                               array([1, 0, 0, 0])))
+        self.assertTrue(
+            basecore2d.fill_equal(array([0, 0, 0, 0]), array([0, 0, 0, 0])))
+        self.assertTrue(not basecore2d.fill_equal(
+            array([0, 0, 0, 0]), array([0, 0, 0, 1])))
+        self.assertTrue(not basecore2d.fill_equal(
+            array([0, 0, 0, 0]), array([1, 0, 0, 0])))
 
 
 class LineStateTestCase(unittest.TestCase):
-
     def create_ls(self):
         color = array([0, 0, 0, 1])
         width = 2
@@ -91,7 +86,6 @@ class LineStateTestCase(unittest.TestCase):
 
 
 class GraphicsContextTestCase(unittest.TestCase):
-
     def test_create_gc(self):
         gc = basecore2d.GraphicsContextBase()
 
@@ -193,7 +187,7 @@ class GraphicsContextTestCase(unittest.TestCase):
         gc.restore_state()
         self.assertEqual(gc.state.line_state.line_join, constants.JOIN_BEVEL)
         # set_line_join should fail if one attempts to set a bad value.
-        self.assertRaises(ValueError, gc.set_line_join, (100,))
+        self.assertRaises(ValueError, gc.set_line_join, (100, ))
 
     def test_state_miter_limit(self):
         gc = basecore2d.GraphicsContextBase()
@@ -217,7 +211,7 @@ class GraphicsContextTestCase(unittest.TestCase):
         gc.restore_state()
         self.assertEqual(gc.state.line_state.line_cap, constants.CAP_BUTT)
         # set_line_cap should fail if one attempts to set a bad value.
-        self.assertRaises(ValueError, gc.set_line_cap, (100,))
+        self.assertRaises(ValueError, gc.set_line_cap, (100, ))
 
     def test_state_line_dash(self):
         gc = basecore2d.GraphicsContextBase()
@@ -229,17 +223,19 @@ class GraphicsContextTestCase(unittest.TestCase):
         gc.set_line_dash([3.0, 4.0])
         self.assertTrue(gc.state.line_state.is_dashed())
         self.assertEqual(gc.state.line_state.line_dash[0], 0)
-        self.assertTrue(alltrue(ravel(gc.state.line_state.line_dash[1] ==
-                                            array([3.0, 4.0]))))
+        self.assertTrue(
+            alltrue(
+                ravel(gc.state.line_state.line_dash[1] == array([3.0, 4.0]))))
         gc.restore_state()
         self.assertTrue(gc.state.line_state.is_dashed())
         self.assertEqual(gc.state.line_state.line_dash[0], 2.0)
-        self.assertTrue(alltrue(ravel(gc.state.line_state.line_dash[1] ==
-                                            array([1.0, 2.0]))))
+        self.assertTrue(
+            alltrue(
+                ravel(gc.state.line_state.line_dash[1] == array([1.0, 2.0]))))
 
         # pattern must be a container with atleast two values
-        self.assertRaises(ValueError, gc.set_line_cap, (100,))
-        self.assertRaises(ValueError, gc.set_line_cap, ([100],))
+        self.assertRaises(ValueError, gc.set_line_cap, (100, ))
+        self.assertRaises(ValueError, gc.set_line_cap, ([100], ))
         # phase must be positive.
         self.assertRaises(ValueError, gc.set_line_cap, ([100, 200], -1))
 
@@ -279,13 +275,16 @@ class GraphicsContextTestCase(unittest.TestCase):
     def test_state_stroke_color(self):
         gc = basecore2d.GraphicsContextBase()
         # defaults to [0,0,0,1]
-        self.assertTrue(alltrue(gc.state.line_state.line_color == array([0, 0, 0, 1])))
+        self.assertTrue(
+            alltrue(gc.state.line_state.line_color == array([0, 0, 0, 1])))
         gc.set_stroke_color((0, 1, 0, 1))
         gc.save_state()
         gc.set_stroke_color((1, 1, 1, 1))
-        self.assertTrue(alltrue(gc.state.line_state.line_color == array([1, 1, 1, 1])))
+        self.assertTrue(
+            alltrue(gc.state.line_state.line_color == array([1, 1, 1, 1])))
         gc.restore_state()
-        self.assertTrue(alltrue(gc.state.line_state.line_color == array([0, 1, 0, 1])))
+        self.assertTrue(
+            alltrue(gc.state.line_state.line_color == array([0, 1, 0, 1])))
 
     def test_state_character_spacing(self):
         gc = basecore2d.GraphicsContextBase()
@@ -309,7 +308,7 @@ class GraphicsContextTestCase(unittest.TestCase):
         gc.restore_state()
         self.assertEqual(gc.state.text_drawing_mode, constants.TEXT_OUTLINE)
         # try an unacceptable value.
-        self.assertRaises(ValueError, gc.set_text_drawing_mode, (10,))
+        self.assertRaises(ValueError, gc.set_text_drawing_mode, (10, ))
 
     #-------------------------------------------------------------------------
     # Use context manager for saving and restoring state.
@@ -330,7 +329,8 @@ class GraphicsContextTestCase(unittest.TestCase):
             gc.set_line_width(10)
             self.assertEqual(gc.state.line_state.line_width, 10)
             gc.set_fill_color((1, 1, 1, 1))
-            self.assertTrue(alltrue(gc.state.fill_color == array([1, 1, 1, 1])))
+            self.assertTrue(
+                alltrue(gc.state.fill_color == array([1, 1, 1, 1])))
 
         # Verify that we're back to the earlier settings.
         self.assertEqual(gc.state.antialias, 0)
@@ -352,7 +352,8 @@ class GraphicsContextTestCase(unittest.TestCase):
             gc.set_line_width(10)
             self.assertEqual(gc.state.line_state.line_width, 10)
             gc.set_fill_color((1, 1, 1, 1))
-            self.assertTrue(alltrue(gc.state.fill_color == array([1, 1, 1, 1])))
+            self.assertTrue(
+                alltrue(gc.state.fill_color == array([1, 1, 1, 1])))
 
             with gc:
                 # Change the state properties.
@@ -361,13 +362,14 @@ class GraphicsContextTestCase(unittest.TestCase):
                 gc.set_line_width(2)
                 self.assertEqual(gc.state.line_state.line_width, 2)
                 gc.set_fill_color((1, 1, 0, 1))
-                self.assertTrue(alltrue(gc.state.fill_color ==
-                                            array([1, 1, 0, 1])))
+                self.assertTrue(
+                    alltrue(gc.state.fill_color == array([1, 1, 0, 1])))
 
             # Verify that we're back to the earlier settings.
             self.assertEqual(gc.state.antialias, 1)
             self.assertEqual(gc.state.line_state.line_width, 10)
-            self.assertTrue(alltrue(gc.state.fill_color == array([1, 1, 1, 1])))
+            self.assertTrue(
+                alltrue(gc.state.fill_color == array([1, 1, 1, 1])))
 
         # Verify that we're back to the earlier settings.
         self.assertEqual(gc.state.antialias, 0)

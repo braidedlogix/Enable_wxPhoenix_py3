@@ -5,7 +5,6 @@
 # This file is open source software distributed according to the terms in
 # LICENSE.txt
 #
-
 """
 Enable Commands
 ===============
@@ -24,6 +23,7 @@ from traits.api import Bool, Instance, Tuple, Unicode
 from traits.util.camel_case import camel_case_to_words
 
 from enable.component import Component
+
 
 class ComponentCommand(AbstractCommand):
     """ Abstract command which operates on a Component """
@@ -85,10 +85,14 @@ class ResizeCommand(ComponentCommand):
     #: whether additional resizes can be merged or if the resize is finished.
     mergeable = Bool
 
-    def __init__(self, component, new_rectangle=None, previous_rectangle=None,
+    def __init__(self,
+                 component,
+                 new_rectangle=None,
+                 previous_rectangle=None,
                  **traits):
         if previous_rectangle is None:
-            previous_rectangle = tuple(component.position)+tuple(component.bounds)
+            previous_rectangle = tuple(component.position) + tuple(
+                component.bounds)
 
         if new_rectangle is None:
             if 'data' in traits:
@@ -106,7 +110,10 @@ class ResizeCommand(ComponentCommand):
             **traits)
 
     @classmethod
-    def move_command(cls, component, new_position, previous_position=None,
+    def move_command(cls,
+                     component,
+                     new_position,
+                     previous_position=None,
                      **traits):
         """ Factory that creates a ResizeCommand implementing a move operation
 
@@ -120,12 +127,10 @@ class ResizeCommand(ComponentCommand):
             previous_rectangle = previous_position + bounds
         else:
             previous_rectangle = None
-        return cls(
-            component=component,
-            new_rectangle=new_rectangle,
-            previous_rectangle=previous_rectangle,
-            **traits)
-
+        return cls(component=component,
+                   new_rectangle=new_rectangle,
+                   previous_rectangle=previous_rectangle,
+                   **traits)
 
     #-------------------------------------------------------------------------
     # AbstractCommand interface
@@ -170,7 +175,7 @@ class ResizeCommand(ComponentCommand):
     #-------------------------------------------------------------------------
 
     def _name_default(self):
-        return "Resize "+self.component_name
+        return "Resize " + self.component_name
 
 
 class MoveCommand(ComponentCommand):
@@ -210,7 +215,10 @@ class MoveCommand(ComponentCommand):
     #: whether additional moves can be merged or if the move is finished.
     mergeable = Bool
 
-    def __init__(self, component, new_position=None, previous_position=None,
+    def __init__(self,
+                 component,
+                 new_position=None,
+                 previous_position=None,
                  **traits):
         if previous_position is None:
             previous_position = component.position
@@ -258,7 +266,6 @@ class MoveCommand(ComponentCommand):
         self.component._layout_needed = True
         self.component.request_redraw()
 
-
     def _merge_data(self, other):
         self.data = other.data
         self.mergeable = other.mergeable
@@ -269,4 +276,4 @@ class MoveCommand(ComponentCommand):
     #-------------------------------------------------------------------------
 
     def _name_default(self):
-        return "Move "+self.component_name
+        return "Move " + self.component_name

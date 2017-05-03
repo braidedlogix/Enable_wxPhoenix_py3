@@ -16,7 +16,6 @@ from traceback import format_exception_only
 # Enthought library imports.
 from traits.etsconfig.api import ETSConfig
 
-
 # This is set to the api module path for the selected backend.
 _toolkit_backend = None
 
@@ -43,6 +42,7 @@ def _init_toolkit():
     global _toolkit_backend
     _toolkit_backend = backend
 
+
 # Do this once then disappear.
 _init_toolkit()
 del _init_toolkit
@@ -54,7 +54,8 @@ def toolkit_object(name):
     try:
         be_obj = getattr(sys.modules[_toolkit_backend], name)
     except AttributeError:
-        raise NotImplementedError("the %s.%s enable backend doesn't implement %s" %
-                                  (ETSConfig.toolkit, ETSConfig.kiva_backend, name))
+        raise NotImplementedError(
+            "the %s.%s enable backend doesn't implement %s" %
+            (ETSConfig.toolkit, ETSConfig.kiva_backend, name))
 
     return be_obj

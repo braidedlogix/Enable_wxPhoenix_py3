@@ -23,11 +23,14 @@ class Window(BaseWindow):
     _shuffle_buffer = Array(shape=(None, None, 4), dtype=np.uint8)
 
     def _create_gc(self, size, pix_format="rgba32"):
-        gc = GraphicsContext((size[0]+1, size[1]+1), pix_format=pix_format)
+        gc = GraphicsContext((size[0] + 1, size[1] + 1), pix_format=pix_format)
         gc.translate_ctm(0.5, 0.5)
 
-        self._shuffle_buffer = np.empty((size[1]+1, size[0]+1, 4,),
-                                        dtype=np.uint8)
+        self._shuffle_buffer = np.empty(
+            (
+                size[1] + 1,
+                size[0] + 1,
+                4, ), dtype=np.uint8)
 
         return gc
 

@@ -10,8 +10,6 @@
 #------------------------------------------------------------------------------
 """ Abstract base class for tools that handle drag and drop """
 
-
-
 from traits.api import Enum
 
 from enable.base_tool import BaseTool
@@ -20,8 +18,8 @@ from enable.base_tool import BaseTool
 class BaseDropTool(BaseTool):
     """ Abstract base class for tools that handle drag and drop """
 
-    default_drag_result = Enum("copy", "move", "link", "cancel",
-                               "error", "none")
+    default_drag_result = Enum("copy", "move", "link", "cancel", "error",
+                               "none")
 
     def normal_drag_over(self, event):
         """ Handle dragging over the component """

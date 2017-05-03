@@ -108,8 +108,11 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
     # Flag to keep from recursing in _vtk_render_event
     _rendering = Bool(False)
 
-    def __init__(self, render_window_interactor, renderer,
-            istyle_class=tvtk.InteractorStyle, **traits):
+    def __init__(self,
+                 render_window_interactor,
+                 renderer,
+                 istyle_class=tvtk.InteractorStyle,
+                 **traits):
         AbstractWindow.__init__(self, **traits)
         self.control = render_window_interactor
         self.renderer = renderer
@@ -118,15 +121,23 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
         rwi.interactor_style = istyle_class()
 
         istyle = rwi.interactor_style
-        self._add_observer(istyle, "LeftButtonPressEvent", self._vtk_mouse_button_event)
-        self._add_observer(istyle, "LeftButtonReleaseEvent", self._vtk_mouse_button_event)
-        self._add_observer(istyle, "MiddleButtonPressEvent", self._vtk_mouse_button_event)
-        self._add_observer(istyle, "MiddleButtonReleaseEvent", self._vtk_mouse_button_event)
-        self._add_observer(istyle, "RightButtonPressEvent", self._vtk_mouse_button_event)
-        self._add_observer(istyle, "RightButtonReleaseEvent", self._vtk_mouse_button_event)
+        self._add_observer(istyle, "LeftButtonPressEvent",
+                           self._vtk_mouse_button_event)
+        self._add_observer(istyle, "LeftButtonReleaseEvent",
+                           self._vtk_mouse_button_event)
+        self._add_observer(istyle, "MiddleButtonPressEvent",
+                           self._vtk_mouse_button_event)
+        self._add_observer(istyle, "MiddleButtonReleaseEvent",
+                           self._vtk_mouse_button_event)
+        self._add_observer(istyle, "RightButtonPressEvent",
+                           self._vtk_mouse_button_event)
+        self._add_observer(istyle, "RightButtonReleaseEvent",
+                           self._vtk_mouse_button_event)
         self._add_observer(istyle, "MouseMoveEvent", self._vtk_mouse_move)
-        self._add_observer(istyle, "MouseWheelForwardEvent", self._vtk_mouse_wheel)
-        self._add_observer(istyle, "MouseWheelBackwardEvent", self._vtk_mouse_wheel)
+        self._add_observer(istyle, "MouseWheelForwardEvent",
+                           self._vtk_mouse_wheel)
+        self._add_observer(istyle, "MouseWheelBackwardEvent",
+                           self._vtk_mouse_wheel)
 
         self._add_observer(istyle, "KeyPressEvent", self._on_key_pressed)
         self._add_observer(istyle, "KeyReleaseEvent", self._on_key_released)
@@ -134,7 +145,8 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
 
         # We want _vtk_render_event to be called before rendering, so we
         # observe the StartEvent on the RenderWindow.
-        self._add_observer(rwi.render_window, "StartEvent", self._vtk_render_event)
+        self._add_observer(rwi.render_window, "StartEvent",
+                           self._vtk_render_event)
         self._add_observer(istyle, "ExposeEvent", self._vtk_expose_event)
         self.interactor_style = istyle
 
@@ -143,11 +155,11 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
 
         self._mapper = tvtk.ImageMapper()
         self._mapper.color_window = 255
-        self._mapper.color_level = 255/2.0
+        self._mapper.color_level = 255 / 2.0
         self._actor2d.mapper = self._mapper
 
         #self._size = tuple(self._get_control_size())
-        self._size = [0,0]
+        self._size = [0, 0]
         self._redraw_needed = True
         self._layout_needed = True
         #self._gc = self._create_gc(self._size)
@@ -220,7 +232,9 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
         if meth is not None:
             meth()
         else:
-            warnings.warn("Unable to pass through mouse event '%s' to vtkInteractionStyle" % eventname)
+            warnings.warn(
+                "Unable to pass through mouse event '%s' to vtkInteractionStyle"
+                % eventname)
         return
 
     def _vtk_mouse_button_event(self, vtk_obj, eventname):
@@ -245,10 +259,10 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
 
         if "Press" in eventname:
             action = "down"
-            setattr(self, "_%s_down"%button, True)
+            setattr(self, "_%s_down" % button, True)
         elif "Release" in eventname:
             action = "up"
-            setattr(self, "_%s_down"%button, False)
+            setattr(self, "_%s_down" % button, False)
         else:
             # Unable to figure out the appropriate method to dispatch to
             warnings.warn("Unable to create event for", eventname)
@@ -300,15 +314,16 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
 
         x, y = self.control.event_position
 
-        return KeyEvent(event_type = event_type,
-                character=key, x=x, y=y,
-                alt_down=bool(self.control.alt_key),
-                shift_down=bool(self.control.shift_key),
-                control_down=bool(self.control.control_key),
-                event=eventname,
-                window=self.control)
-
-
+        return KeyEvent(
+            event_type=event_type,
+            character=key,
+            x=x,
+            y=y,
+            alt_down=bool(self.control.alt_key),
+            shift_down=bool(self.control.shift_key),
+            control_down=bool(self.control.control_key),
+            event=eventname,
+            window=self.control)
 
     def _create_mouse_event(self, event_string):
         """ Returns an enable.MouseEvent that reflects the VTK mouse event.
@@ -335,22 +350,24 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
             # Reset the wheel amount for next time
             self._wheel_amount = 0
 
-        tmp = MouseEvent(x = x, y = y,
-                    alt_down = bool(rwi.alt_key),
-                    control_down = bool(rwi.control_key),
-                    shift_down = bool(rwi.shift_key),
-                    left_down = self._left_down,
-                    right_down = self._right_down,
-                    middle_down = self._middle_down,
-                    mouse_wheel = wheel,
-                    window = self)
+        tmp = MouseEvent(
+            x=x,
+            y=y,
+            alt_down=bool(rwi.alt_key),
+            control_down=bool(rwi.control_key),
+            shift_down=bool(rwi.shift_key),
+            left_down=self._left_down,
+            right_down=self._right_down,
+            middle_down=self._middle_down,
+            mouse_wheel=wheel,
+            window=self)
         return tmp
 
     def _get_control_size(self):
         if self.control is not None:
             return tuple(self.control.size)
         else:
-            return (0,0)
+            return (0, 0)
 
     def _redraw(self, coordinates=None):
         " Called by the contained component to request a redraw "
@@ -386,7 +403,7 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
         comp = self.component
         dx, dy = size
         if getattr(comp, "fit_window", False):
-            comp.outer_position = [0,0]
+            comp.outer_position = [0, 0]
             comp.outer_bounds = [dx, dy]
         elif hasattr(comp, "resizable"):
             if "h" in comp.resizable:
@@ -407,15 +424,17 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
         # a pixel.
         width = size[0] + 1
         height = size[1] + 1
-        gc = ImageGraphicsContextEnable((width, height), pix_format = pix_format, window=self )
+        gc = ImageGraphicsContextEnable(
+            (width, height), pix_format=pix_format, window=self)
         gc.translate_ctm(0.5, 0.5)
-        gc.clear((0,0,0,0))
+        gc.clear((0, 0, 0, 0))
 
         imagedata_dimensions = (width, height, 1)
-        if self._vtk_image_data is None or any(self._vtk_image_data.dimensions != imagedata_dimensions):
+        if self._vtk_image_data is None or any(
+                self._vtk_image_data.dimensions != imagedata_dimensions):
             sz = (width, height, 4)
             img = tvtk.ImageData()
-            img.extent = (0, width-1, 0, height-1, 0, 0)
+            img.extent = (0, width - 1, 0, height - 1, 0, 0)
             # note the transposed height and width for VTK (row, column, depth)
             img.dimensions = imagedata_dimensions
             # create a 2d view of the array.  This is a bit superfluous because
@@ -468,7 +487,9 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
             ary = ascontiguousarray(self._gc.bmp_array[::-1, :, :4])
             ary_2d = reshape(ary, (width * height, 4))
         except Exception as e:
-            warnings.warn("Error reshaping array of shape %s to width and height of (%d, %d)" % (str(ary.shape), width, height))
+            warnings.warn(
+                "Error reshaping array of shape %s to width and height of (%d, %d)"
+                % (str(ary.shape), width, height))
             return
 
         # Make sure we paint to the right location on the mapper
@@ -480,7 +501,6 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
         else:
             self.control.render()
         self._redraw_needed = False
-
 
     def _set_focus(self):
         #print "set_focus unimplemented"
@@ -503,14 +523,15 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
     def _set_tooltip(self, tooltip):
         pass
 
-
     #------------------------------------------------------------------------
     # Trait property setters/getters
     #------------------------------------------------------------------------
 
     def _get_padding(self):
-        return [self.padding_left, self.padding_right,
-                self.padding_top, self.padding_bottom]
+        return [
+            self.padding_left, self.padding_right, self.padding_top,
+            self.padding_bottom
+        ]
 
     def _set_padding(self, val):
         old_padding = self.padding
@@ -518,11 +539,13 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
         if type(val) == int:
             self.padding_left = self.padding_right = \
                 self.padding_top = self.padding_bottom = val
-            self.trait_property_changed("padding", old_padding, [val]*4)
+            self.trait_property_changed("padding", old_padding, [val] * 4)
         else:
             # assume padding is some sort of array type
             if len(val) != 4:
-                raise RuntimeError("Padding must be a 4-element sequence type or an int.  Instead, got" + str(val))
+                raise RuntimeError(
+                    "Padding must be a 4-element sequence type or an int.  Instead, got"
+                    + str(val))
             self.padding_left = val[0]
             self.padding_right = val[1]
             self.padding_top = val[2]
@@ -537,7 +560,6 @@ class EnableVTKWindow(AbstractWindow, CoordinateBox):
     def _get_vpadding(self):
         return 2*self._get_visible_border() + self.padding_bottom + \
                 self.padding_top
-
 
     #------------------------------------------------------------------------
     # Trait event handlers

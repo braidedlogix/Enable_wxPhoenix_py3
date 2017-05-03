@@ -3,7 +3,6 @@ Defines the base class for all Chaco tools.  See docs/event_handling.txt for an
 overview of how event handling works in Chaco.
 """
 
-
 # Enthought library imports
 from traits.api import Bool, Enum, Instance
 
@@ -32,6 +31,7 @@ class KeySpec(object):
     are specifying the user pressing Ctrl + Right_arrow with Alt not pressed
     and Shift either pressed or not.
     """
+
     def __init__(self, key, *modifiers, **kwmods):
         """ Creates this key spec with the given modifiers. """
         self.key = key
@@ -60,7 +60,6 @@ class KeySpec(object):
         modifiers = set(code.lower() for code in codes[:-1])
         ignore = set('alt', 'shift', 'control') - modifiers
         return cls(key, *modifiers, ignore=ignore)
-
 
 
 class BaseTool(Interactor):
@@ -103,7 +102,6 @@ class BaseTool(Interactor):
     #     The tool does not have a visual representation that the component
     #     needs to render.
     draw_mode = Enum("none", "overlay", "normal")
-
 
     #------------------------------------------------------------------------
     # Concrete methods

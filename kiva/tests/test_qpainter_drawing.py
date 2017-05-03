@@ -11,7 +11,6 @@ from traits.testing.unittest_tools import unittest
 
 @unittest.skipIf(QT_NOT_AVAILABLE, "Cannot import qt")
 class TestQPainterDrawing(DrawingImageTester, unittest.TestCase):
-
     def setUp(self):
         application = QtGui.QApplication.instance()
         if application is None:

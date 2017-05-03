@@ -7,9 +7,8 @@ from enable.api import Window
 
 
 class MyFrame(DemoFrame):
-
     def _create_window(self):
-        label = Label(bounds=[100, 50], position=[50,50], text="HELLO")
+        label = Label(bounds=[100, 50], position=[50, 50], text="HELLO")
         label.bgcolor = "lightpink"
         return Window(self, -1, component=label)
 

@@ -5,9 +5,10 @@ import time
 from kiva.image import font_metrics_provider as FMP
 from kiva.fonttools import Font
 
-counts = (500,)
-strings = ("hello", ) # ascii_lowercase + ascii_uppercase)
-fonts = ( ("arial", 12), ) # ("times", 16), ("courier", 10) )
+counts = (500, )
+strings = ("hello", )  # ascii_lowercase + ascii_uppercase)
+fonts = (("arial", 12), )  # ("times", 16), ("courier", 10) )
+
 
 def test():
 
@@ -24,7 +25,8 @@ def test():
         end = time.time()
         print("finished count=%d" % count)
         print("   total time:", end - start)
-        print("   time/set_font:", (end-start) / float(count * len(fonts)))
+        print("   time/set_font:", (end - start) / float(count * len(fonts)))
+
 
 if __name__ == "__main__":
     test()

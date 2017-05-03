@@ -7,14 +7,12 @@ except ImportError:
 else:
     PYGLET_NOT_AVAILABLE = False
 
-
 from kiva.tests.drawing_tester import DrawingImageTester
 from traits.testing.unittest_tools import unittest
 
 
 @unittest.skipIf(PYGLET_NOT_AVAILABLE, "Cannot import pyglet")
 class TestGLDrawing(DrawingImageTester, unittest.TestCase):
-
     def tearDown(self):
         if hasattr(self, 'window') and self.window is not None:
             self.window.close()

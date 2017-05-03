@@ -5,12 +5,10 @@ from enable.example_support import DemoFrame, demo_main
 from enable.api import Container, Window
 from enable.text_grid import TextGrid
 
-
 size = (400, 100)
 
 
 class MyFrame(DemoFrame):
-
     def _create_window(self):
 
         strings = array([["apple", "banana", "cherry", "durian"],

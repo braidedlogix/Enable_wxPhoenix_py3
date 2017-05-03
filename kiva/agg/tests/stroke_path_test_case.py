@@ -58,7 +58,6 @@ from .test_utils import Utils
 
 
 class StrokePathTestCase(unittest.TestCase, Utils):
-
     def test_alias_width_one(self):
         """ The fastest path through the stroke path code is for aliased
             path with width=1.  It is reasonably safe here not to worry
@@ -83,16 +82,15 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(3, 0)
 
         # These settings allow the fastest path.
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(False)
         gc.set_line_width(1)
 
         gc.stroke_path()
 
         # test a single color channel.
-        desired = array(((255,255,255),
-                         (  0,  0,  0)))
-        actual = gc.bmp_array[:,:,0]
+        desired = array(((255, 255, 255), (0, 0, 0)))
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(actual, desired)
 
     def test_alias_width_two_outline_aa(self):
@@ -114,7 +112,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(3, 0)
 
         # Settings allow the 2nd fastest path.
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(False)
         gc.set_line_width(2)
         gc.set_line_cap(kiva.CAP_ROUND)
@@ -123,9 +121,8 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.stroke_path()
 
         # test a single color channel.
-        desired = array(((255, 255, 255),
-                         (  0,   0,   0)))
-        actual = gc.bmp_array[:,:,0]
+        desired = array(((255, 255, 255), (0, 0, 0)))
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(actual, desired)
 
     def test_alias_width_two_scanline_aa(self):
@@ -144,7 +141,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(3, 0)
 
         # Settings allow the 2nd fastest path.
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(False)
         gc.set_line_width(2)
         gc.set_line_cap(kiva.CAP_ROUND)
@@ -153,17 +150,20 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.stroke_path()
 
         # test a single color channel.
-        desired = array(((255, 255, 255),
-                         (  0,   0,   0)))
-        actual = gc.bmp_array[:,:,0]
+        desired = array(((255, 255, 255), (0, 0, 0)))
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(actual, desired)
 
     #########################################################################
     # Cap Tests
     #########################################################################
 
-    def cap_equality_helper(self, antialias, width, line_cap, line_join,
-                                 size=(6,6)):
+    def cap_equality_helper(self,
+                            antialias,
+                            width,
+                            line_cap,
+                            line_join,
+                            size=(6, 6)):
 
         gc = GraphicsContextArray(size, pix_format="rgb24")
 
@@ -175,7 +175,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(4, 3)
 
         # Settings allow the faster outline path through C++ code
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(antialias)
         gc.set_line_width(width)
         gc.set_line_cap(line_cap)
@@ -191,7 +191,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
 
             fix me: This is rendering antialiased end points currently.
         """
-        gc = GraphicsContextArray((6,6), pix_format="rgb24")
+        gc = GraphicsContextArray((6, 6), pix_format="rgb24")
 
         # clear background to white values (255, 255, 255)
         gc.clear((1.0, 1.0, 1.0))
@@ -201,7 +201,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(4, 3)
 
         # Set up line
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(False)
         gc.set_line_width(2)
         gc.set_line_cap(kiva.CAP_ROUND)
@@ -209,14 +209,12 @@ class StrokePathTestCase(unittest.TestCase, Utils):
 
         gc.stroke_path()
 
-        desired = array(((255, 255, 255, 255, 255, 255),
-                         (255, 255, 255, 255, 255, 255),
-                         (255,   0,   0,   0,   0, 255),
-                         (255,   0,   0,   0,   0, 255),
-                         (255, 255, 255, 255, 255, 255),
-                         (255, 255, 255, 255, 255, 255)))
+        desired = array(
+            ((255, 255, 255, 255, 255, 255), (255, 255, 255, 255, 255, 255),
+             (255, 0, 0, 0, 0, 255), (255, 0, 0, 0, 0, 255),
+             (255, 255, 255, 255, 255, 255), (255, 255, 255, 255, 255, 255)))
 
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(desired, actual)
 
     def test_alias_cap_round_equality(self):
@@ -237,7 +235,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
 
         # Instead of testing against a known desired value, we are simply
         # testing for equality...
-        self.assertRavelEqual(gc1.bmp_array[:,:,0], gc2.bmp_array[:,:,0])
+        self.assertRavelEqual(gc1.bmp_array[:, :, 0], gc2.bmp_array[:, :, 0])
 
     def test_alias_cap_square(self):
         """ Round caps should extend beyond the end of the line. by
@@ -245,7 +243,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
 
             fix me: This is rendering antialiased end points currently.
         """
-        gc = GraphicsContextArray((6,6), pix_format="rgb24")
+        gc = GraphicsContextArray((6, 6), pix_format="rgb24")
 
         # clear background to white values (255, 255, 255)
         gc.clear((1.0, 1.0, 1.0))
@@ -255,7 +253,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(4, 3)
 
         # Set up line
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(False)
         gc.set_line_width(2)
         gc.set_line_cap(kiva.CAP_SQUARE)
@@ -263,21 +261,19 @@ class StrokePathTestCase(unittest.TestCase, Utils):
 
         gc.stroke_path()
 
-        desired = array(((255, 255, 255, 255, 255, 255),
-                         (255, 255, 255, 255, 255, 255),
-                         (255, 255,   0,   0, 255, 255),
-                         (255, 255,   0,   0, 255, 255),
-                         (255, 255, 255, 255, 255, 255),
-                         (255, 255, 255, 255, 255, 255)))
+        desired = array(
+            ((255, 255, 255, 255, 255, 255), (255, 255, 255, 255, 255, 255),
+             (255, 255, 0, 0, 255, 255), (255, 255, 0, 0, 255, 255),
+             (255, 255, 255, 255, 255, 255), (255, 255, 255, 255, 255, 255)))
 
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(desired, actual)
 
     def test_alias_cap_square(self):
         """ Square caps should extend beyond the end of the line. by
             half the width of the line.
         """
-        gc = GraphicsContextArray((6,6), pix_format="rgb24")
+        gc = GraphicsContextArray((6, 6), pix_format="rgb24")
 
         # clear background to white values (255, 255, 255)
         gc.clear((1.0, 1.0, 1.0))
@@ -287,7 +283,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(4, 3)
 
         # Set up line
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(False)
         gc.set_line_width(2)
         gc.set_line_cap(kiva.CAP_SQUARE)
@@ -295,14 +291,12 @@ class StrokePathTestCase(unittest.TestCase, Utils):
 
         gc.stroke_path()
 
-        desired = array(((255, 255, 255, 255, 255, 255),
-                         (255, 255, 255, 255, 255, 255),
-                         (255,   0,   0,   0,   0, 255),
-                         (255,   0,   0,   0,   0, 255),
-                         (255, 255, 255, 255, 255, 255),
-                         (255, 255, 255, 255, 255, 255)))
+        desired = array(
+            ((255, 255, 255, 255, 255, 255), (255, 255, 255, 255, 255, 255),
+             (255, 0, 0, 0, 0, 255), (255, 0, 0, 0, 0, 255),
+             (255, 255, 255, 255, 255, 255), (255, 255, 255, 255, 255, 255)))
 
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(desired, actual)
 
     def test_alias_cap_butt_equality(self):
@@ -326,7 +320,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         """ Square caps should extend beyond the end of the line. by
             half the width of the line.
         """
-        gc = GraphicsContextArray((6,6), pix_format="rgb24")
+        gc = GraphicsContextArray((6, 6), pix_format="rgb24")
 
         # clear background to white values (255, 255, 255)
         gc.clear((1.0, 1.0, 1.0))
@@ -336,7 +330,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(4, 3)
 
         # Set up line
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(False)
         gc.set_line_width(2)
         gc.set_line_cap(kiva.CAP_SQUARE)
@@ -344,14 +338,12 @@ class StrokePathTestCase(unittest.TestCase, Utils):
 
         gc.stroke_path()
 
-        desired = array(((255, 255, 255, 255, 255, 255),
-                         (255, 255, 255, 255, 255, 255),
-                         (255,   0,   0,   0,   0, 255),
-                         (255,   0,   0,   0,   0, 255),
-                         (255, 255, 255, 255, 255, 255),
-                         (255, 255, 255, 255, 255, 255)))
+        desired = array(
+            ((255, 255, 255, 255, 255, 255), (255, 255, 255, 255, 255, 255),
+             (255, 0, 0, 0, 0, 255), (255, 0, 0, 0, 0, 255),
+             (255, 255, 255, 255, 255, 255), (255, 255, 255, 255, 255, 255)))
 
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(desired, actual)
 
     def test_alias_cap_square_equality(self):
@@ -392,7 +384,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(3, 0)
 
         # Set up stroke
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(True)
         gc.set_line_width(1)
         gc.set_line_cap(kiva.CAP_BUTT)
@@ -401,9 +393,8 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.stroke_path()
 
         # test a single color channel.
-        desired = array(((255, 255, 255),
-                         (127, 127, 127)))
-        actual = gc.bmp_array[:,:,0]
+        desired = array(((255, 255, 255), (127, 127, 127)))
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(desired, actual)
 
     def test_antialias_width_slower_path(self):
@@ -427,7 +418,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(3, 0)
 
         # Set up stroke
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(True)
         gc.set_line_width(1)
         gc.set_line_cap(kiva.CAP_BUTT)
@@ -436,9 +427,8 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         gc.stroke_path()
 
         # test a single color channel.
-        desired = array(((255, 255, 255),
-                         (127, 127, 127)))
-        actual = gc.bmp_array[:,:,0]
+        desired = array(((255, 255, 255), (127, 127, 127)))
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(desired, actual)
 
     def test_curve_to(self):
@@ -462,10 +452,10 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         x2, y2 = 6.0, 1.0
         x3, y3 = 9.0, 5.0
         gc.move_to(x0, y0)
-        gc.curve_to(x1, y1, x2, y2, x3, y3);
+        gc.curve_to(x1, y1, x2, y2, x3, y3)
 
         # Set up stroke
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(True)
         gc.set_line_width(1)
         gc.set_line_cap(kiva.CAP_BUTT)
@@ -473,7 +463,7 @@ class StrokePathTestCase(unittest.TestCase, Utils):
 
         gc.stroke_path()
 
-        gc. set_stroke_color((0.0, 1.0, 1.0))
+        gc.set_stroke_color((0.0, 1.0, 1.0))
         gc.move_to(x0, y0)
         gc.line_to(x1, y1)
         gc.move_to(x2, y2)
@@ -484,16 +474,16 @@ class StrokePathTestCase(unittest.TestCase, Utils):
         # note: This is a "screen capture" from running this
         #       test.  It looks right, but hasn't been check closely.
         desired = array([[255, 255, 255, 230, 255, 255, 255, 255, 255, 255],
-                         [255, 255, 231,  25, 212, 255, 255, 255, 255, 255],
-                         [255, 252,  65, 128, 255, 255, 255, 255, 255, 255],
-                         [255, 103,  26, 143, 229, 255, 255, 255, 255, 255],
-                         [179,   2, 115,  96,  23, 189, 255, 255, 204, 255],
-                         [255, 205, 255, 255, 189,  23,  97, 116,   2, 179],
-                         [255, 255, 255, 255, 255, 229, 142,  25, 103, 255],
-                         [255, 255, 255, 255, 255, 255, 127,  66, 252, 255],
-                         [255, 255, 255, 255, 255, 212,  26, 231, 255, 255],
+                         [255, 255, 231, 25, 212, 255, 255, 255, 255, 255],
+                         [255, 252, 65, 128, 255, 255, 255, 255, 255, 255],
+                         [255, 103, 26, 143, 229, 255, 255, 255, 255, 255],
+                         [179, 2, 115, 96, 23, 189, 255, 255, 204, 255],
+                         [255, 205, 255, 255, 189, 23, 97, 116, 2, 179],
+                         [255, 255, 255, 255, 255, 229, 142, 25, 103, 255],
+                         [255, 255, 255, 255, 255, 255, 127, 66, 252, 255],
+                         [255, 255, 255, 255, 255, 212, 26, 231, 255, 255],
                          [255, 255, 255, 255, 255, 255, 231, 255, 255, 255]])
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         self.assertRavelEqual(desired, actual)
 
 

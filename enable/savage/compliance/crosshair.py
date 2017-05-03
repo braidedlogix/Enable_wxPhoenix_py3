@@ -5,7 +5,6 @@ from enable.api import BaseTool, ColorTrait, LineStyle
 from traits.api import Bool, Float, HasTraits, List, Tuple, on_trait_change
 
 
-
 class Crosshair(BaseTool):
     """ Display a crosshair at the given SVG coordinates.
 
@@ -43,10 +42,10 @@ class Crosshair(BaseTool):
             gc.set_stroke_color(self.line_color_)
             gc.set_line_width(self.line_width)
             gc.set_line_dash(self.line_style_)
-            gc.move_to(self.component.x, y+0.5)
-            gc.line_to(self.component.x2, y+0.5)
-            gc.move_to(x-0.5, self.component.y)
-            gc.line_to(x-0.5, self.component.y2)
+            gc.move_to(self.component.x, y + 0.5)
+            gc.line_to(self.component.x2, y + 0.5)
+            gc.move_to(x - 0.5, self.component.y)
+            gc.line_to(x - 0.5, self.component.y2)
             gc.stroke_path()
         finally:
             gc.restore_state()
@@ -110,4 +109,3 @@ class MultiController(HasTraits):
             self.sync_trait('svg_coords', crosshair, remove=True)
             self.sync_trait('mouse_in', crosshair, remove=True)
             self.crosshairs.append(crosshair)
-

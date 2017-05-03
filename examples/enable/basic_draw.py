@@ -20,7 +20,6 @@ class Box(Component):
 
 
 class MyFrame(DemoFrame):
-
     def _create_window(self):
         box = Box(bounds=[100.0, 100.0], position=[50.0, 50.0])
         container = Container(bounds=[500, 500])

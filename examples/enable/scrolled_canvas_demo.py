@@ -7,7 +7,6 @@ from enable.example_support import demo_main, DemoFrame
 
 
 class MyFrame(DemoFrame):
-
     def _create_window(self):
 
         canvas = Canvas(bgcolor="lightsteelblue", draw_axes=True)
@@ -28,13 +27,17 @@ class MyFrame(DemoFrame):
                               y_color / (boxgridsize - 1) * j + \
                               origin_color) + (1.0,)
                 box = Box(color=color, bounds=[boxsize, boxsize], resizable="")
-                box.position= [i*spacing + offset - boxsize/2 + 0.5,
-                               j*spacing + offset - boxsize/2 + 0.5]
+                box.position = [
+                    i * spacing + offset - boxsize / 2 + 0.5,
+                    j * spacing + offset - boxsize / 2 + 0.5
+                ]
                 canvas.add(box)
 
-        viewport = Viewport(component=canvas, enable_zoom=True,
-                            vertical_anchor='center',
-                            horizontal_anchor='center')
+        viewport = Viewport(
+            component=canvas,
+            enable_zoom=True,
+            vertical_anchor='center',
+            horizontal_anchor='center')
         #viewport.view_position = [0,0]
         viewport.tools.append(ViewportPanTool(viewport))
 
@@ -42,14 +45,17 @@ class MyFrame(DemoFrame):
         #viewport.min_zoom = 0.1
         #viewport.max_zoom = 3.0
 
-        scrolled = Scrolled(canvas, fit_window = True,
-                            inside_padding_width = 0,
-                            mousewheel_scroll = False,
-                            viewport_component = viewport,
-                            always_show_sb = True,
-                            continuous_drag_update = True)
+        scrolled = Scrolled(
+            canvas,
+            fit_window=True,
+            inside_padding_width=0,
+            mousewheel_scroll=False,
+            viewport_component=viewport,
+            always_show_sb=True,
+            continuous_drag_update=True)
 
         return Window(self, -1, component=scrolled)
+
 
 if __name__ == "__main__":
     demo = demo_main(MyFrame, title="Canvas example")

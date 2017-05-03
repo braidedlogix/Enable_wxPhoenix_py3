@@ -13,8 +13,8 @@ from .container import Container
 from .coordinate_box import CoordinateBox
 from .layout.layout_helpers import expand_constraints
 from .layout.layout_manager import LayoutManager
-from .layout.utils import (
-    add_symbolic_contents_constraints, get_from_constraints_namespace)
+from .layout.utils import (add_symbolic_contents_constraints,
+                           get_from_constraints_namespace)
 
 
 class ConstraintsContainer(Container):
@@ -122,6 +122,7 @@ class ConstraintsContainer(Container):
                                    item.layout_height.value())
                     offset_table[running_index] = (nx, ny)
                     running_index += 1
+
             mgr_layout(layout, width_var, height_var, (width, height))
 
             self.invalidate_draw()
@@ -207,11 +208,12 @@ class ConstraintsContainer(Container):
         """
         add_symbolic_contents_constraints(self._constraints_vars)
 
-        return [self.contents_left == self.left,
-                self.contents_bottom == self.bottom,
-                self.contents_right == self.left + self.layout_width,
-                self.contents_top == self.bottom + self.layout_height,
-            ]
+        return [
+            self.contents_left == self.left,
+            self.contents_bottom == self.bottom,
+            self.contents_right == self.left + self.layout_width,
+            self.contents_top == self.bottom + self.layout_height,
+        ]
 
     def _get__layout_constraints(self):
         """ React to changes of the user controlled constraints.
@@ -232,8 +234,10 @@ class ConstraintsContainer(Container):
         """
         # Remove stale components from the map
         for item in event.removed:
-            item.on_trait_change(self._component_size_hint_changed,
-                                 'layout_size_hint', remove=True)
+            item.on_trait_change(
+                self._component_size_hint_changed,
+                'layout_size_hint',
+                remove=True)
             del self._component_map[item.id]
 
         # Check the added components
@@ -244,8 +248,10 @@ class ConstraintsContainer(Container):
         """
         # Clear the component maps
         for key, item in self._component_map.items():
-            item.on_trait_change(self._component_size_hint_changed,
-                                 'layout_size_hint', remove=True)
+            item.on_trait_change(
+                self._component_size_hint_changed,
+                'layout_size_hint',
+                remove=True)
         self._component_map = {}
 
         # Check the new components

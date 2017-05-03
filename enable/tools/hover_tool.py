@@ -3,17 +3,18 @@ Tool to detect when the user hovers over a specific part of an underlying
 components.
 """
 
-
-
 # Enthought library imports
 from enable.base_tool import BaseTool
 from traits.etsconfig.api import ETSConfig
-from pyface.toolkit import toolkit_object
+#from pyface.toolkit import toolkit_object
+from pyface import toolkit  #import toolkit_object
+toolkit_object = toolkit.toolkit_object
 from traits.api import Any, Callable, Enum, Float, Int
 
 # Define a toolkit-specific function for determining the global mouse position
 if ETSConfig.toolkit == 'wx':
     import wx
+
     def GetGlobalMousePosition():
         pos = wx.GetMousePosition()
         if isinstance(pos, tuple):
@@ -25,11 +26,13 @@ if ETSConfig.toolkit == 'wx':
 
 elif ETSConfig.toolkit == 'qt4':
     from pyface.qt import QtGui
+
     def GetGlobalMousePosition():
         pos = QtGui.QCursor.pos()
         return (pos.x(), pos.y())
 
 else:
+
     def GetGlobalMousePosition():
         raise NotImplementedError("GetGlobalMousePosition is not defined for" \
             "toolkit '%s'." % ETSConfig.toolkit)
@@ -46,8 +49,17 @@ class HoverTool(BaseTool):
     """
 
     # Defines the part of the component that the hover tool will listen
-    area_type = Enum("top", "bottom", "left", "right", "borders",   # borders
-                     "UL", "UR", "LL", "LR", "corners")             # corners
+    area_type = Enum(
+        "top",
+        "bottom",
+        "left",
+        "right",
+        "borders",  # borders
+        "UL",
+        "UR",
+        "LL",
+        "LR",
+        "corners")  # corners
 
     # The width/height of the border or corner area.  (Corners are assumed to
     # be square.)
@@ -79,7 +91,6 @@ class HoverTool(BaseTool):
 
     # The timer
     _timer = Any
-
 
     #-------------------------------------------------------------------------
     # Public methods
@@ -122,7 +133,6 @@ class HoverTool(BaseTool):
             self.on_hover()
 
         self._timer.Stop()
-
 
     #-------------------------------------------------------------------------
     # Private methods

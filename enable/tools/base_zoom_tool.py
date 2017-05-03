@@ -6,6 +6,7 @@ from numpy import allclose, inf
 # Enthought library imports
 from traits.api import Enum, Float, HasTraits
 
+
 class BaseZoomTool(HasTraits):
     """ Defines traits and methods to actually perform the logic of zooming
     onto a plot.
@@ -23,7 +24,8 @@ class BaseZoomTool(HasTraits):
     # bounds.  If None, then there is no limit.
     max_zoom_out_factor = Float(1e5, allow_none=True)
 
-    def _zoom_limit_reached(self, orig_position, orig_bounds, new_position, new_bounds):
+    def _zoom_limit_reached(self, orig_position, orig_bounds, new_position,
+                            new_bounds):
         """ Returns True if the new low and high exceed the maximum zoom
         limits
         """
@@ -62,9 +64,9 @@ class BaseZoomTool(HasTraits):
         """
         event_pos = (event.x, event.y)
         if axis == "x":
-            return event_pos[ self._determine_axis() ]
+            return event_pos[self._determine_axis()]
         else:
-            return event_pos[ 1 - self._determine_axis() ]
+            return event_pos[1 - self._determine_axis()]
 
     def _determine_axis(self):
         """ Determines whether the index of the coordinate along the axis of
@@ -74,5 +76,6 @@ class BaseZoomTool(HasTraits):
             return 0
         else:
             return 1
+
 
 # EOF

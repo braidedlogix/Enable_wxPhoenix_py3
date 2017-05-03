@@ -5,7 +5,6 @@
 # This file is open source software distributed according to the terms in
 # LICENSE.txt
 #
-
 """
 Undoable Move Tool
 ==================
@@ -48,19 +47,20 @@ class UndoableMoveApplication(DemoApplication):
     #-------------------------------------------------------------------------
 
     def _create_window(self):
-        box = Box(bounds=[100,100], position=[50,50], color='red')
+        box = Box(bounds=[100, 100], position=[50, 50], color='red')
 
-        move_tool = MoveCommandTool(component=box,
-                                    command_stack=self.command_stack)
+        move_tool = MoveCommandTool(
+            component=box, command_stack=self.command_stack)
         box.tools.append(move_tool)
 
         container = Container(bounds=[600, 600])
         container.add(box)
 
-        undo_tool = UndoTool(component=container,
-                             undo_manager=self.undo_manager,
-                             undo_keys=[KeySpec('Left')],
-                             redo_keys=[KeySpec('Right')])
+        undo_tool = UndoTool(
+            component=container,
+            undo_manager=self.undo_manager,
+            undo_keys=[KeySpec('Left')],
+            redo_keys=[KeySpec('Right')])
         container.tools.append(undo_tool)
 
         window = Window(self.control, -1, component=container)
@@ -77,17 +77,13 @@ class UndoableMoveApplication(DemoApplication):
         file_menu = MenuManager(name='&File')
         file_menu.append(Group(exit_action))
 
-        self.undo = UndoAction(undo_manager=self.undo_manager,
-                               accelerator='Ctrl+Z')
-        self.redo = RedoAction(undo_manager=self.undo_manager,
-                               accelerator='Ctrl+Shift+Z')
+        self.undo = UndoAction(
+            undo_manager=self.undo_manager, accelerator='Ctrl+Z')
+        self.redo = RedoAction(
+            undo_manager=self.undo_manager, accelerator='Ctrl+Shift+Z')
         menu_bar_manager = MenuBarManager(
-            file_menu,
-            MenuManager(
-                self.undo,
-                self.redo,
-                name='&Edit')
-        )
+            file_menu, MenuManager(
+                self.undo, self.redo, name='&Edit'))
         return menu_bar_manager
 
     def _undo_manager_default(self):

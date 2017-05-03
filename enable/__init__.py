@@ -5,14 +5,7 @@
 """
 from ._version import full_version as __version__
 
-__requires__ = [
-    'numpy',
-    'traits',
-    'traitsui',
-    'pyface',
-    'six',
-    'fonttools'
-]
+__requires__ = ['numpy', 'traits', 'traitsui', 'pyface', 'six', 'fonttools']
 
 # Do not force installation of pillow if PIL is already available.
 try:

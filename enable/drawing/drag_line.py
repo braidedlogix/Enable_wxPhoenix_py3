@@ -1,7 +1,5 @@
 """ A drag drawn line. """
 
-
-
 from enable.api import Line
 from traits.api import Instance
 
@@ -22,7 +20,7 @@ class DragLine(DrawingTool):
     line = Instance(Line, args=())
 
     # Override the default value of this inherited trait
-    draw_mode="overlay"
+    draw_mode = "overlay"
 
     def reset(self):
         self.line.vertex_color = self.vertex_color

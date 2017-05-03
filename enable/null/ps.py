@@ -11,11 +11,14 @@
 
 from kiva.ps import CompiledPath, PSGC as GraphicsContext
 
+
 class NativeScrollBar(object):
     pass
 
+
 class Window(object):
     pass
+
 
 def font_metrics_provider():
     from kiva.fonttools import Font

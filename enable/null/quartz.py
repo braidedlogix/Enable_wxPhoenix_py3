@@ -14,13 +14,17 @@ import numpy as np
 from kiva.fonttools import Font
 from kiva.quartz import ABCGI
 
+
 class NativeScrollBar(object):
     pass
+
 
 class Window(object):
     pass
 
+
 CompiledPath = ABCGI.CGMutablePath
+
 
 class GraphicsContext(ABCGI.CGLayerContext):
     def __init__(self, size_or_array, *args, **kwds):
@@ -30,7 +34,7 @@ class GraphicsContext(ABCGI.CGLayerContext):
             # We are better off making our Layer from the window gc since
             # the data formats will match and so it will be faster to draw the
             # layer.
-            gc = ABCGI.CGBitmapContext((1,1))
+            gc = ABCGI.CGBitmapContext((1, 1))
         if isinstance(size_or_array, np.ndarray):
             # Initialize the layer with an image.
             image = ABCGI.CGImage(size_or_array)
@@ -40,7 +44,8 @@ class GraphicsContext(ABCGI.CGLayerContext):
             # No initialization.
             image = None
             width, height = size_or_array
-        super(GraphicsContext, self).__init__((width, height), gc, *args, **kwds)
+        super(GraphicsContext, self).__init__(
+            (width, height), gc, *args, **kwds)
         if image is not None:
             self.draw_image(image)
 

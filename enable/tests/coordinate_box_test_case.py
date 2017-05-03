@@ -2,6 +2,7 @@ import unittest
 
 from enable.api import CoordinateBox
 
+
 class CoordinateBoxTestCase(unittest.TestCase):
     def check_position(self):
         c = CoordinateBox(bounds=[50.0, 50.0])
@@ -23,14 +24,15 @@ class CoordinateBoxTestCase(unittest.TestCase):
 
     def check_is_in(self):
         c = CoordinateBox(x=10, y=20)
-        c.width=100
-        c.height=100
+        c.width = 100
+        c.height = 100
         self.assertTrue(c.is_in(10, 20))
         self.assertTrue(c.is_in(100, 100))
         self.assertTrue(c.is_in(15, 50))
         self.assertTrue(not c.is_in(0, 0))
         self.assertTrue(not c.is_in(10, 10))
         return
+
 
 if __name__ == "__main__":
     import nose

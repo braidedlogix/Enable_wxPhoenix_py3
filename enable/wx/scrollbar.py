@@ -24,11 +24,15 @@ def valid_range(object, name, value):
                 high = low + 1.0
             page_size = max(min(page_size, high - low), 0.0)
             line_size = max(min(line_size, page_size), 0.0)
-            return (float(low), float(high), float(page_size), float(line_size))
+            return (float(low), float(high), float(page_size),
+                    float(line_size))
     except:
         raise
     raise TraitError
+
+
 valid_range.info = 'a (low,high,page_size,line_size) range tuple'
+
 
 def valid_scroll_position(object, name, value):
     "Verify that a specified scroll bar position is valid"
@@ -53,14 +57,14 @@ class NativeScrollBar(Component):
 
     # The current position of the scroll bar.  This must be within the range
     # (self.low, self.high)
-    scroll_position = Trait( 0.0, valid_scroll_position )
+    scroll_position = Trait(0.0, valid_scroll_position)
 
     # A tuple (low, high, page_size, line_size).  Can be accessed using
     # convenience properties (see below).  Low and High refer to the conceptual
     # bounds of the region represented by the full scroll bar.  Note that
     # the maximum value of scroll_position is actually (high - page_size), and
     # not just the value of high.
-    range = Trait( ( 0.0, 100.0, 10.0, 1.0 ), valid_range )
+    range = Trait((0.0, 100.0, 10.0, 1.0), valid_range)
 
     # The orientation of the scrollbar
     orientation = Trait("horizontal", "vertical")
@@ -108,7 +112,6 @@ class NativeScrollBar(Component):
     # Public Methods
     #------------------------------------------------------------------------
 
-
     def destroy(self):
         """ Destroy the native widget associated with this component.
         """
@@ -131,7 +134,7 @@ class NativeScrollBar(Component):
         x_pos, y_pos = self.position
         x_size, y_size = self.bounds
 
-        wx_xpos, wx_ypos = self._get_abs_coords(x_pos, y_pos+y_size-1)
+        wx_xpos, wx_ypos = self._get_abs_coords(x_pos, y_pos + y_size - 1)
 
         # We have to do this flip_y business because wx and enable use opposite
         # coordinate systems, and enable defines the component's position as its
@@ -149,14 +152,16 @@ class NativeScrollBar(Component):
             self._create_control(window, wxpos, wxthumbsize, wxrange)
 
         if self._widget_moved:
-            if (self._last_widget_x != wx_xpos) or (self._last_widget_y != wx_ypos):
+            if (self._last_widget_x != wx_xpos) or (
+                    self._last_widget_y != wx_ypos):
                 self._control.SetPosition(wx.Point(wx_xpos, wx_ypos))
             controlsize = self._control.GetSize()
             if x_size != controlsize[0] or y_size != controlsize[1]:
                 self._control.SetSize(wx.Size(x_size, y_size))
 
         if self._scroll_updated:
-            self._control.SetScrollbar(wxpos, wxthumbsize, wxrange, wxthumbsize, True)
+            self._control.SetScrollbar(wxpos, wxthumbsize, wxrange,
+                                       wxthumbsize, True)
 
         self._last_widget_x = int(wx_xpos)
         self._last_widget_y = int(wx_ypos)
@@ -172,7 +177,8 @@ class NativeScrollBar(Component):
         else:
             wxstyle = wx.VERTICAL
         self._control = wx.ScrollBar(window.control, style=wxstyle)
-        self._control.SetScrollbar(wxpos, wxthumbsize, wxrange, wxthumbsize, True)
+        self._control.SetScrollbar(wxpos, wxthumbsize, wxrange, wxthumbsize,
+                                   True)
         self._control.Bind(wx.EVT_SCROLL, self._wx_scroll_handler)
         self._control.Bind(wx.EVT_SET_FOCUS, self._yield_focus)
         self._control.Bind(wx.EVT_SCROLL_THUMBTRACK, self._thumbtrack)
@@ -208,7 +214,8 @@ class NativeScrollBar(Component):
         """Handle wx scroll events"""
         # If the user moved the scrollbar, set the scroll position, but don't
         # tell wx to move the scrollbar.  Doing so causes jerkiness
-        self.scroll_position = self._wx_to_enable_pos(self._control.GetThumbPosition())
+        self.scroll_position = self._wx_to_enable_pos(
+            self._control.GetThumbPosition())
         return
 
     def _enable_to_wx_spec(self, enable_spec):
@@ -219,11 +226,15 @@ class NativeScrollBar(Component):
         """
         low, high, page_size, line_size, position = enable_spec
         if self.origin == 'bottom' and self.orientation == 'vertical':
-            position = (high-page_size) - position + 1
+            position = (high - page_size) - position + 1
         if line_size == 0.0:
-            return (0, high-low, high-low)
+            return (0, high - low, high - low)
         else:
-            return [int(round(x)) for x in ((position-low)/line_size, page_size/line_size, (high-low)/line_size)]
+            return [
+                int(round(x))
+                for x in ((position - low) / line_size, page_size / line_size,
+                          (high - low) / line_size)
+            ]
 
     def _wx_to_enable_pos(self, pos):
         """
@@ -246,7 +257,8 @@ class NativeScrollBar(Component):
 
     def _range_changed(self):
         low, high, page_size, line_size = self.range
-        self.scroll_position = max(min(self.scroll_position, high-page_size), low)
+        self.scroll_position = max(
+            min(self.scroll_position, high - page_size), low)
         self._scroll_updated = True
         self.request_redraw()
         return
@@ -256,8 +268,9 @@ class NativeScrollBar(Component):
         return
 
     def _mouse_wheel_changed(self, event):
-        event.handled  = True
-        self.scroll_position += (event.mouse_wheel * self.range[3] * self.mouse_wheel_speed)
+        event.handled = True
+        self.scroll_position += (event.mouse_wheel * self.range[3] *
+                                 self.mouse_wheel_speed)
         return
 
     def _scroll_position_changed(self):

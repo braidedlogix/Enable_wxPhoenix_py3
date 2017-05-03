@@ -6,6 +6,7 @@ from traits.api import Bool, Enum, Float, Tuple
 
 from .drag_tool import DragTool
 
+
 class ViewportPanTool(DragTool):
     """ A tool that enables the user to pan around a viewport by clicking a
     mouse button and dragging.
@@ -44,7 +45,6 @@ class ViewportPanTool(DragTool):
     # set programmatically.
     _auto_constrain = Bool(False)
 
-
     #------------------------------------------------------------------------
     # Inherited BaseTool traits
     #------------------------------------------------------------------------
@@ -70,7 +70,8 @@ class ViewportPanTool(DragTool):
         """
         if self._auto_constrain and self.constrain_direction is None:
             # Determine the constraint direction
-            if abs(event.x - self._original_xy[0]) > abs(event.y - self._original_xy[1]):
+            if abs(event.x - self._original_xy[0]) > abs(event.y -
+                                                         self._original_xy[1]):
                 self.constrain_direction = "x"
             else:
                 self.constrain_direction = "y"
@@ -107,5 +108,6 @@ class ViewportPanTool(DragTool):
             event.window.set_mouse_owner(None)
         event.handled = True
         return
+
 
 # EOF

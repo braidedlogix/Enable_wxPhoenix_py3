@@ -39,6 +39,7 @@ def _init_toolkit():
     global _toolkit_backend
     _toolkit_backend = backend
 
+
 # Do this once then disappear.
 _init_toolkit()
 del _init_toolkit
@@ -52,7 +53,7 @@ def toolkit_object(name, raise_exceptions=False):
 
     mname, oname = name.split(':')
 
-    class Unimplemented (object):
+    class Unimplemented(object):
         """ This is returned if an object isn't implemented by the selected
             toolkit. It raises an exception if it is ever instantiated.
         """
@@ -73,4 +74,3 @@ def toolkit_object(name, raise_exceptions=False):
         if raise_exceptions: raise e
 
     return be_obj
-

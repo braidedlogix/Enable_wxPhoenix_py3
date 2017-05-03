@@ -16,8 +16,8 @@ from enable.testing import EnableTestAssistant
 from enable.tools.button_tool import ButtonTool
 
 
-class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
-
+class ButtonToolTestCase(EnableTestAssistant, UnittestTools,
+                         unittest.TestCase):
     def setUp(self):
         self.component = Component(position=[50, 50], bounds=[100, 100])
         self.tool = ButtonTool(component=self.component)
@@ -91,8 +91,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitChanges(tool, 'down', count=1):
             with self.assertTraitChanges(tool, 'clicked', count=1):
                 with self.assertTraitDoesNotChange(tool, 'checked'):
-                    event = self.mouse_up(self.component, 100, 100,
-                                          window=window)
+                    event = self.mouse_up(
+                        self.component, 100, 100, window=window)
 
         self.assertTrue(event.handled)
         self.assertTrue(tool.event_state, 'normal')
@@ -118,8 +118,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitChanges(tool, 'down', count=1):
             with self.assertTraitChanges(tool, 'clicked', count=1):
                 with self.assertTraitChanges(tool, 'checked', count=1):
-                    event = self.mouse_up(self.component, 100, 100,
-                                          window=window)
+                    event = self.mouse_up(
+                        self.component, 100, 100, window=window)
 
         self.assertTrue(event.handled)
         self.assertTrue(tool.event_state, 'normal')
@@ -146,8 +146,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitChanges(tool, 'down', count=1):
             with self.assertTraitChanges(tool, 'clicked', count=1):
                 with self.assertTraitChanges(tool, 'checked', count=1):
-                    event = self.mouse_up(self.component, 100, 100,
-                                          window=window)
+                    event = self.mouse_up(
+                        self.component, 100, 100, window=window)
 
         self.assertTrue(event.handled)
         self.assertTrue(tool.event_state, 'normal')
@@ -173,8 +173,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitDoesNotChange(tool, 'down'):
             with self.assertTraitDoesNotChange(tool, 'clicked'):
                 with self.assertTraitDoesNotChange(tool, 'checked'):
-                    event = self.mouse_up(self.component, 100, 100,
-                                          window=window)
+                    event = self.mouse_up(
+                        self.component, 100, 100, window=window)
 
         self.assertFalse(event.handled)
         self.assertTrue(tool.event_state, 'normal')
@@ -200,8 +200,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitChanges(tool, 'down', count=1):
             with self.assertTraitDoesNotChange(tool, 'clicked'):
                 with self.assertTraitDoesNotChange(tool, 'checked'):
-                    event = self.mouse_move(self.component, 25, 25,
-                                            window=window)
+                    event = self.mouse_move(
+                        self.component, 25, 25, window=window)
 
         self.assertFalse(event.handled)
         self.assertTrue(tool.event_state, 'pressed')
@@ -212,8 +212,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitChanges(tool, 'down', count=1):
             with self.assertTraitDoesNotChange(tool, 'clicked'):
                 with self.assertTraitDoesNotChange(tool, 'checked'):
-                    event = self.mouse_move(self.component, 100, 100,
-                                            window=window)
+                    event = self.mouse_move(
+                        self.component, 100, 100, window=window)
 
         self.assertFalse(event.handled)
         self.assertTrue(tool.event_state, 'pressed')
@@ -224,8 +224,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitChanges(tool, 'down', count=1):
             with self.assertTraitDoesNotChange(tool, 'clicked'):
                 with self.assertTraitDoesNotChange(tool, 'checked'):
-                    event = self.mouse_move(self.component, 200, 200,
-                                            window=window)
+                    event = self.mouse_move(
+                        self.component, 200, 200, window=window)
 
         self.assertFalse(event.handled)
         self.assertTrue(tool.event_state, 'pressed')
@@ -236,8 +236,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitDoesNotChange(tool, 'down'):
             with self.assertTraitDoesNotChange(tool, 'clicked'):
                 with self.assertTraitDoesNotChange(tool, 'checked'):
-                    event = self.mouse_up(self.component, 200, 200,
-                                          window=window)
+                    event = self.mouse_up(
+                        self.component, 200, 200, window=window)
 
         self.assertFalse(event.handled)
         self.assertTrue(tool.event_state, 'normal')
@@ -263,8 +263,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitChanges(tool, 'down', count=1):
             with self.assertTraitDoesNotChange(tool, 'clicked'):
                 with self.assertTraitDoesNotChange(tool, 'checked'):
-                    event = self.mouse_leave(self.component, 25, 25,
-                                             window=window)
+                    event = self.mouse_leave(
+                        self.component, 25, 25, window=window)
 
         self.assertFalse(event.handled)
         self.assertTrue(tool.event_state, 'pressed')
@@ -275,8 +275,8 @@ class ButtonToolTestCase(EnableTestAssistant, UnittestTools, unittest.TestCase):
         with self.assertTraitChanges(tool, 'down', count=1):
             with self.assertTraitDoesNotChange(tool, 'clicked'):
                 with self.assertTraitDoesNotChange(tool, 'checked'):
-                    event = self.mouse_enter(self.component, 100, 100,
-                                             window=window)
+                    event = self.mouse_enter(
+                        self.component, 100, 100, window=window)
 
         self.assertFalse(event.handled)
         self.assertTrue(tool.event_state, 'pressed')

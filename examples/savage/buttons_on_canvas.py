@@ -1,5 +1,3 @@
-
-
 import os.path
 import xml.etree.cElementTree as etree
 
@@ -29,8 +27,8 @@ class CanvasButton(Component):
 
         # set the toggle doc if it wasn't passed in as a keyword arg
         if self.toggle_document is None:
-            toggle_filename = os.path.join(os.path.dirname(__file__),
-                                           'button_toggle.svg')
+            toggle_filename = os.path.join(
+                os.path.dirname(__file__), 'button_toggle.svg')
             self.toggle_document = self._load_svg_document(toggle_filename)
 
         self.callback = callback
@@ -54,9 +52,10 @@ class CanvasButton(Component):
 
     def _draw_svg_document(self, gc, document):
         with gc:
-            gc.translate_ctm(self.x, self.y+self.height)
+            gc.translate_ctm(self.x, self.y + self.height)
             doc_size = document.getSize()
-            gc.scale_ctm(self.width/float(doc_size[0]), -self.height/float(doc_size[1]))
+            gc.scale_ctm(self.width / float(doc_size[0]), -self.height /
+                         float(doc_size[1]))
             document.render(gc)
 
     def _draw_label(self, gc):
@@ -65,7 +64,7 @@ class CanvasButton(Component):
             gc.set_font(font)
 
             x, y, width, height = gc.get_text_extent(self.label)
-            text_x = self.x + (self.width - width)/2.0
+            text_x = self.x + (self.width - width) / 2.0
             text_y = self.y - height
 
             gc.show_text(self.label, (text_x, text_y))
@@ -82,6 +81,7 @@ class ButtonCanvas(Container):
     def add_button(self, button):
         button.container = self
         self.components.append(button)
+
 
 class ButtonSelectionTool(BaseTool):
     """ Listens for double-clicks and tries to open a traits editor on the
@@ -107,11 +107,12 @@ class ButtonSelectionTool(BaseTool):
 class ButtonCanvasView(HasTraits):
     canvas = Instance(Container)
 
-    traits_view = View(Item('canvas', editor=ComponentEditor(),
-                            show_label=False),
-                        width=400,
-                        height=400,
-                        resizable=True)
+    traits_view = View(
+        Item(
+            'canvas', editor=ComponentEditor(), show_label=False),
+        width=400,
+        height=400,
+        resizable=True)
 
     def __init__(self, *args, **kw):
         super(ButtonCanvasView, self).__init__(*args, **kw)
@@ -126,12 +127,21 @@ class ButtonCanvasView(HasTraits):
 
     def add_buttons(self):
         data_dir = os.path.dirname(__file__)
-        self.canvas.add_button(CanvasButton(os.path.join(data_dir, 'edit-copy.svg'),
-                                            self.do_copy, [],
-                                            label="Copy", x=150, y=150,))
-        self.canvas.add_button(CanvasButton(os.path.join(data_dir, 'edit-paste.svg'),
-                                            self.do_paste, [],
-                                            label="Paste", x=250, y=150))
+        self.canvas.add_button(
+            CanvasButton(
+                os.path.join(data_dir, 'edit-copy.svg'),
+                self.do_copy,
+                [],
+                label="Copy",
+                x=150,
+                y=150, ))
+        self.canvas.add_button(
+            CanvasButton(
+                os.path.join(data_dir, 'edit-paste.svg'),
+                self.do_paste, [],
+                label="Paste",
+                x=250,
+                y=150))
 
     def do_copy(self):
         print("copying something")

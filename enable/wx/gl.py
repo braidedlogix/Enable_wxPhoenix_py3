@@ -10,6 +10,7 @@ from kiva.gl import CompiledPath, GraphicsContext
 from .base_window import BaseWindow
 from .scrollbar import NativeScrollBar
 
+
 class Window(BaseWindow):
 
     control = Instance(GLCanvas)
@@ -23,15 +24,18 @@ class Window(BaseWindow):
 
         self._gc = None
 
-    def _create_control(self, parent, wid, pos = wx.DefaultPosition,
-                        size = wx.DefaultSize):
-        return GLCanvas(parent, wid, pos, size,
-                        style=wx.CLIP_CHILDREN|wx.WANTS_CHARS)
+    def _create_control(self,
+                        parent,
+                        wid,
+                        pos=wx.DefaultPosition,
+                        size=wx.DefaultSize):
+        return GLCanvas(
+            parent, wid, pos, size, style=wx.CLIP_CHILDREN | wx.WANTS_CHARS)
 
     def _create_gc(self, size, pix_format=None):
         """ Create a GraphicsContext instance.
         """
-        gc = GraphicsContext((size[0]+1,size[1]+1))
+        gc = GraphicsContext((size[0] + 1, size[1] + 1))
         if self._pyglet_gl_context is None:
             from pyglet.gl import Context
             self._pyglet_gl_context = Context()
@@ -66,10 +70,12 @@ class Window(BaseWindow):
         self._update_region = []
         self.control.SwapBuffers()
 
+
 def font_metrics_provider():
     from kiva.fonttools import Font
     gc = GraphicsContext((1, 1))
     gc.set_font(Font())
     return gc
+
 
 # EOF

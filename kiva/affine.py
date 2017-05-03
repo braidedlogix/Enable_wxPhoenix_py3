@@ -44,10 +44,10 @@
 from numpy import (array, array_equal, arctan2, cos, dot, eye, float64, ones,
                    sin, zeros)
 
-
 # -----------------------------------------------------------------------------
 # Affine transform construction
 # -----------------------------------------------------------------------------
+
 
 def affine_identity():
     """ Returns a new identity affine_transform object.
@@ -92,6 +92,7 @@ def affine_from_translation(x, y):
 # -----------------------------------------------------------------------------
 # Affine transform manipulation
 # -----------------------------------------------------------------------------
+
 
 def scale(transform, sx, sy):
     """ Returns a scaled version of the transform by the given values.
@@ -164,7 +165,7 @@ def invert(m):
     """ Returns the inverse of the transform, m.
     """
     inv = zeros(m.shape, float64)
-    det = m[0, 0] * m[1, 1] - m[0, 1]*m[1, 0]
+    det = m[0, 0] * m[1, 1] - m[0, 1] * m[1, 0]
 
     inv[0, 0] = m[1, 1]
     inv[0, 1] = -m[0, 1]
@@ -174,9 +175,9 @@ def invert(m):
     inv[1, 1] = m[0, 0]
     inv[1, 2] = 0
 
-    inv[2, 0] = m[1, 0]*m[2, 1] - m[1, 1]*m[2, 0]
-    inv[2, 1] = -m[0, 0]*m[2, 1] + m[0, 1]*m[2, 0]
-    inv[2, 2] = m[0, 0]*m[1, 1] - m[0, 1]*m[1, 0]
+    inv[2, 0] = m[1, 0] * m[2, 1] - m[1, 1] * m[2, 0]
+    inv[2, 1] = -m[0, 0] * m[2, 1] + m[0, 1] * m[2, 0]
+    inv[2, 2] = m[0, 0] * m[1, 1] - m[0, 1] * m[1, 0]
     inv /= det
     return inv
 
@@ -245,9 +246,9 @@ def tsr_factor(m):
     cos_ang = cos(angle)
     sin_ang = sin(angle)
     if cos_ang != 0.0:
-        sx, sy = a/cos_ang, d/cos_ang
+        sx, sy = a / cos_ang, d / cos_ang
     else:
-        sx, sy = -c/sin_ang, b/sin_ang
+        sx, sy = -c / sin_ang, b / sin_ang
 
     return tx, ty, sx, sy, angle
 
@@ -290,9 +291,9 @@ def trs_factor(m):
     cos_ang = cos(angle)
     sin_ang = sin(angle)
     if cos_ang != 0.0:
-        sx, sy = a/cos_ang, d/cos_ang
+        sx, sy = a / cos_ang, d / cos_ang
     else:
-        sx, sy = b/sin_ang, -c/sin_ang
+        sx, sy = b / sin_ang, -c / sin_ang
 
     return tx, ty, sx, sy, angle
 
@@ -300,6 +301,7 @@ def trs_factor(m):
 # -----------------------------------------------------------------------------
 # Transforming points and arrays of points
 # -----------------------------------------------------------------------------
+
 
 def transform_point(ctm, pt):
     """ Returns pt transformed by the affine transform, ctm.
@@ -320,6 +322,6 @@ def transform_points(ctm, pts):
         y = pts[..., 1]
         a, b, c, d, tx, ty = affine_params(ctm)
         res = zeros(pts.shape, float64)
-        res[..., 0] = a*x+c*y+tx
-        res[..., 1] = b*x+d*y+ty
+        res[..., 0] = a * x + c * y + tx
+        res[..., 1] = b * x + d * y + ty
     return res

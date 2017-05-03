@@ -1,7 +1,5 @@
 """ Defines the Component class """
 
-
-
 from uuid import uuid4
 
 # Enthought library imports
@@ -16,11 +14,11 @@ from .coordinate_box import CoordinateBox
 from .enable_traits import bounds_trait, coordinate_trait, LineStyle
 from .interactor import Interactor
 
-
 coordinate_delegate = Delegate("inner", modify=True)
 
-
-DEFAULT_DRAWING_ORDER = ["background", "underlay", "mainlayer", "border", "overlay"]
+DEFAULT_DRAWING_ORDER = [
+    "background", "underlay", "mainlayer", "border", "overlay"
+]
 
 
 class Component(CoordinateBox, Interactor):
@@ -53,16 +51,15 @@ class Component(CoordinateBox, Interactor):
     #------------------------------------------------------------------------
 
     # Our container object
-    container = Any    # Instance("Container")
+    container = Any  # Instance("Container")
 
     # A reference to our top-level Enable Window.  This is stored as a shadow
     # attribute if this component is the direct child of the Window; otherwise,
     # the getter function recurses up the containment hierarchy.
-    window = Property   # Instance("Window")
+    window = Property  # Instance("Window")
 
     # The list of viewport that are viewing this component
     viewports = List(Instance("enable.viewport.Viewport"))
-
 
     #------------------------------------------------------------------------
     # Layout traits
@@ -126,7 +123,7 @@ class Component(CoordinateBox, Interactor):
 
     # A list of overlays for the plot.  By default, overlays are drawn above the
     # plot and its annotations.
-    overlays = List   #[AbstractOverlay]
+    overlays = List  #[AbstractOverlay]
 
     # Listen for changes to selection metadata on
     # the underlying data sources, and render them specially?
@@ -179,7 +176,6 @@ class Component(CoordinateBox, Interactor):
     # Does the component respond to mouse events over the padding area?
     padding_accepts_focus = Bool(True)
 
-
     #------------------------------------------------------------------------
     # Position and bounds of outer box (encloses the padding and border area)
     # All of these are read-only properties.  To set them directly, use
@@ -224,7 +220,7 @@ class Component(CoordinateBox, Interactor):
     #     component instead of under its main layer (see **overlay_border**)
     # #. 'overlay': Legends, selection regions, and other tool-drawn visual
     #     elements
-    draw_order = Instance(list, args=(DEFAULT_DRAWING_ORDER,))
+    draw_order = Instance(list, args=(DEFAULT_DRAWING_ORDER, ))
 
     # If True, then this component draws as a unified whole,
     # and its parent container calls this component's _draw() method when
@@ -325,14 +321,13 @@ class Component(CoordinateBox, Interactor):
     #max_height = Any
     #min_height = Any
 
-
     #------------------------------------------------------------------------
     # Private traits
     #------------------------------------------------------------------------
 
     # Shadow trait for self.window.  Only gets set if this is the top-level
     # enable component in a Window.
-    _window = Any    # Instance("Window")
+    _window = Any  # Instance("Window")
 
     # Whether or not component itself needs to be laid out.  Some times
     # components are composites of others, in which case the layout
@@ -378,19 +373,21 @@ class Component(CoordinateBox, Interactor):
         padding_traits = {}
         for name in list(traits.keys()):
             # Use .keys() so we can modify the dict during iteration safely.
-            if name in ['padding_top', 'padding_bottom', 'padding_left',
-                'padding_right']:
+            if name in [
+                    'padding_top', 'padding_bottom', 'padding_left',
+                    'padding_right'
+            ]:
                 padding_traits[name] = traits.pop(name)
 
         if "container" in traits:
             # After the component is otherwise configured, make sure our
             # container gets notified of our being added to it.
             container = traits.pop("container")
-            super(Component,self).__init__(**traits)
+            super(Component, self).__init__(**traits)
             self._set_padding_traits(padding, padding_traits)
             container.add(self)
         else:
-            super(Component,self).__init__(**traits)
+            super(Component, self).__init__(**traits)
             self._set_padding_traits(padding, padding_traits)
         return
 
@@ -424,8 +421,8 @@ class Component(CoordinateBox, Interactor):
         self._draw(gc, view_bounds, mode)
         return
 
-    def draw_select_box(self, gc, position, bounds, width, dash,
-                        inset, color, bgcolor, marker_size):
+    def draw_select_box(self, gc, position, bounds, width, dash, inset, color,
+                        bgcolor, marker_size):
         """ Renders a selection box around the component.
 
         Subclasses can implement this utility method to render a selection box
@@ -460,12 +457,12 @@ class Component(CoordinateBox, Interactor):
         with gc:
             gc.set_line_width(width)
             gc.set_antialias(False)
-            x,y = position
+            x, y = position
             x += inset
             y += inset
             width, height = bounds
-            width -= 2*inset
-            height -= 2*inset
+            width -= 2 * inset
+            height -= 2 * inset
             rect = (x, y, width, height)
 
             gc.set_stroke_color(bgcolor)
@@ -478,17 +475,19 @@ class Component(CoordinateBox, Interactor):
 
             if marker_size > 0:
                 gc.set_fill_color(bgcolor)
-                half_y = y + height/2.0
+                half_y = y + height / 2.0
                 y2 = y + height
-                half_x = x + width/2.0
+                half_x = x + width / 2.0
                 x2 = x + width
-                marker_positions = ((x,y), (x,half_y), (x,y2), (half_x,y),
-                                    (half_x,y2), (x2,y), (x2, half_y), (x2,y2))
+                marker_positions = ((x, y), (x, half_y), (x, y2), (half_x, y),
+                                    (half_x, y2), (x2, y), (x2, half_y),
+                                    (x2, y2))
                 gc.set_line_dash(None)
                 gc.set_line_width(1.0)
                 for pos in marker_positions:
-                    gc.rect(pos[0]-marker_size/2.0, pos[1]-marker_size/2.0,
-                            marker_size, marker_size)
+                    gc.rect(pos[0] - marker_size / 2.0,
+                            pos[1] - marker_size / 2.0, marker_size,
+                            marker_size)
                 gc.draw_path()
 
         return
@@ -552,17 +551,22 @@ class Component(CoordinateBox, Interactor):
             damaged_regions = self._default_damaged_regions()
 
         if self_relative:
-            damaged_regions = [[region[0] + self.x, region[1] + self.y,
-                                region[2], region[3]] for region in damaged_regions]
+            damaged_regions = [[
+                region[0] + self.x, region[1] + self.y, region[2], region[3]
+            ] for region in damaged_regions]
         for view in self.viewports:
-            view.invalidate_draw(damaged_regions=damaged_regions, self_relative=True,
-                                 view_relative=True)
+            view.invalidate_draw(
+                damaged_regions=damaged_regions,
+                self_relative=True,
+                view_relative=True)
 
         if self.container is not None:
-            self.container.invalidate_draw(damaged_regions=damaged_regions, self_relative=True)
+            self.container.invalidate_draw(
+                damaged_regions=damaged_regions, self_relative=True)
 
         if self._window is not None:
-            self._window.invalidate_draw(damaged_regions=damaged_regions, self_relative=True)
+            self._window.invalidate_draw(
+                damaged_regions=damaged_regions, self_relative=True)
         return
 
     def invalidate_and_redraw(self):
@@ -661,7 +665,7 @@ class Component(CoordinateBox, Interactor):
         if self.fixed_preferred_size is not None:
             return self.fixed_preferred_size
         else:
-            size = [0,0]
+            size = [0, 0]
             outer_bounds = self.outer_bounds
             if "h" not in self.resizable:
                 size[0] = outer_bounds[0]
@@ -698,8 +702,10 @@ class Component(CoordinateBox, Interactor):
     def _default_damaged_regions(self):
         """Returns the default damaged regions for this Component.  This consists
         of the current position/bounds, and the last drawn position/bounds"""
-        return [list(self.outer_position) + list(self.outer_bounds),
-                list(self.drawn_outer_position) + list(self.drawn_outer_bounds)]
+        return [
+            list(self.outer_position) + list(self.outer_bounds),
+            list(self.drawn_outer_position) + list(self.drawn_outer_bounds)
+        ]
 
     def _draw(self, gc, view_bounds=None, mode="default"):
         """ Draws the component, paying attention to **draw_order**, including
@@ -738,7 +744,8 @@ class Component(CoordinateBox, Interactor):
                 if hasattr(GraphicsContext, 'create_from_gc'):
                     # For some backends, such as the mac, a much more efficient
                     # backbuffer can be created from the window gc.
-                    bb = GraphicsContext.create_from_gc(gc, (int(width), int(height)))
+                    bb = GraphicsContext.create_from_gc(gc, (int(width),
+                                                             int(height)))
                 else:
                     bb = GraphicsContext((int(width), int(height)))
 
@@ -754,7 +761,7 @@ class Component(CoordinateBox, Interactor):
                         bb.draw_rect((x, y, width, height), FILL)
 
                 # Fixme: should there be a +1 here?
-                bb.translate_ctm(-x+0.5, -y+0.5)
+                bb.translate_ctm(-x + 0.5, -y + 0.5)
                 # There are a couple of strategies we could use here, but we
                 # have to do something about view_bounds.  This is because
                 # if we only partially render the object into the backbuffer,
@@ -796,7 +803,10 @@ class Component(CoordinateBox, Interactor):
             handler(gc, view_bounds, mode)
         return
 
-    def _draw_border(self, gc, view_bounds=None, mode="default",
+    def _draw_border(self,
+                     gc,
+                     view_bounds=None,
+                     mode="default",
                      force_draw=False):
         """ Utility method to draw the borders around this component
 
@@ -816,9 +826,10 @@ class Component(CoordinateBox, Interactor):
                     gc.set_line_width(border_width)
                     gc.set_line_dash(self.border_dash_)
                     gc.set_stroke_color(self.border_color_)
-                    gc.draw_rect((self.x-border_width/2.0, self.y-border_width/2.0,
-                                 self.width+2*border_width-1,
-                                 self.height+2*border_width-1), STROKE)
+                    gc.draw_rect((self.x - border_width / 2.0,
+                                  self.y - border_width / 2.0,
+                                  self.width + 2 * border_width - 1,
+                                  self.height + 2 * border_width - 1), STROKE)
 
     def _draw_inset_border(self, gc, view_bounds=None, mode="default"):
         """ Draws the border of a component.
@@ -835,10 +846,10 @@ class Component(CoordinateBox, Interactor):
             gc.set_line_dash(self.border_dash_)
             gc.set_stroke_color(self.border_color_)
             gc.set_antialias(0)
-            gc.draw_rect((self.x+border_width/2.0-0.5,
-                         self.y+border_width/2.0-0.5,
-                         self.width-border_width/2.0,
-                         self.height-border_width/2.0), STROKE)
+            gc.draw_rect((self.x + border_width / 2.0 - 0.5,
+                          self.y + border_width / 2.0 - 0.5,
+                          self.width - border_width / 2.0,
+                          self.height - border_width / 2.0), STROKE)
 
     #------------------------------------------------------------------------
     # Protected methods for subclasses to implement
@@ -852,7 +863,7 @@ class Component(CoordinateBox, Interactor):
                 r = tuple(self.outer_position) + \
                         (self.outer_width-1, self.outer_height-1)
             else:
-                r = tuple(self.position) + (self.width-1, self.height-1)
+                r = tuple(self.position) + (self.width - 1, self.height - 1)
 
             with gc:
                 gc.set_antialias(False)
@@ -917,7 +928,6 @@ class Component(CoordinateBox, Interactor):
         else:
             self._new_dispatch(event, suffix)
         return
-
 
     def _new_dispatch(self, event, suffix):
         """ Dispatches a mouse event
@@ -1109,7 +1119,7 @@ class Component(CoordinateBox, Interactor):
         # We don't notify our container of this change b/c the
         # caller who changed our .container should take care of that.
         if new is None:
-            self.position = [0,0]
+            self.position = [0, 0]
 
     def _position_changed(self, *args):
         if self.container is not None:
@@ -1151,8 +1161,10 @@ class Component(CoordinateBox, Interactor):
         self.position[1] = val
 
     def _get_padding(self):
-        return [self.padding_left, self.padding_right,
-                self.padding_top, self.padding_bottom]
+        return [
+            self.padding_left, self.padding_right, self.padding_top,
+            self.padding_bottom
+        ]
 
     def _set_padding(self, val):
         old_padding = self.padding
@@ -1160,7 +1172,7 @@ class Component(CoordinateBox, Interactor):
         if type(val) == int:
             self.padding_left = self.padding_right = \
                 self.padding_top = self.padding_bottom = val
-            self.trait_property_changed("padding", old_padding, [val]*4)
+            self.trait_property_changed("padding", old_padding, [val] * 4)
         else:
             # assume padding is some sort of array type
             if len(val) != 4:
@@ -1181,7 +1193,6 @@ class Component(CoordinateBox, Interactor):
         return 2*self._get_visible_border() + self.padding_bottom + \
                 self.padding_top
 
-
     #------------------------------------------------------------------------
     # Outer position setters and getters
     #------------------------------------------------------------------------
@@ -1194,8 +1205,10 @@ class Component(CoordinateBox, Interactor):
 
     def _set_outer_position(self, new_pos):
         border = self._get_visible_border()
-        self.position = [new_pos[0] + self.padding_left + border,
-                         new_pos[1] + self.padding_bottom + border]
+        self.position = [
+            new_pos[0] + self.padding_left + border,
+            new_pos[1] + self.padding_bottom + border
+        ]
 
     def _get_outer_x(self):
         return self.x - self.padding_left - self._get_visible_border()

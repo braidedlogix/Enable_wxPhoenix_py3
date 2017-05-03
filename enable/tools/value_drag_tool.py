@@ -5,7 +5,6 @@
 # This file is open source software distributed according to the terms in
 # LICENSE.txt
 #
-
 """
 Value Drag Tools
 ================
@@ -15,7 +14,6 @@ drag operation has a direct effect on some underlying value.  This can
 potentially be used as the basis for many different interactions,
 
 """
-
 
 from traits.api import Str, Float, Set, Enum, Bool, Tuple, Dict, Event, Any, Either
 from .drag_tool import DragTool
@@ -109,8 +107,10 @@ class ValueDragTool(DragTool):
 
     def dragging(self, event):
         position = event.current_pointer_position()
-        delta_x = self.x_mapper.map_data(position[0]) - self.original_data_point[0]
-        delta_y = self.y_mapper.map_data(position[1]) - self.original_data_point[1]
+        delta_x = self.x_mapper.map_data(position[
+            0]) - self.original_data_point[0]
+        delta_y = self.y_mapper.map_data(position[
+            1]) - self.original_data_point[1]
         self.set_delta(self.original_value, delta_x, delta_y)
         return True
 
@@ -123,7 +123,9 @@ class ValueDragTool(DragTool):
         # override button down to handle modifier keys correctly
         if not event.handled and self._drag_state == "nondrag":
             key_states = dict((key, key in self.modifier_keys) for key in keys)
-            if not all(getattr(event, key+'_down') == state for key, state in list(key_states.items())):
+            if not all(
+                    getattr(event, key + '_down') == state
+                    for key, state in list(key_states.items())):
                 return False
             self.mouse_down_position = (event.x, event.y)
             if not self.is_draggable(*self.mouse_down_position):
@@ -168,7 +170,7 @@ class AttributeDragTool(ValueDragTool):
     x_bounds = Tuple(Either(Float, Str, None), Either(Float, Str, None))
 
     #: max and min values for y value
-    y_bounds = Tuple(Either(Float,Str,  None), Either(Float, Str, None))
+    y_bounds = Tuple(Either(Float, Str, None), Either(Float, Str, None))
 
     x_name = Str
 
@@ -206,7 +208,7 @@ class AttributeDragTool(ValueDragTool):
         """
         inspector_value = {}
         if self.x_attr:
-            x_value =  value[0] + delta_x
+            x_value = value[0] + delta_x
             if self.x_bounds[0] is not None:
                 if isinstance(self.x_bounds[0], str):
                     m = getattr(self.model, self.x_bounds[0])

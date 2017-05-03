@@ -3,8 +3,10 @@ from pyparsing import ParseException
 
 import enable.savage.svg.css.values as values
 
+
 class FailTest(Exception):
     pass
+
 
 class ParseTester(object):
     def testValidValues(self):
@@ -14,6 +16,7 @@ class ParseTester(object):
                 self.assertEqual(expected, self.parser.parseString(string)[0])
         except ParseException:
             raise FailTest("expected %r to be valid" % string)
+
 
 class TestInteger(unittest.TestCase, ParseTester):
     parser = values.integer
@@ -25,14 +28,17 @@ class TestNumber(unittest.TestCase, ParseTester):
     valid = [(x, float(x)) for x in ["1.1", "2.3", ".3535"]]
     valid += TestInteger.valid
 
+
 class TestSignedNumber(unittest.TestCase, ParseTester):
     parser = values.signedNumber
     valid = [(x, float(x)) for x in ["+1.1", "-2.3"]]
     valid += TestNumber.valid
 
+
 class TestLengthUnit(unittest.TestCase, ParseTester):
     parser = values.lengthUnit
-    valid = [(x,x.lower()) for x in ["em", "ex", "px", "PX", "EX", "EM", "%"]]
+    valid = [(x, x.lower()) for x in ["em", "ex", "px", "PX", "EX", "EM", "%"]]
+
 
 class TestLength(unittest.TestCase):
     parser = values.length
@@ -57,14 +63,5 @@ class TestLength(unittest.TestCase):
         """ CSS spec section 4.3.2 requires that the
         length identifier immediately follow the value
         """
-        self.assertRaises(
-            ParseException,
-            self.parser.parseString,
-            "300 %"
-        )
-        self.assertRaises(
-            ParseException,
-            self.parser.parseString,
-            "300 px"
-        )
-
+        self.assertRaises(ParseException, self.parser.parseString, "300 %")
+        self.assertRaises(ParseException, self.parser.parseString, "300 px")

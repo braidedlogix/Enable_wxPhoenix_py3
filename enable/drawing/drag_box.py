@@ -6,7 +6,6 @@
 #  Author: Scott Swarts <swarts@enthought.com>
 #
 #-----------------------------------------------------------------------------
-
 """A drag drawn box
 """
 
@@ -26,6 +25,7 @@ from traits.api import Event, Float, Trait, Tuple
 ##############################################################################
 # class 'DragBox'
 ##############################################################################
+
 
 class DragBox(Box):
     """A drag drawn box
@@ -71,7 +71,7 @@ class DragBox(Box):
 
     #### 'normal' state ######################################################
 
-    def normal_left_down ( self, event ):
+    def normal_left_down(self, event):
         """ Handle the left button down in the 'normal' state. """
 
         self.event_state = 'drawing'
@@ -83,7 +83,7 @@ class DragBox(Box):
 
         return
 
-    def normal_mouse_move (self, event):
+    def normal_mouse_move(self, event):
         """ Handle the mouse moving in the 'normal' state. """
 
         self.pointer = self.normal_pointer
@@ -97,7 +97,6 @@ class DragBox(Box):
 
         self._set_bounds(event)
 
-
     def drawing_left_up(self, event):
         """ Handle the left mouse button coming up in the 'drawing' state. """
 
@@ -108,7 +107,6 @@ class DragBox(Box):
         self._set_bounds(event)
 
         return
-
 
     ##########################################################################
     # Private interface
@@ -123,12 +121,12 @@ class DragBox(Box):
             x, dx = self.x_bounds
         else:
             x = min(self.start_x, event.x)
-            dx = abs(event.x-self.start_x)
+            dx = abs(event.x - self.start_x)
         if self.y_bounds is not None:
             y, dy = self.y_bounds
         else:
             y = min(self.start_y, event.y)
-            dy = abs(event.y-self.start_y)
+            dy = abs(event.y - self.start_y)
         self.bounds = (x, y, dx, dy)
 
 

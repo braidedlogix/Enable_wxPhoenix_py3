@@ -1,6 +1,5 @@
 """ The base class for moveable shapes. """
 
-
 # Standard library imports.
 import math
 
@@ -134,8 +133,8 @@ class Shape(Component):
         dx, dy = self.bounds
         ox, oy = self.position
 
-        cx = ox + dx/2
-        cy = oy + dy/2
+        cx = ox + dx / 2
+        cy = oy + dy / 2
 
         return cx, cy
 
@@ -165,7 +164,7 @@ class Shape(Component):
 
             dx, dy = self.bounds
             x, y = self.position
-            gc.set_text_position(x+(dx-tw)/2, y+(dy-th)/2)
+            gc.set_text_position(x + (dx - tw) / 2, y + (dy - th) / 2)
 
             gc.show_text(self.text)
 
@@ -194,5 +193,6 @@ class Shape(Component):
             text_color = (r, g, b, 0.5)
 
         return text_color
+
 
 #### EOF ######################################################################

@@ -16,7 +16,6 @@ class DummyTool(DragTool):
 
 
 class DragToolTestCase(EnableTestAssistant, unittest.TestCase):
-
     def setUp(self):
         self.tool = DummyTool()
 
@@ -74,6 +73,7 @@ class DragToolTestCase(EnableTestAssistant, unittest.TestCase):
         self.assertEqual(tool.canceled, 1)
         self.assertEqual(tool._drag_state, 'dragging')
         self.assertFalse(event.handled)
+
 
 if __name__ == '__main__':
     unittest.main()

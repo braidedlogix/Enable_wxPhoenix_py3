@@ -14,7 +14,6 @@
 #  Date:   06/24/2009
 #
 #------------------------------------------------------------------------------
-
 """ Traits UI 'display only' SVG editor.
 """
 
@@ -31,6 +30,7 @@ from traitsui.basic_editor_factory import BasicEditorFactory
 #-------------------------------------------------------------------------------
 #  'SVGEditor' editor factory class:
 #-------------------------------------------------------------------------------
+
 
 class SVGEditor(BasicEditorFactory):
 

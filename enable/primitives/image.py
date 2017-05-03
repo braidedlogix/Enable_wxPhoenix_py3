@@ -1,8 +1,6 @@
 """ Defines the Image component class.
 """
 
-
-
 # Enthought library imports
 from traits.api import Array, Bool, Enum, Instance, Property, cached_property
 
@@ -23,7 +21,7 @@ class Image(Component):
     """
 
     #: the image data as an array
-    data = Array(shape=(None, None, (3,4)), dtype='uint8')
+    data = Array(shape=(None, None, (3, 4)), dtype='uint8')
 
     #: the format of the image data (eg. RGB vs. RGBA)
     format = Property(Enum('rgb24', 'rgba32'), depends_on='data')
@@ -49,7 +47,8 @@ class Image(Component):
     def _draw_mainlayer(self, gc, view_bounds=None, mode="normal"):
         """ Draws the image. """
         with gc:
-            gc.draw_image(self._image, (self.x, self.y, self.width, self.height))
+            gc.draw_image(self._image,
+                          (self.x, self.y, self.width, self.height))
 
     @cached_property
     def _get_format(self):

@@ -19,19 +19,26 @@ from traits.api import Event
 from .svg_button_editor import SVGButtonEditor
 
 
-class SVGButton ( Event ):
+class SVGButton(Event):
     """ Defines a trait whose UI editor is a button.
     """
 
-    def __init__ ( self, label = '', filename = None,
-                         tooltip = '', toggle=False,
-                         toggle_state=False,
-                         toggle_filename=None,
-                         toggle_label='',
-                         toggle_tooltip='',
-                         width = 32, height = 32,
-                         orientation = 'vertical', width_padding = 4,
-                         height_padding = 1, view = None, **metadata ):
+    def __init__(self,
+                 label='',
+                 filename=None,
+                 tooltip='',
+                 toggle=False,
+                 toggle_state=False,
+                 toggle_filename=None,
+                 toggle_label='',
+                 toggle_tooltip='',
+                 width=32,
+                 height=32,
+                 orientation='vertical',
+                 width_padding=4,
+                 height_padding=1,
+                 view=None,
+                 **metadata):
         """ Returns a trait event whose editor is a button.
 
             Parameters
@@ -66,19 +73,20 @@ class SVGButton ( Event ):
             No default value because events do not store values.
         """
 
-        self.editor = SVGButtonEditor( label          = label,
-                                       filename       = filename,
-                                       tooltip        = tooltip,
-                                       toggle         = toggle,
-                                       toggle_state   = toggle_state,
-                                       toggle_filename= toggle_filename,
-                                       toggle_tooltip = toggle_tooltip,
-                                       toggle_label   = toggle_label,
-                                       orientation    = orientation,
-                                       width_padding  = width_padding,
-                                       height_padding = height_padding,
-                                       width          = width,
-                                       height         = height,
-                                       view           = view )
+        self.editor = SVGButtonEditor(
+            label=label,
+            filename=filename,
+            tooltip=tooltip,
+            toggle=toggle,
+            toggle_state=toggle_state,
+            toggle_filename=toggle_filename,
+            toggle_tooltip=toggle_tooltip,
+            toggle_label=toggle_label,
+            orientation=orientation,
+            width_padding=width_padding,
+            height_padding=height_padding,
+            width=width,
+            height=height,
+            view=view)
 
-        super( SVGButton, self ).__init__( **metadata )
+        super(SVGButton, self).__init__(**metadata)

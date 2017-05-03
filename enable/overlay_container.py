@@ -1,8 +1,7 @@
-
-
 from .container import Container
 from .simple_layout import simple_container_get_preferred_size, \
     simple_container_do_layout
+
 
 class OverlayContainer(Container):
     """ A container that stretches all its components to fit within its space.

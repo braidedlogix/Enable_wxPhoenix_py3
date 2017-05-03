@@ -7,16 +7,18 @@ from traitsui.api import Item, View
 class StaticImageExample(HasTraits):
     svg = Instance(SVGDocument)
 
-    traits_view = View(Item('svg', editor=SVGEditor(),
-                            width=450, height=450,
-                            show_label=False),
-                       resizable=True,
-                       title="StaticImageExample")
+    traits_view = View(
+        Item(
+            'svg', editor=SVGEditor(), width=450, height=450,
+            show_label=False),
+        resizable=True,
+        title="StaticImageExample")
 
     def __init__(self, filename, renderer, *args, **kw):
         super(StaticImageExample, self).__init__(*args, **kw)
 
         self.svg = SVGDocument.createFromFile(filename, renderer=renderer)
+
 
 if __name__ == "__main__":
     import os.path

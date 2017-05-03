@@ -3,6 +3,7 @@
 
 # TODO: stolen from Chaco PlotContainers, should change their classes to use
 
+
 def stacked_preferred_size(container, components=None):
     """ Returns the size (width,height) that is preferred for this component.
 
@@ -53,11 +54,13 @@ def stacked_preferred_size(container, components=None):
         max_other_size = container.default_size[other_ndx]
 
     if ndx == 0:
-        container._cached_preferred_size = (total_size + container.hpadding,
-                                       max_other_size + container.vpadding)
+        container._cached_preferred_size = (
+            total_size + container.hpadding,
+            max_other_size + container.vpadding)
     else:
-        container._cached_preferred_size = (max_other_size + container.hpadding,
-                                       total_size + container.vpadding)
+        container._cached_preferred_size = (
+            max_other_size + container.hpadding,
+            total_size + container.vpadding)
 
     return container._cached_preferred_size
 
@@ -146,7 +149,8 @@ def stack_layout(container, components, align):
             elif align == "max":
                 position[other_ndx] = size[other_ndx] - bounds[other_ndx]
             elif align == "center":
-                position[other_ndx] = (size[other_ndx] - bounds[other_ndx]) / 2.0
+                position[other_ndx] = (
+                    size[other_ndx] - bounds[other_ndx]) / 2.0
 
         component.outer_position = position
         component.outer_bounds = bounds

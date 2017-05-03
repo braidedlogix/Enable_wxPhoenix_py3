@@ -25,14 +25,13 @@ from enable.tools.apptools.undo_tool import UndoTool
 
 
 class UndoToolTestCase(unittest.TestCase, EnableTestAssistant, UnittestTools):
-
     def setUp(self):
         self.undo_manager = UndoManager()
         self.undo_manager.undo = MagicMock()
         self.undo_manager.redo = MagicMock()
         self.component = Component()
-        self.tool = UndoTool(component=self.component,
-                             undo_manager=self.undo_manager)
+        self.tool = UndoTool(
+            component=self.component, undo_manager=self.undo_manager)
         self.component.tools.append(self.tool)
 
     def test_undo_key_press(self):
@@ -44,8 +43,8 @@ class UndoToolTestCase(unittest.TestCase, EnableTestAssistant, UnittestTools):
         self.assertTrue(key_event.handled)
 
     def test_redo_key_press(self):
-        key_event = self.create_key_press('z', control_down=True,
-                                          shift_down=True)
+        key_event = self.create_key_press(
+            'z', control_down=True, shift_down=True)
         self.component.dispatch(key_event, 'key_pressed')
 
         self.assertTrue(key_event.handled)

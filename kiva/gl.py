@@ -1,6 +1,3 @@
-
-
-
 # Major library imports
 import ctypes
 from math import floor
@@ -84,16 +81,13 @@ class ArrayImage(ArrayInterfaceImage):
             width = texture.owner.width
             height = texture.owner.height
             blank = (ctypes.c_ubyte * (width * height * 4))()
-            gl.glTexImage2D(texture.target, texture.level,
-                            internalformat,
-                            width, height,
-                            1,
-                            gl.GL_RGBA, gl.GL_UNSIGNED_BYTE,
+            gl.glTexImage2D(texture.target, texture.level, internalformat,
+                            width, height, 1, gl.GL_RGBA, gl.GL_UNSIGNED_BYTE,
                             blank)
             internalformat = None
 
-        self.blit_to_texture(texture.target, texture.level,
-                             0, 0, 0, internalformat)
+        self.blit_to_texture(texture.target, texture.level, 0, 0, 0,
+                             internalformat)
 
         return texture
 
@@ -128,9 +122,7 @@ class ArrayImage(ArrayInterfaceImage):
                           component_column(lookup_format[1]) +
                           component_column(lookup_format[2]) +
                           component_column(lookup_format[3]))
-                format = {
-                    3: gl.GL_RGB,
-                    4: gl.GL_RGBA}.get(len(data_format))
+                format = {3: gl.GL_RGB, 4: gl.GL_RGBA}.get(len(data_format))
                 type = gl.GL_UNSIGNED_BYTE
 
                 gl.glMatrixMode(gl.GL_COLOR)
@@ -142,7 +134,8 @@ class ArrayImage(ArrayInterfaceImage):
                     1: 'L',
                     2: 'LA',
                     3: 'RGB',
-                    4: 'RGBA'}.get(len(data_format))
+                    4: 'RGBA'
+                }.get(len(data_format))
                 format, type = self._get_gl_format_and_type(data_format)
 
         # Workaround: don't use GL_UNPACK_ROW_LENGTH
@@ -199,7 +192,7 @@ def image_as_array(img):
     elif isinstance(img, ndarray):
         return img
     else:
-        msg = "can't convert %r into a numpy array" % (img,)
+        msg = "can't convert %r into a numpy array" % (img, )
         raise NotImplementedError(msg)
 
 
@@ -241,7 +234,7 @@ class MRU(dict):
         if key != self.__order__[-1]:
             try:
                 ndx = self.__order__.index(key)
-                self.__order__[ndx:-1] = self.__order__[ndx+1:]
+                self.__order__[ndx:-1] = self.__order__[ndx + 1:]
                 self.__order__[-1] = key
             except ValueError:
                 # new key that's not already in the cache
@@ -266,8 +259,11 @@ def GetFont(font):
         if key not in GlobalFontCache:
             if isinstance(font, AggFontType):
                 agg_font = font
-                font = Font(face_name=agg_font.name, size=agg_font.size,
-                            family=agg_font.family, style=agg_font.style)
+                font = Font(
+                    face_name=agg_font.name,
+                    size=agg_font.size,
+                    family=agg_font.family,
+                    style=agg_font.style)
             bold = False
             italic = False
             if font.style in [BOLD, BOLD_ITALIC] or font.weight == BOLD:
@@ -298,8 +294,11 @@ def GetLabel(text, pyglet_font):
         # the y coordinate given.  Unfortunately, it doesn't expose a per-Text
         # descent (only a per-Font descent), so it's impossible to know how to
         # offset the y value properly for a given string.
-        label = Label(text, font_name=pyglet_font.name,
-                      font_size=pyglet_font.size, anchor_y="bottom")
+        label = Label(
+            text,
+            font_name=pyglet_font.name,
+            font_size=pyglet_font.size,
+            anchor_y="bottom")
         GlobalTextCache[key] = label
     else:
         label = GlobalTextCache[key]
@@ -364,18 +363,31 @@ class GraphicsContext(_GCL):
         label.x = x
         label.y = y
         c = self.get_fill_color()
-        label.color = (int(c[0]*255), int(c[1]*255), int(c[2]*255),
-                       int(c[3]*255))
+        label.color = (int(c[0] * 255), int(c[1] * 255), int(c[2] * 255),
+                       int(c[3] * 255))
         label.draw()
         return True
 
-    def linear_gradient(self, x1, y1, x2, y2, stops, spread_method,
+    def linear_gradient(self,
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        stops,
+                        spread_method,
                         units='userSpaceOnUse'):
         """ Not implemented.
         """
         pass
 
-    def radial_gradient(self, cx, cy, r, fx, fy, stops, spread_method,
+    def radial_gradient(self,
+                        cx,
+                        cy,
+                        r,
+                        fx,
+                        fy,
+                        stops,
+                        spread_method,
                         units='userSpaceOnUse'):
         """ Not implemented.
         """
@@ -402,22 +414,45 @@ class GraphicsContext(_GCL):
         texture.height = h
         t = texture.tex_coords
         points = array([
-            [x,   y+h],
-            [x+w, y+h],
-            [x+w, y],
-            [x,   y],
+            [x, y + h],
+            [x + w, y + h],
+            [x + w, y],
+            [x, y],
         ])
         p = transform_points(affine_from_values(*xform), points)
-        a = (gl.GLfloat*32)(
-            t[0],    t[1],    t[2],  1.,
-            p[0, 0], p[0, 1], 0,     1.,
-            t[3],    t[4],    t[5],  1.,
-            p[1, 0], p[1, 1], 0,     1.,
-            t[6],    t[7],    t[8],  1.,
-            p[2, 0], p[2, 1], 0,     1.,
-            t[9],    t[10],   t[11], 1.,
-            p[3, 0], p[3, 1], 0,     1.,
-        )
+        a = (gl.GLfloat * 32)(
+            t[0],
+            t[1],
+            t[2],
+            1.,
+            p[0, 0],
+            p[0, 1],
+            0,
+            1.,
+            t[3],
+            t[4],
+            t[5],
+            1.,
+            p[1, 0],
+            p[1, 1],
+            0,
+            1.,
+            t[6],
+            t[7],
+            t[8],
+            1.,
+            p[2, 0],
+            p[2, 1],
+            0,
+            1.,
+            t[9],
+            t[10],
+            t[11],
+            1.,
+            p[3, 0],
+            p[3, 1],
+            0,
+            1., )
         gl.glPushAttrib(gl.GL_ENABLE_BIT)
         gl.glEnable(texture.target)
         gl.glBindTexture(texture.target, texture.id)

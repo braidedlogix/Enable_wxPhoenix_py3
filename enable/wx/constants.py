@@ -9,53 +9,53 @@
 # Thanks for using Enthought open source!
 #------------------------------------------------------------------------------
 
-
-
 import warnings
 import wx
 
 from ..toolkit_constants import pointer_names, key_names
 
-DRAG_RESULTS_MAP = { "error":   wx.DragError,
-                     "none":    wx.DragNone,
-                     "copy":    wx.DragCopy,
-                     "move":    wx.DragMove,
-                     "link":    wx.DragLink,
-                     "cancel":  wx.DragCancel }
+DRAG_RESULTS_MAP = {
+    "error": wx.DragError,
+    "none": wx.DragNone,
+    "copy": wx.DragCopy,
+    "move": wx.DragMove,
+    "link": wx.DragLink,
+    "cancel": wx.DragCancel
+}
 
 # Map from pointer shape name to pointer shapes:
 pointer_shapes = [
-   wx.CURSOR_ARROW,
-   wx.CURSOR_ARROWWAIT,
-   wx.CURSOR_BLANK,
-   wx.CURSOR_BULLSEYE,
-   wx.CURSOR_CHAR,
-   wx.CURSOR_CROSS,
-   wx.CURSOR_HAND,
-   wx.CURSOR_IBEAM,
-   wx.CURSOR_LEFT_BUTTON,
-   wx.CURSOR_MAGNIFIER,
-   wx.CURSOR_MIDDLE_BUTTON,
-   wx.CURSOR_NO_ENTRY,
-   wx.CURSOR_PAINT_BRUSH,
-   wx.CURSOR_PENCIL,
-   wx.CURSOR_POINT_LEFT,
-   wx.CURSOR_POINT_RIGHT,
-   wx.CURSOR_QUESTION_ARROW,
-   wx.CURSOR_RIGHT_ARROW,
-   wx.CURSOR_RIGHT_BUTTON,
-   wx.CURSOR_SIZENS,
-   wx.CURSOR_SIZENESW,
-   wx.CURSOR_SIZENWSE,
-   wx.CURSOR_SIZEWE,
-   wx.CURSOR_SIZEWE,
-   wx.CURSOR_SIZENS,
-   wx.CURSOR_SIZENWSE,
-   wx.CURSOR_SIZENESW,
-   wx.CURSOR_SIZING,
-   wx.CURSOR_SPRAYCAN,
-   wx.CURSOR_WAIT,
-   wx.CURSOR_WATCH,
+    wx.CURSOR_ARROW,
+    wx.CURSOR_ARROWWAIT,
+    wx.CURSOR_BLANK,
+    wx.CURSOR_BULLSEYE,
+    wx.CURSOR_CHAR,
+    wx.CURSOR_CROSS,
+    wx.CURSOR_HAND,
+    wx.CURSOR_IBEAM,
+    wx.CURSOR_LEFT_BUTTON,
+    wx.CURSOR_MAGNIFIER,
+    wx.CURSOR_MIDDLE_BUTTON,
+    wx.CURSOR_NO_ENTRY,
+    wx.CURSOR_PAINT_BRUSH,
+    wx.CURSOR_PENCIL,
+    wx.CURSOR_POINT_LEFT,
+    wx.CURSOR_POINT_RIGHT,
+    wx.CURSOR_QUESTION_ARROW,
+    wx.CURSOR_RIGHT_ARROW,
+    wx.CURSOR_RIGHT_BUTTON,
+    wx.CURSOR_SIZENS,
+    wx.CURSOR_SIZENESW,
+    wx.CURSOR_SIZENWSE,
+    wx.CURSOR_SIZEWE,
+    wx.CURSOR_SIZEWE,
+    wx.CURSOR_SIZENS,
+    wx.CURSOR_SIZENWSE,
+    wx.CURSOR_SIZENESW,
+    wx.CURSOR_SIZING,
+    wx.CURSOR_SPRAYCAN,
+    wx.CURSOR_WAIT,
+    wx.CURSOR_WATCH,
 ]
 
 if len(pointer_names) != len(pointer_shapes):
@@ -64,8 +64,6 @@ if len(pointer_names) != len(pointer_shapes):
 POINTER_MAP = dict(list(zip(pointer_names, pointer_shapes)))
 
 # Map from wxPython special key names into Enable key names:
-
-
 
 key_symbols = [
     wx.WXK_ADD,
@@ -124,7 +122,7 @@ key_symbols = [
     wx.WXK_NUMPAD7,
     wx.WXK_NUMPAD8,
     wx.WXK_NUMPAD9,
-    wx.WXK_PAGEUP,	 
+    wx.WXK_PAGEUP,
     wx.WXK_PAGEDOWN,
     wx.WXK_PAUSE,
     wx.WXK_PRINT,
@@ -137,8 +135,6 @@ key_symbols = [
     wx.WXK_UP,
     wx.WXK_ALT,
 ]
-
-
 
 if len(key_symbols) != len(key_names):
     warnings.warn("The WX toolkit backend keymap is out of sync!")

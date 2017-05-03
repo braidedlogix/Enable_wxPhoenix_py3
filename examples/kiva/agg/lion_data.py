@@ -156,9 +156,10 @@ M 157,342 L 156,349 L 150,356 L 157,353 L 163,346 L 162,342 L 157,342 L 157,342 
 M 99,265 L 96,284 L 92,299 L 73,339 L 73,333 L 87,300 L 99,265 L 99,265 L 99,265
 """
 
+
 def build_paths(lion_string):
-    mins=[]
-    maxs=[]
+    mins = []
+    maxs = []
     colors = []
     paths = []
     lines = lion_string.split('\n')
@@ -168,33 +169,34 @@ def build_paths(lion_string):
             pass
         elif len(fields) == 1:
             hex_color = fields[0]
-            r = int(hex_color[:2],16)/255.
-            g = int(hex_color[2:4],16)/255.
-            b = int(hex_color[4:6],16)/255.
-            colors.append(array((r,g,b,1.0)))
+            r = int(hex_color[:2], 16) / 255.
+            g = int(hex_color[2:4], 16) / 255.
+            b = int(hex_color[4:6], 16) / 255.
+            colors.append(array((r, g, b, 1.0)))
             paths.append(CompiledPath())
             path = paths[-1]
         else:
-            fields = array(fields,'O')
+            fields = array(fields, 'O')
             cmd = fields[::2]
             pts = [array(eval(x), dtype=float) for x in fields[1::2]]
-            mins.append(amin(pts,axis=0))
-            maxs.append(amax(pts,axis=0))
+            mins.append(amin(pts, axis=0))
+            maxs.append(amax(pts, axis=0))
 
-            path_def = list(zip (cmd,pts))
+            path_def = list(zip(cmd, pts))
             for cmd, pt in path_def:
                 pt[0] -= 119
                 pt[1] -= 190.5
                 if cmd == 'M':
-                    path.move_to(pt[0],pt[1])
+                    path.move_to(pt[0], pt[1])
                 if cmd == 'L':
-                    path.line_to(pt[0],pt[1])
-    min_pt =  amin(array(mins),axis=0)
-    max_pt = amax(array(maxs),axis=0)
+                    path.line_to(pt[0], pt[1])
+    min_pt = amin(array(mins), axis=0)
+    max_pt = amax(array(maxs), axis=0)
 
     sz = max_pt - min_pt
-    center = min_pt + sz/2.0
+    center = min_pt + sz / 2.0
     return list(zip(paths, colors)), sz, center
+
 
 def get_lion():
     """get_lion() -> path_and_color, size, center
@@ -204,5 +206,6 @@ def get_lion():
         center: [x, y]
     """
     return build_paths(lion_string)
+
 
 # EOF

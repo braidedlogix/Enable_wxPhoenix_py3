@@ -87,8 +87,10 @@ class Circle(Component):
             klass = LightCircle
         else:
             klass = DashedCircle
-        self.shadow = klass(bounds=self.bounds, position=self.position,
-                            color=(1.0, 1.0, 1.0, 1.0))
+        self.shadow = klass(
+            bounds=self.bounds,
+            position=self.position,
+            color=(1.0, 1.0, 1.0, 1.0))
         self.container.insert(0, self.shadow)
         x, y = self.position
         self.prev_x = event.x
@@ -96,8 +98,9 @@ class Circle(Component):
         return
 
     def moving_mouse_move(self, event):
-        self.position = [self.x + (event.x - self.prev_x),
-                         self.y + (event.y - self.prev_y)]
+        self.position = [
+            self.x + (event.x - self.prev_x), self.y + (event.y - self.prev_y)
+        ]
         self.prev_x = event.x
         self.prev_y = event.y
         self.request_redraw()
@@ -126,7 +129,7 @@ class LightCircle(Component):
 
     def _draw_mainlayer(self, gc, view_bounds=None, mode="default"):
         with gc:
-            gc.set_fill_color(self.color[0:3] + (self.color[3] * 0.3,))
+            gc.set_fill_color(self.color[0:3] + (self.color[3] * 0.3, ))
             dx, dy = self.bounds
             x, y = self.position
             radius = min(dx / 2.0, dy / 2.0)
@@ -150,21 +153,20 @@ class DashedCircle(Component):
             x, y = self.position
             radius = min(dx / 2.0, dy / 2.0)
             gc.arc(x + dx / 2.0, y + dy / 2.0, radius, 0.0, 2 * 3.14159)
-            gc.set_stroke_color(self.color[0:3] + (self.color[3] * 0.8,))
+            gc.set_stroke_color(self.color[0:3] + (self.color[3] * 0.8, ))
             gc.set_line_dash(self.line_dash)
             gc.stroke_path()
         return
 
 
 class MyFrame(DemoFrame):
-
     def _create_window(self):
-        circle1 = Circle(bounds=[75, 75], position=[50, 50],
-                         shadow_type="dashed")
-        circle2 = Circle(bounds=[75, 75], position=[200, 50],
-                         shadow_type="light")
-        container = MyFilledContainer(bounds=[500, 500],
-                                      bgcolor=(0.5, 0.5, 0.5, 1.0))
+        circle1 = Circle(
+            bounds=[75, 75], position=[50, 50], shadow_type="dashed")
+        circle2 = Circle(
+            bounds=[75, 75], position=[200, 50], shadow_type="light")
+        container = MyFilledContainer(
+            bounds=[500, 500], bgcolor=(0.5, 0.5, 0.5, 1.0))
         container.auto_size = True
         container.add(circle1)
         container.add(circle2)

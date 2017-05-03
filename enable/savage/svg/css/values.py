@@ -3,13 +3,16 @@ Parser for various kinds of CSS values as per CSS2 spec section 4.3
 """
 from pyparsing import Word, Combine, Optional, Literal, oneOf, CaselessLiteral, StringEnd, OneOrMore
 
-def asInt(s,l,t):
+
+def asInt(s, l, t):
     return int(t[0])
 
-def asFloat(s,l,t):
+
+def asFloat(s, l, t):
     return float(t[0])
 
-def asFloatOrInt(s,l,t):
+
+def asFloatOrInt(s, l, t):
     """ Return an int if possible, otherwise a float"""
     v = t[0]
     try:
@@ -17,14 +20,13 @@ def asFloatOrInt(s,l,t):
     except ValueError:
         return float(v)
 
+
 integer = Word("0123456789").setParseAction(asInt)
 
 number = Combine(
-    Optional(Word("0123456789")) + Literal(".") + Word("01234567890")
-    | integer
-)
+    Optional(Word("0123456789")) + Literal(".") + Word("01234567890") |
+    integer)
 number.setName('number')
-
 
 sign = oneOf("+ -")
 
@@ -33,8 +35,8 @@ signedNumber = Combine(Optional(sign) + number).setParseAction(asFloat)
 lengthValue = Combine(Optional(sign) + number).setParseAction(asFloatOrInt)
 lengthValue.setName('lengthValue')
 
-
-lengthUnit = oneOf(['em', 'ex', 'px', 'pt', 'in', 'cm', 'mm', 'pc', '%'], caseless=True)
+lengthUnit = oneOf(
+    ['em', 'ex', 'px', 'pt', 'in', 'cm', 'mm', 'pc', '%'], caseless=True)
 #the spec says that the unit is only optional for a 0 length, but
 #there are just too many places where a default is permitted.
 #TODO: Maybe should use a ctor like optional to let clients declare it?

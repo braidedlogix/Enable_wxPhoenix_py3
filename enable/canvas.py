@@ -1,11 +1,8 @@
 """ Defines the enable Canvas class """
 
-
-
 # Enthought library imports
 from traits.api import Bool, Trait, Tuple, List
 from kiva.constants import FILL
-
 
 # Local relative imports
 from .component import Component
@@ -60,7 +57,7 @@ class Canvas(Container):
 
     # The (x, y, x2, y2) coordinates of the bounding box of the components
     # in our inner coordinate space
-    _bounding_box = Tuple((0,0,100,100))
+    _bounding_box = Tuple((0, 0, 100, 100))
 
     def compact(self):
         """
@@ -81,7 +78,8 @@ class Canvas(Container):
                 component.container = None
                 self._components.remove(component)
             else:
-                raise RuntimeError("Unable to remove component from container.")
+                raise RuntimeError(
+                    "Unable to remove component from container.")
 
             # Check to see if we need to compact.
             x, y, x2, y2 = self._bounding_box
@@ -98,7 +96,6 @@ class Canvas(Container):
         if self.view_bounds is None:
             self.view_bounds = view_bounds
         super(Canvas, self).draw(gc, view_bounds, mode)
-
 
     #------------------------------------------------------------------------
     # Protected methods
@@ -124,7 +121,7 @@ class Canvas(Container):
                 x, y, x2, y2 = self.view_bounds
             else:
                 x, y, x2, y2 = self._bounding_box
-            r = (x, y, x2-x+1, y2-y+1)
+            r = (x, y, x2 - x + 1, y2 - y + 1)
 
             with gc:
                 gc.set_antialias(False)
@@ -142,7 +139,7 @@ class Canvas(Container):
             x, y, x2, y2 = self.view_bounds
             if (x <= 0 <= x2) or (y <= 0 <= y2):
                 with gc:
-                    gc.set_stroke_color((0,0,0,1))
+                    gc.set_stroke_color((0, 0, 0, 1))
                     gc.set_line_width(1.0)
                     gc.move_to(0, y)
                     gc.line_to(0, y2)
@@ -155,18 +152,17 @@ class Canvas(Container):
         # Overload the parent class's implementation to skip visibility test
         if view_bounds:
             v = view_bounds
-            new_bounds = (v[0]-self.x, v[1]-self.y, v[2], v[3])
+            new_bounds = (v[0] - self.x, v[1] - self.y, v[2], v[3])
         else:
             new_bounds = None
         return new_bounds
-
 
     #------------------------------------------------------------------------
     # Event handlers
     #------------------------------------------------------------------------
 
     def _bounds_offset_default(self):
-        return [0,0]
+        return [0, 0]
 
     def _view_bounds_changed(self):
         llx, lly, urx, ury = self._bounding_box

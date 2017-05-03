@@ -4,19 +4,17 @@ from enable.api import Component, Container
 
 
 class EnableUnitTest(unittest.TestCase):
-
     def assert_dims(self, obj, **dims):
         """
         checks that each of the named dimensions of the object are a
         certain value.  e.g.   assert_dims(component, x=5.0, y=7.0).
         """
         for dim, val in list(dims.items()):
-            self.assertTrue( getattr(obj, dim) == val )
+            self.assertTrue(getattr(obj, dim) == val)
         return
 
 
 class ContainerTestCase(EnableUnitTest):
-
     def create_simple_components(self):
         "Returns a container with 3 items in it; used by several tests."
         c1 = Component(bounds=[5.0, 10.0])
@@ -44,9 +42,9 @@ class ContainerTestCase(EnableUnitTest):
     def test_position(self):
         container = self.create_simple_components()
         components = container.components
-        self.assertTrue(components[0].position == [20,10])
-        self.assertTrue(components[1].position == [40,10])
-        self.assertTrue(components[2].position == [60,10])
+        self.assertTrue(components[0].position == [20, 10])
+        self.assertTrue(components[1].position == [40, 10])
+        self.assertTrue(components[2].position == [60, 10])
         return
 
     def test_position_bounds(self):

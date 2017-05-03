@@ -20,6 +20,7 @@ def test_mouse_move():
     assert not event.shift_down
     nose.tools.assert_equal(event.window.get_pointer_position(), (10, 20))
 
+
 @skip_if_null
 def test_mouse_move_real_window():
     from enable.api import Window
@@ -39,6 +40,7 @@ def test_mouse_move_real_window():
     # can't test pointer position, not set, but if we get here it didn't
     # try to set the pointer position
 
+
 @skip_if_null
 def test_mouse_move_real_window_mocked_position():
     from enable.api import Window
@@ -46,8 +48,7 @@ def test_mouse_move_real_window_mocked_position():
     test_assistant = EnableTestAssistant()
     component = Component(bounds=[100, 200])
 
-    with mock.patch.object(Window, 'get_pointer_position',
-                            return_value=None):
+    with mock.patch.object(Window, 'get_pointer_position', return_value=None):
         window = Window(None, component=component)
         event = test_assistant.mouse_move(component, 10, 20, window)
 

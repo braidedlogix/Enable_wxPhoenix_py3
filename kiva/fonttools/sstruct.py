@@ -52,8 +52,6 @@ calcsize(format)
 
 # Updated to Python 2.7/3.0, CJW
 
-
-
 __version__ = "1.2"
 __copyright__ = "Copyright 1998, Just van Rossum <just@letterror.com>"
 
@@ -75,9 +73,9 @@ def pack(format, obj):
         value = obj[name]
         if name in fixes:
             # fixed point conversion
-            value = int(round(value*fixes[name]))
+            value = int(round(value * fixes[name]))
         elements.append(value)
-    data = struct.pack(*(formatstring,) + tuple(elements))
+    data = struct.pack(*(formatstring, ) + tuple(elements))
     return data
 
 
@@ -123,30 +121,22 @@ def calcsize(format):
 
 # matches "name:formatchar" (whitespace is allowed)
 _elementRE = re.compile(
-    "\s*"                           # whitespace
-    "([A-Za-z_][A-Za-z_0-9]*)"      # name (python identifier)
-    "\s*:\s*"                       # whitespace : whitespace
-    "([cbBhHiIlLfd]|[0-9]+[ps]|"    # formatchar...
-        "([0-9]+)\.([0-9]+)(F))"    # ...formatchar                 # noqa
-    "\s*"                           # whitespace
-    "(#.*)?$"                       # [comment] + end of string
+    "\s*"  # whitespace
+    "([A-Za-z_][A-Za-z_0-9]*)"  # name (python identifier)
+    "\s*:\s*"  # whitespace : whitespace
+    "([cbBhHiIlLfd]|[0-9]+[ps]|"  # formatchar...
+    "([0-9]+)\.([0-9]+)(F))"  # ...formatchar                 # noqa
+    "\s*"  # whitespace
+    "(#.*)?$"  # [comment] + end of string
 )
-
 
 # matches the special struct format chars and 'x' (pad byte)
 _extraRE = re.compile("\s*([x@=<>!])\s*(#.*)?$")
 
-
 # matches an "empty" string, possibly containing whitespace and/or a comment
 _emptyRE = re.compile("\s*(#.*)?$")
 
-
-_fixedpointmappings = {
-    8: "b",
-    16: "h",
-    32: "l"
-}
-
+_fixedpointmappings = {8: "b", 16: "h", 32: "l"}
 
 _formatcache = {}
 

@@ -14,4 +14,3 @@ class ABConstrainable(object, metaclass=ABCMeta):
     which are `LinearSymbolic` instances.
 
     """
-

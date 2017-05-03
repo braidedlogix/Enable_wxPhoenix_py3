@@ -1,6 +1,3 @@
-
-
-
 from enable.api import Container, Component, ColorTrait
 from kiva.constants import FILL, FILL_STROKE
 from kiva.trait_defs.kiva_font_trait import KivaFont
@@ -29,7 +26,7 @@ class Button(Component):
     radio_group = Any
 
     # Default size of the button if no label is present
-    bounds=[32,32]
+    bounds = [32, 32]
 
     # Generally, buttons are not resizable
     resizable = ""
@@ -54,7 +51,8 @@ class Button(Component):
         with gc:
             gc.set_fill_color(self.color_)
             gc.set_stroke_color(self.border_color_)
-            gc.draw_rect((int(self.x), int(self.y), int(self.width)-1, int(self.height)-1), FILL_STROKE)
+            gc.draw_rect((int(self.x), int(self.y), int(self.width) - 1,
+                          int(self.height) - 1), FILL_STROKE)
             self._draw_label(gc)
         return
 
@@ -62,20 +60,21 @@ class Button(Component):
         with gc:
             gc.set_fill_color(self.down_color_)
             gc.set_stroke_color(self.border_color_)
-            gc.draw_rect((int(self.x), int(self.y), int(self.width)-1, int(self.height)-1), FILL_STROKE)
+            gc.draw_rect((int(self.x), int(self.y), int(self.width) - 1,
+                          int(self.height) - 1), FILL_STROKE)
             self._draw_label(gc, color=self.down_label_color_)
         return
 
     def _draw_label(self, gc, color=None):
         if self.label != "":
             gc.set_font(self.label_font)
-            x,y,w,h = gc.get_text_extent(self.label)
+            x, y, w, h = gc.get_text_extent(self.label)
             if color is None:
                 color = self.label_color_
             gc.set_fill_color(color)
             gc.set_stroke_color(color)
-            gc.show_text(self.label, (self.x+(self.width-w-x)/2,
-                                  self.y+(self.height-h-y)/2))
+            gc.show_text(self.label, (self.x + (self.width - w - x) / 2,
+                                      self.y + (self.height - h - y) / 2))
         return
 
     def normal_left_down(self, event):
@@ -138,8 +137,10 @@ class DrawingCanvasToolbar(Container):
 
     def _canvas_changed(self, old, new):
         if old:
-            old.on_trait_change(self._canvas_bounds_changed, "bounds", remove=True)
-            old.on_trait_change(self._canvas_bounds_changed, "bounds_items", remove=True)
+            old.on_trait_change(
+                self._canvas_bounds_changed, "bounds", remove=True)
+            old.on_trait_change(
+                self._canvas_bounds_changed, "bounds_items", remove=True)
 
         if new:
             new.on_trait_change(self._canvas_bounds_changed, "bounds")
@@ -152,10 +153,10 @@ class DrawingCanvasToolbar(Container):
         return
 
     def _dispatch_stateful_event(self, event, suffix):
-        super(DrawingCanvasToolbar, self)._dispatch_stateful_event(event, suffix)
+        super(DrawingCanvasToolbar, self)._dispatch_stateful_event(event,
+                                                                   suffix)
         event.handled = True
         return
-
 
 
 class DrawingCanvas(Container):
@@ -229,7 +230,8 @@ class DrawingCanvas(Container):
             with gc:
                 gc.set_antialias(False)
                 gc.set_fill_color(self.bgcolor_)
-                gc.draw_rect((int(self.x), int(self.y), int(self.width)-1, int(self.height)-1), FILL)
+                gc.draw_rect((int(self.x), int(self.y), int(self.width) - 1,
+                              int(self.height) - 1), FILL)
         return
 
     #------------------------------------------------------------------------
@@ -239,7 +241,6 @@ class DrawingCanvas(Container):
     def _tools_items_changed(self):
         self.request_redraw()
         return
-
 
 
 # EOF

@@ -5,7 +5,6 @@
 # This file is open source software distributed according to the terms in
 # LICENSE.txt
 #
-
 """
 Undoable Move Tool
 ==================
@@ -44,7 +43,7 @@ class SelectableBox(Box):
         "Draw the box background in a specified graphics context"
 
         # Set up all the control variables for quick access:
-        bs  = self.border_size
+        bs = self.border_size
         bsd = bs + bs
         bsh = bs / 2.0
         x, y = self.position
@@ -68,6 +67,7 @@ class SelectableBox(Box):
                     gc.draw_rect((x + bsh, y + bsh, dx - bs, dy - bs), STROKE)
         return
 
+
 class MyFrame(DemoFrame):
     """ Example of using a ButtonTool
 
@@ -82,7 +82,8 @@ class MyFrame(DemoFrame):
 
     def _create_window(self):
         # create a box that changes color when clicked
-        push_button_box = SelectableBox(bounds=[100,50], position=[50, 50], color='red')
+        push_button_box = SelectableBox(
+            bounds=[100, 50], position=[50, 50], color='red')
 
         # create a basic push button tool for it
         push_button_tool = ButtonTool(component=push_button_box)
@@ -93,8 +94,11 @@ class MyFrame(DemoFrame):
         push_button_tool.on_trait_change(push_button_box.select, 'down')
 
         # another box for a toggle button
-        toggle_box = SelectableBox(bounds=[100,50], position=[50, 125],
-            color='lightblue', selected_color='blue')
+        toggle_box = SelectableBox(
+            bounds=[100, 50],
+            position=[50, 125],
+            color='lightblue',
+            selected_color='blue')
 
         # a toggle button tool
         toggle_button_tool = ButtonTool(component=toggle_box, togglable=True)

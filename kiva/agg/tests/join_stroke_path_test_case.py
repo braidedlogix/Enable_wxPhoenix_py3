@@ -29,10 +29,9 @@ import kiva
 
 from .test_utils import Utils
 
-class JoinStrokePathTestCase(unittest.TestCase, Utils):
 
-    def helper(self, antialias, width, line_cap, line_join,
-               size=(10,10)):
+class JoinStrokePathTestCase(unittest.TestCase, Utils):
+    def helper(self, antialias, width, line_cap, line_join, size=(10, 10)):
 
         gc = GraphicsContextArray(size, pix_format="rgb24")
 
@@ -45,7 +44,7 @@ class JoinStrokePathTestCase(unittest.TestCase, Utils):
         gc.line_to(7, 9)
 
         # Settings allow the faster outline path through C++ code
-        gc. set_stroke_color((0.0, 0.0, 0.0)) # black
+        gc.set_stroke_color((0.0, 0.0, 0.0))  # black
         gc.set_antialias(antialias)
         gc.set_line_width(width)
         gc.set_line_cap(line_cap)
@@ -68,7 +67,7 @@ class JoinStrokePathTestCase(unittest.TestCase, Utils):
 
         gc = self.helper(antialias, width, line_cap, line_join)
 
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         assert 0, "join=miter, width=3, antialias=False\n%s" % actual
         #assert_arrays_equal(actual, desired)
 
@@ -85,7 +84,7 @@ class JoinStrokePathTestCase(unittest.TestCase, Utils):
         line_join = kiva.JOIN_BEVEL
 
         gc = self.helper(antialias, width, line_cap, line_join)
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         assert 0, "join=bevel, width=3, antialias=False\n%s" % actual
         #assert_arrays_equal(actual, desired)
 
@@ -106,7 +105,7 @@ class JoinStrokePathTestCase(unittest.TestCase, Utils):
         line_join = kiva.JOIN_ROUND
 
         gc = self.helper(antialias, width, line_cap, line_join)
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         assert 0, "join=round, width=3, antialias=False\n%s" % actual
         #assert_arrays_equal(actual, desired)
 
@@ -120,15 +119,15 @@ class JoinStrokePathTestCase(unittest.TestCase, Utils):
 
         gc = self.helper(antialias, width, line_cap, line_join)
 
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         desired = array([[255, 255, 255, 255, 255, 255, 255, 255, 255, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 127, 127, 127, 127,   0,   0,   0, 127, 255],
-                         [255,   0,   0,   0,   0,   0,   0,   0, 127, 255],
-                         [255,   0,   0,   0,   0,   0,   0,   0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 127, 127, 127, 127, 0, 0, 0, 127, 255],
+                         [255, 0, 0, 0, 0, 0, 0, 0, 127, 255],
+                         [255, 0, 0, 0, 0, 0, 0, 0, 127, 255],
                          [255, 127, 127, 127, 127, 127, 127, 127, 191, 255],
                          [255, 255, 255, 255, 255, 255, 255, 255, 255, 255]])
         self.assertRavelEqual(actual, desired)
@@ -140,15 +139,15 @@ class JoinStrokePathTestCase(unittest.TestCase, Utils):
         line_join = kiva.JOIN_BEVEL
 
         gc = self.helper(antialias, width, line_cap, line_join)
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         desired = array([[255, 255, 255, 255, 255, 255, 255, 255, 255, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 127, 127, 127, 127,   0,   0,   0, 127, 255],
-                         [255,   0,   0,   0,   0,   0,   0,   0, 127, 255],
-                         [255,   0,   0,   0,   0,   0,   0,  31, 223, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 127, 127, 127, 127, 0, 0, 0, 127, 255],
+                         [255, 0, 0, 0, 0, 0, 0, 0, 127, 255],
+                         [255, 0, 0, 0, 0, 0, 0, 31, 223, 255],
                          [255, 127, 127, 127, 127, 127, 127, 223, 255, 255],
                          [255, 255, 255, 255, 255, 255, 255, 255, 255, 255]])
         self.assertRavelEqual(actual, desired)
@@ -162,18 +161,19 @@ class JoinStrokePathTestCase(unittest.TestCase, Utils):
         line_join = kiva.JOIN_ROUND
 
         gc = self.helper(antialias, width, line_cap, line_join)
-        actual = gc.bmp_array[:,:,0]
+        actual = gc.bmp_array[:, :, 0]
         desired = array([[255, 255, 255, 255, 255, 255, 255, 255, 255, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 255, 255, 255, 255, 127,   0,   0, 127, 255],
-                         [255, 127, 127, 127, 127,   0,   0,   0, 127, 255],
-                         [255,   0,   0,   0,   0,   0,   0,   0, 127, 255],
-                         [255,   0,   0,   0,   0,   0,   0,   0, 180, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 255, 255, 255, 255, 127, 0, 0, 127, 255],
+                         [255, 127, 127, 127, 127, 0, 0, 0, 127, 255],
+                         [255, 0, 0, 0, 0, 0, 0, 0, 127, 255],
+                         [255, 0, 0, 0, 0, 0, 0, 0, 180, 255],
                          [255, 127, 127, 127, 127, 127, 127, 179, 253, 255],
                          [255, 255, 255, 255, 255, 255, 255, 255, 255, 255]])
         self.assertRavelEqual(actual, desired)
+
 
 if __name__ == "__main__":
     unittest.main()

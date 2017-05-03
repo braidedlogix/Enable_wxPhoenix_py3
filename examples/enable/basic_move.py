@@ -34,7 +34,7 @@ class Box(Component):
             gc.fill_path()
 
             # draw line around outer box
-            gc.set_stroke_color((0,0,0,1))
+            gc.set_stroke_color((0, 0, 0, 1))
             gc.rect(self.outer_x, self.outer_y, self.outer_width,
                     self.outer_height)
             gc.stroke_path()
@@ -54,7 +54,7 @@ class Box(Component):
         return
 
     def moving_mouse_move(self, event):
-        self.position = [event.x-self.offset_x, event.y-self.offset_y]
+        self.position = [event.x - self.offset_x, event.y - self.offset_y]
         event.handled = True
         self.request_redraw()
         return
@@ -74,9 +74,8 @@ class Box(Component):
 
 
 class MyFrame(DemoFrame):
-
     def _create_window(self):
-        box = Box(bounds=[100,100], position=[50,50], padding=15)
+        box = Box(bounds=[100, 100], position=[50, 50], padding=15)
         return Window(self, -1, component=box)
 
 

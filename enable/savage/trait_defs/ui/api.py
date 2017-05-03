@@ -14,7 +14,6 @@
 #  Date:   06/24/2009
 #
 #------------------------------------------------------------------------------
-
 """ Exports the symbols defined by the savage.traits.ui package.
 """
 

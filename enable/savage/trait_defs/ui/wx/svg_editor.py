@@ -14,7 +14,6 @@
 #  Date:   08/06/2008
 #
 #-------------------------------------------------------------------------------
-
 """ Traits UI 'display only' SVG editor.
 """
 
@@ -33,6 +32,7 @@ from .wx_render_panel import RenderPanel as WxRenderPanel
 #-------------------------------------------------------------------------------
 #  'SVGEditor' class:
 #-------------------------------------------------------------------------------
+
 
 class SVGEditor(Editor):
     """ Traits UI 'display only' SVG editor.
@@ -70,4 +70,3 @@ class SVGEditor(Editor):
         if self.control.document != self.value:
             self.control.document = self.value
             self.control.Refresh()
-

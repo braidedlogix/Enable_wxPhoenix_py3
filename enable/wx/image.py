@@ -18,16 +18,17 @@ from kiva.agg import CompiledPath, GraphicsContextSystem as GraphicsContext
 from .base_window import BaseWindow
 from .scrollbar import NativeScrollBar
 
+
 def _wx_bitmap_from_buffer(buf, width, height):
     """ Given a pixel buffer in ARGB order, return a WX bitmap
         object with the pixels in BGRA order.
     """
     arr = np.frombuffer(buf, dtype=np.uint8).reshape((width, height, 4))
     copy = np.zeros_like(arr)
-    copy[...,0::4] = arr[...,2::4]
-    copy[...,1::4] = arr[...,1::4]
-    copy[...,2::4] = arr[...,0::4]
-    copy[...,3::4] = arr[...,3::4]
+    copy[..., 0::4] = arr[..., 2::4]
+    copy[..., 1::4] = arr[..., 1::4]
+    copy[..., 2::4] = arr[..., 0::4]
+    copy[..., 3::4] = arr[..., 3::4]
     return wx.BitmapFromBufferRGBA(width, height, np.ravel(copy))
 
 
@@ -38,8 +39,10 @@ class Window(BaseWindow):
         # appear upside down when blitting. Note that this is not the
         # case on Windows.
         bottom_up = 0 if sys.platform != 'win32' else 1
-        gc = GraphicsContext((size[0]+1, size[1]+1), pix_format = pix_format,
-                             bottom_up = bottom_up)
+        gc = GraphicsContext(
+            (size[0] + 1, size[1] + 1),
+            pix_format=pix_format,
+            bottom_up=bottom_up)
         gc.translate_ctm(0.5, 0.5)
         return gc
 
@@ -70,5 +73,6 @@ def font_metrics_provider():
     gc = GraphicsContext((1, 1))
     gc.set_font(Font())
     return gc
+
 
 # EOF

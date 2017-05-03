@@ -27,17 +27,12 @@ try:
                      interpolation="nearest",
                      bottom_up=True):
             assert isinstance(size, tuple), repr(size)
-            width,height = size
-            pixel_map = PixelMap(
-                width,
-                height,
-                pix_format_string_map[pix_format],
-                255,
-                bool(bottom_up)
-            ).set_bmp_array()
+            width, height = size
+            pixel_map = PixelMap(width, height,
+                                 pix_format_string_map[pix_format], 255,
+                                 bool(bottom_up)).set_bmp_array()
             GraphicsContextArray.__init__(self, pixel_map.bmp_array,
-                                          pix_format, interpolation,
-                                          bottom_up)
+                                          pix_format, interpolation, bottom_up)
             self.pixel_map = pixel_map
 
 except ImportError as ex:

@@ -34,7 +34,7 @@ class Circle(Shape):
 
             x, y = self.position
             gc.arc(x + self.radius, y + self.radius, self.radius, 0,
-                   2*3.14159, False)
+                   2 * 3.14159, False)
             gc.fill_path()
 
             # Draw the shape's text.

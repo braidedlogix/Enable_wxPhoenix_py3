@@ -1,7 +1,5 @@
 """ Defines a Viewport which renders sub-areas of components """
 
-
-
 # Standard library imports
 from numpy import array, dot
 
@@ -62,7 +60,6 @@ class Viewport(Component):
     # on the component.
     initiate_layout = Bool(False)
 
-
     min_zoom = Delegate('zoom_tool', modify=True)
     max_zoom = Delegate('zoom_tool', modify=True)
 
@@ -92,7 +89,7 @@ class Viewport(Component):
         if self.enable_zoom:
             self._enable_zoom_changed(False, True)
 
-    def components_at(self, x, y, add_containers = False):
+    def components_at(self, x, y, add_containers=False):
         """
         Returns the list of components inside the viewport at the given (x,y)
         in the viewport's native coordinate space (not in the space of the
@@ -116,14 +113,17 @@ class Viewport(Component):
         else:
             return []
 
-    def invalidate_draw(self, damaged_regions=None, self_relative=False,
+    def invalidate_draw(self,
+                        damaged_regions=None,
+                        self_relative=False,
                         view_relative=False):
         if view_relative and damaged_regions:
-            damaged_regions = [[region[0] - self.view_position[0],
-                                region[1] - self.view_position[1],
-                                region[2], region[3]] for region in damaged_regions]
-        super(Viewport, self).invalidate_draw(damaged_regions=damaged_regions,
-                                              self_relative=self_relative)
+            damaged_regions = [[
+                region[0] - self.view_position[0],
+                region[1] - self.view_position[1], region[2], region[3]
+            ] for region in damaged_regions]
+        super(Viewport, self).invalidate_draw(
+            damaged_regions=damaged_regions, self_relative=self_relative)
         return
 
     def cleanup(self, window):
@@ -149,7 +149,7 @@ class Viewport(Component):
         component.
         """
         transform = self.get_event_transform()
-        return dot(array([x,y,1]), transform)[:2]
+        return dot(array([x, y, 1]), transform)[:2]
 
     def component_to_viewport(self, x, y):
         """ Given a coordinate X and Y in the viewed component's coordinate
@@ -162,7 +162,6 @@ class Viewport(Component):
         newy = (y - vx) * self.zoom + oy
         return (newx, newy)
 
-
     def get_event_transform(self, event=None, suffix=""):
         transform = affine.affine_identity()
 
@@ -172,17 +171,17 @@ class Viewport(Component):
             # inside of the viewport outwards.
             if self.enable_zoom and self.zoom != 1.0:
                 transform = affine.translate(transform, *self.view_position)
-                transform = affine.scale(transform, 1/self.zoom, 1/self.zoom)
-                transform = affine.translate(transform, -self.outer_position[0],
-                                                        -self.outer_position[1])
+                transform = affine.scale(transform, 1 / self.zoom, 1 /
+                                         self.zoom)
+                transform = affine.translate(transform,
+                                             -self.outer_position[0],
+                                             -self.outer_position[1])
             else:
                 x_offset = self.view_position[0] - self.outer_position[0]
                 y_offset = self.view_position[1] - self.outer_position[1]
                 transform = affine.translate(transform, x_offset, y_offset)
 
         return transform
-
-
 
     #------------------------------------------------------------------------
     # Component interface
@@ -203,9 +202,8 @@ class Viewport(Component):
                 # and it's easier/more accurate than transforming the clip
                 # rectangle down into the component's space (especially if zoom
                 # is involved).
-                gc.clip_to_rect(x-0.5, y-0.5,
-                                self.width+1,
-                                self.height+1)
+                gc.clip_to_rect(x - 0.5, y - 0.5, self.width + 1,
+                                self.height + 1)
 
                 # There is a two-step transformation from the viewport's "outer"
                 # coordinates into the coordinates space of the viewed component:
@@ -213,7 +211,8 @@ class Viewport(Component):
                 if self.enable_zoom:
                     if self.zoom != 0:
                         gc.scale_ctm(self.zoom, self.zoom)
-                        gc.translate_ctm(x/self.zoom - view_x, y/self.zoom - view_y)
+                        gc.translate_ctm(x / self.zoom - view_x,
+                                         y / self.zoom - view_y)
                     else:
                         raise RuntimeError("Viewport zoomed out too far.")
                 else:
@@ -224,7 +223,8 @@ class Viewport(Component):
                 if view_bounds:
                     # Find the intersection rectangle of the viewport with the view_bounds,
                     # and transform this into the component's space.
-                    clipped_view = intersect_bounds(self.position + self.bounds, view_bounds)
+                    clipped_view = intersect_bounds(
+                        self.position + self.bounds, view_bounds)
                     if clipped_view != empty_rectangle:
                         # clipped_view and self.position are in the space of our parent
                         # container.  we know that self.position -> view_x,view_y
@@ -233,9 +233,10 @@ class Viewport(Component):
                         # view_x and view_y to generate the transformed coordinates
                         # of clipped_view in our component's space.
                         offset = array(clipped_view[:2]) - array(self.position)
-                        new_bounds = ((offset[0]/self.zoom + view_x),
-                                      (offset[1]/self.zoom + view_y),
-                                      clipped_view[2] / self.zoom, clipped_view[3] / self.zoom)
+                        new_bounds = ((offset[0] / self.zoom + view_x),
+                                      (offset[1] / self.zoom + view_y),
+                                      clipped_view[2] / self.zoom,
+                                      clipped_view[3] / self.zoom)
                         self.component.draw(gc, new_bounds, mode=mode)
 
         return
@@ -260,11 +261,9 @@ class Viewport(Component):
 
         return
 
-
     #------------------------------------------------------------------------
     # Event handlers
     #------------------------------------------------------------------------
-
 
     def _enable_zoom_changed(self, old, new):
         """
@@ -288,8 +287,8 @@ class Viewport(Component):
         if isinstance(self.component, Canvas):
             llx, lly = self.view_position
             self.component.view_bounds = (llx, lly,
-                                          llx + self.view_bounds[0]-1,
-                                          lly + self.view_bounds[1]-1)
+                                          llx + self.view_bounds[0] - 1,
+                                          lly + self.view_bounds[1] - 1)
         return
 
     def _component_changed(self, old, new):
@@ -318,8 +317,8 @@ class Viewport(Component):
 
     def _bounds_changed(self, old, new):
         Component._bounds_changed(self, old, new)
-        new_w = new[0]/self.zoom
-        new_h = new[1]/self.zoom
+        new_w = new[0] / self.zoom
+        new_h = new[1] / self.zoom
         w, h = self.view_bounds
         delta_x = new_w - w
         delta_y = new_h - h
@@ -342,13 +341,13 @@ class Viewport(Component):
         x = 0
         y = 0
         if self.vertical_anchor == 'top':
-            y = self.component.height-self.view_bounds[1]
+            y = self.component.height - self.view_bounds[1]
         elif self.vertical_anchor == 'center':
-            y = (self.component.height-self.view_bounds[1])/2.0
+            y = (self.component.height - self.view_bounds[1]) / 2.0
         if self.horizontal_anchor == 'right':
-            x = self.component.width-self.view_bounds[0]
+            x = self.component.width - self.view_bounds[0]
         elif self.horizontal_anchor == 'center':
-            x = (self.component.width-self.view_bounds[0])/2.0
+            x = (self.component.width - self.view_bounds[0]) / 2.0
         return [x, y]
 
     def _initialize_position(self):
@@ -431,12 +430,12 @@ class Viewport(Component):
         if self.vertical_anchor == 'top':
             y -= delta_y
         elif self.vertical_anchor == 'center':
-            y -= delta_y/2
+            y -= delta_y / 2
 
         if self.horizontal_anchor == 'right':
             x -= delta_x
         elif self.horizontal_anchor == 'center':
-            x -= delta_x/2
+            x -= delta_x / 2
         return x, y
 
     def _adjust_stay_inside(self, x, y, extra_width, extra_height):
@@ -474,16 +473,16 @@ class Viewport(Component):
         elif self.vertical_anchor == 'top':
             y = extra_height
         elif self.vertical_anchor == 'center':
-            y = extra_height/2
+            y = extra_height / 2
         else:
             y = 0
 
         if extra_width >= 0:
-            x =  min(max(0, x), extra_width)
+            x = min(max(0, x), extra_width)
         elif self.horizontal_anchor == 'right':
             x = extra_width
         elif self.horizontal_anchor == 'center':
-            x = extra_width/2
+            x = extra_width / 2
         else:
             x = 0
 

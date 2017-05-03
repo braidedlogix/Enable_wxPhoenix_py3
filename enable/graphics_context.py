@@ -1,6 +1,3 @@
-
-
-
 from kiva.constants import FILL
 
 # Relative imports
@@ -34,7 +31,8 @@ class EnableGCMixin(object):
 
     def clip_to_rect(self, x, y, width, height):
         if getattr(self, "corner_pixel_origin", True):
-            super(EnableGCMixin, self).clip_to_rect(x-0.5, y-0.5, width+1, height+1)
+            super(EnableGCMixin, self).clip_to_rect(x - 0.5, y - 0.5,
+                                                    width + 1, height + 1)
         else:
             super(EnableGCMixin, self).clip_to_rect(x, y, width, height)
 
@@ -59,12 +57,14 @@ class EnableGCMixin(object):
         return
 
     def alpha(self, alpha):
-        raise NotImplementedError("The alpha() method is not compatible with DisplayPDF; use clear() instead.")
+        raise NotImplementedError(
+            "The alpha() method is not compatible with DisplayPDF; use clear() instead."
+        )
 
     def stretch_draw(self, image, x, y, dx, dy):
         "Draws an image 'stretched' to fit a specified area"
-        idx  = image.width()
-        idy  = image.height()
+        idx = image.width()
+        idy = image.height()
         with self:
             self.clip_to_rect(x, y, dx, dy)
             cx, cy, cdx, cdy = x, y, dx, dy
@@ -75,15 +75,17 @@ class EnableGCMixin(object):
             while y < yt:
                 x0 = x
                 while x0 < xr:
-                    self.draw_image(image,(x0, y, idx, idy))
+                    self.draw_image(image, (x0, y, idx, idy))
                     x0 += idx
                 y += idy
         return
+
 
 # Define a GraphicsContextEnable that subclasses whatever the Kiva backend's
 # GraphicsContext is.
 class GraphicsContextEnable(EnableGCMixin, GraphicsContext):
     pass
+
 
 # Define an ImageGraphicsContextEnable that is guaranteed to be a subclass of
 # an ImageGraphicsContext, regardless of the actual Kiva backend.  If the kiva
@@ -92,5 +94,6 @@ from kiva.image import GraphicsContext as GraphicsContextImage
 if isinstance(GraphicsContext, GraphicsContextImage):
     ImageGraphicsContextEnable = GraphicsContextEnable
 else:
+
     class ImageGraphicsContextEnable(EnableGCMixin, GraphicsContextImage):
         pass

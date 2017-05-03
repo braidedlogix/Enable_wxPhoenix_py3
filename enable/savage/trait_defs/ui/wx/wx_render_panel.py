@@ -4,6 +4,7 @@ import wx
 from enable.savage.svg.backends.wx import renderer
 from traitsui.wx.constants import WindowColor
 
+
 class RenderPanel(wx.Panel):
     def __init__(self, parent, document=None):
         wx.Panel.__init__(self, parent)
@@ -11,7 +12,7 @@ class RenderPanel(wx.Panel):
         self.document = document
         self.zoom_x = 100
         self.zoom_y = 100
-        self.offset = wx.Point(0,0)
+        self.offset = wx.Point(0, 0)
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_MOUSEWHEEL, self.OnWheel)
@@ -43,7 +44,7 @@ class RenderPanel(wx.Panel):
 
     def GetBestSize(self):
         if not self.document:
-            return (-1,-1)
+            return (-1, -1)
 
         return wx.Size(*(self.document.getSize()))
 
@@ -73,7 +74,7 @@ class RenderPanel(wx.Panel):
         self.Refresh()
 
     def OnMiddleClick(self, evt):
-        self.offset = wx.Point(0,0)
+        self.offset = wx.Point(0, 0)
         self.zoom_x = 100
         self.zoom_y = 100
         self.Refresh()

@@ -11,7 +11,6 @@ from traits.api import Any, Code, Float, Instance, Property, Str
 from traitsui.api import HSplit, ModelView, UItem, VGroup, View
 from enable.api import Component, ComponentEditor
 
-
 default_script = """# Write your code here.
 # The graphics context is available as gc.
 
@@ -113,15 +112,14 @@ class ScriptedComponentView(ModelView):
                     'model.error',
                     visible_when="model.error != ''",
                     style='readonly',
-                    height=100)
-            ),
+                    height=100)),
             VGroup(
-                UItem('model', editor=ComponentEditor()),
-                UItem('model.fps_display', height=20)
-            ),
-        ),
-        resizable=True
-    )
+                UItem(
+                    'model', editor=ComponentEditor()),
+                UItem(
+                    'model.fps_display', height=20)), ),
+        resizable=True)
+
 
 if __name__ == '__main__':
     view = ScriptedComponentView()

@@ -20,10 +20,13 @@ import re
 class _EOF(object):
     def __repr__(self):
         return 'EOF'
+
+
 EOF = _EOF()
 
 lexicon = [
-    ('float', r'[-\+]?(?:(?:[0-9]*\.[0-9]+)|(?:[0-9]+\.?))(?:[Ee][-\+]?[0-9]+)?'),
+    ('float',
+     r'[-\+]?(?:(?:[0-9]*\.[0-9]+)|(?:[0-9]+\.?))(?:[Ee][-\+]?[0-9]+)?'),
     ('int', r'[-\+]?[0-9]+'),
     ('command', r'[AaCcHhLlMmQqSsTtVvZz]'),
 ]
@@ -39,6 +42,7 @@ class Lexer(object):
 
         http://www.gooli.org/blog/a-simple-lexer-in-python/
     """
+
     def __init__(self, lexicon):
         self.lexicon = lexicon
         parts = []
@@ -60,6 +64,7 @@ class Lexer(object):
                     yield (name, m)
                     break
         yield (EOF, None)
+
 
 svg_lexer = Lexer(lexicon)
 
@@ -122,7 +127,7 @@ class SVGPathParser(object):
         commands = []
         while token[0] is not EOF:
             if token[0] != 'command':
-                raise SyntaxError("expecting a command; got %r" % (token,))
+                raise SyntaxError("expecting a command; got %r" % (token, ))
             rule = self.command_dispatch[token[1]]
             command_group, token = rule(next, token)
             commands.append(command_group)
@@ -188,64 +193,68 @@ class SVGPathParser(object):
         while token[0] in self.number_tokens:
             rx = float(token[1])
             if rx < 0.0:
-                raise SyntaxError("expecting a nonnegative number; got %r" % (token,))
+                raise SyntaxError("expecting a nonnegative number; got %r" %
+                                  (token, ))
 
             token = next()
             if token[0] not in self.number_tokens:
-                raise SyntaxError("expecting a number; got %r" % (token,))
+                raise SyntaxError("expecting a number; got %r" % (token, ))
             ry = float(token[1])
             if ry < 0.0:
-                raise SyntaxError("expecting a nonnegative number; got %r" % (token,))
+                raise SyntaxError("expecting a nonnegative number; got %r" %
+                                  (token, ))
 
             token = next()
             if token[0] not in self.number_tokens:
-                raise SyntaxError("expecting a number; got %r" % (token,))
+                raise SyntaxError("expecting a number; got %r" % (token, ))
             axis_rotation = float(token[1])
 
             token = next()
             if token[1] not in ('0', '1'):
-                raise SyntaxError("expecting a boolean flag; got %r" % (token,))
+                raise SyntaxError("expecting a boolean flag; got %r" %
+                                  (token, ))
             large_arc_flag = bool(int(token[1]))
 
             token = next()
             if token[1] not in ('0', '1'):
-                raise SyntaxError("expecting a boolean flag; got %r" % (token,))
+                raise SyntaxError("expecting a boolean flag; got %r" %
+                                  (token, ))
             sweep_flag = bool(int(token[1]))
 
             token = next()
             if token[0] not in self.number_tokens:
-                raise SyntaxError("expecting a number; got %r" % (token,))
+                raise SyntaxError("expecting a number; got %r" % (token, ))
             x = float(token[1])
 
             token = next()
             if token[0] not in self.number_tokens:
-                raise SyntaxError("expecting a number; got %r" % (token,))
+                raise SyntaxError("expecting a number; got %r" % (token, ))
             y = float(token[1])
 
             token = next()
-            arguments.append(((rx,ry), axis_rotation, large_arc_flag, sweep_flag, (x,y)))
+            arguments.append((
+                (rx, ry), axis_rotation, large_arc_flag, sweep_flag, (x, y)))
 
         return (command, arguments), token
 
     def rule_coordinate(self, next, token):
         if token[0] not in self.number_tokens:
-            raise SyntaxError("expecting a number; got %r" % (token,))
+            raise SyntaxError("expecting a number; got %r" % (token, ))
         x = float(token[1])
         token = next()
         return x, token
 
-
     def rule_coordinate_pair(self, next, token):
         # Inline these since this rule is so common.
         if token[0] not in self.number_tokens:
-            raise SyntaxError("expecting a number; got %r" % (token,))
+            raise SyntaxError("expecting a number; got %r" % (token, ))
         x = float(token[1])
         token = next()
         if token[0] not in self.number_tokens:
-            raise SyntaxError("expecting a number; got %r" % (token,))
+            raise SyntaxError("expecting a number; got %r" % (token, ))
         y = float(token[1])
         token = next()
-        return (x,y), token
+        return (x, y), token
 
 
 svg_parser = SVGPathParser()

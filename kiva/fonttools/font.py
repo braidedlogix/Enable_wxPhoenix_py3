@@ -3,8 +3,6 @@ Defines the Kiva Font class and a utility method to parse free-form font
 specification strings into Font instances.
 """
 
-
-
 import copy
 from kiva.constants import (DEFAULT, DECORATIVE, ROMAN, SCRIPT, SWISS, MODERN,
                             TELETYPE, NORMAL, ITALIC, BOLD, BOLD_ITALIC)
@@ -12,12 +10,12 @@ from .font_manager import FontProperties, fontManager
 
 # Various maps used by str_to_font
 font_families = {
-    'default':    DEFAULT,
+    'default': DEFAULT,
     'decorative': DECORATIVE,
-    'roman':      ROMAN,
-    'script':     SCRIPT,
-    'swiss':      SWISS,
-    'modern':     MODERN
+    'roman': ROMAN,
+    'script': SCRIPT,
+    'swiss': SWISS,
+    'modern': MODERN
 }
 font_styles = {'italic': ITALIC}
 font_weights = {'bold': BOLD}
@@ -51,8 +49,13 @@ def str_to_font(fontspec):
                 point_size = int(lword)
             except:
                 facename.append(word)
-    return Font(size=point_size, family=family, weight=weight, style=style,
-                underline=underline, face_name=' '.join(facename))
+    return Font(
+        size=point_size,
+        family=family,
+        weight=weight,
+        style=style,
+        underline=underline,
+        face_name=' '.join(facename))
 
 
 class Font(object):
@@ -78,13 +81,19 @@ class Font(object):
         TELETYPE: "monospace"
     }
 
-    def __init__(self, face_name="", size=12, family=SWISS, weight=NORMAL,
-                 style=NORMAL, underline=0, encoding=DEFAULT):
+    def __init__(self,
+                 face_name="",
+                 size=12,
+                 family=SWISS,
+                 weight=NORMAL,
+                 style=NORMAL,
+                 underline=0,
+                 encoding=DEFAULT):
         if (type(size) != int) or (type(family) != type(SWISS)) or \
             (type(weight) != type(NORMAL)) or (type(style) != type(NORMAL)) or \
             (type(underline) != int) or (not isinstance(face_name, str)) or \
             (type(encoding) != type(DEFAULT)):
-                raise RuntimeError("Bad value in Font() constructor.")
+            raise RuntimeError("Bad value in Font() constructor.")
         ### HACK:  C++ stuff expects a string (not unicode) for the face_name, so fix
         ###        if needed.  See ticket #2111 in the CP Trac.
         ### Only for python < 3
@@ -125,8 +134,11 @@ class Font(object):
             style = "italic"
         else:
             style = "normal"
-        fp = FontProperties(family=self.familymap[self.family], style=style,
-                            weight=weight, size=self.size)
+        fp = FontProperties(
+            family=self.familymap[self.family],
+            style=style,
+            weight=weight,
+            size=self.size)
         if self.face_name != "":
             fp.set_name(self.face_name)
         return fp
@@ -146,8 +158,7 @@ class Font(object):
     def __eq__(self, other):
         result = False
         try:
-            if (self.family == other.family and
-                    self.size == other.size and
+            if (self.family == other.family and self.size == other.size and
                     self.weight == other.weight and
                     self.style == other.style and
                     self.underline == other.underline and

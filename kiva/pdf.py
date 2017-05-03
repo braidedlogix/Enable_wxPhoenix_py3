@@ -7,7 +7,6 @@
 # under the conditions described in the aforementioned license.  The license
 # is also available online at http://www.enthought.com/licenses/BSD.txt
 # Thanks for using Enthought open source!
-
 """ PDF implementation of the core2d drawing library
 
     :Author:      Eric Jones, Enthought, Inc., eric@enthought.com
@@ -16,8 +15,6 @@
 
     The PDF implementation relies heavily on the ReportLab project.
 """
-
-
 
 # standard library imports
 
@@ -37,7 +34,6 @@ from .line_state import is_dashed
 from .constants import FILL, STROKE, EOF_FILL
 import kiva.constants as constants
 import kiva.affine as affine
-
 
 cap_style = {}
 cap_style[constants.CAP_ROUND] = 1
@@ -67,6 +63,7 @@ class GraphicsContext(GraphicsContextBase):
     """
     Simple wrapper around a PDF graphics context.
     """
+
     def __init__(self, pdf_canvas, *args, **kwargs):
         from .image import GraphicsContext as GraphicsContextImage
         self.gc = pdf_canvas
@@ -406,10 +403,9 @@ class GraphicsContext(GraphicsContextBase):
         if self.current_pdf_path is None:
             self.begin_path()
 
-        self.current_pdf_path.arc(x - radius, y - radius,
-                                  x + radius, y + radius,
-                                  start_angle * 180.0 / pi,
-                                  (end_angle-start_angle) * 180.0 / pi)
+        self.current_pdf_path.arc(x - radius, y - radius, x + radius,
+                                  y + radius, start_angle * 180.0 / pi,
+                                  (end_angle - start_angle) * 180.0 / pi)
         self.current_point = (x, y)
 
     def arc_to(self, x1, y1, x2, y2, radius):
@@ -419,8 +415,8 @@ class GraphicsContext(GraphicsContextBase):
             self.begin_path()
 
         # Get the endpoints on the curve where it touches the line segments
-        t1, t2 = arc_to_tangent_points(self.current_point,
-                                       (x1, y1), (x2, y2), radius)
+        t1, t2 = arc_to_tangent_points(self.current_point, (x1, y1), (x2, y2),
+                                       radius)
 
         # draw!
         self.current_pdf_path.lineTo(*t1)
@@ -591,14 +587,13 @@ class GraphicsContext(GraphicsContextBase):
                 converted_img = img.convert_pixel_format('rgba32', inplace=0)
                 format = 'RGBA'
         else:
-            warnings.warn("Cannot render image of type %r into PDF context."
-                          % type(img))
+            warnings.warn("Cannot render image of type %r into PDF context." %
+                          type(img))
             return
 
         # converted_img now holds an Agg graphics context with the image
-        pil_img = pilfromstring(format,
-                                (converted_img.width(),
-                                 converted_img.height()),
+        pil_img = pilfromstring(format, (converted_img.width(),
+                                         converted_img.height()),
                                 piltostring(converted_img.bmp_array))
 
         if rect is None:
@@ -607,8 +602,8 @@ class GraphicsContext(GraphicsContextBase):
         # Draw the actual image.
         # Wrap it in an ImageReader object, because that's what reportlab
         # actually needs.
-        self.gc.drawImage(ImageReader(pil_img),
-                          rect[0], rect[1], rect[2], rect[3])
+        self.gc.drawImage(
+            ImageReader(pil_img), rect[0], rect[1], rect[2], rect[3])
 
     # ----------------------------------------------------------------
     # Drawing Text

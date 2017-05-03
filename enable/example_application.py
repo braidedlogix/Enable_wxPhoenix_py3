@@ -19,6 +19,7 @@ from __future__ import (division, absolute_import, print_function,
 
 from pyface.api import ApplicationWindow, GUI
 
+
 class DemoApplication(ApplicationWindow):
     """ Simple Pyface application displaying a component.
 

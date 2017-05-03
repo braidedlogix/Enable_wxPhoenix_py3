@@ -1,4 +1,3 @@
-
 # Enthought library imports
 from traits.api import HasTraits
 
@@ -25,5 +24,6 @@ class Viewable(HasTraits):
         else:
             super(Viewable, self).draw(gc, view_bounds, mode)
         return
+
 
 # EOF

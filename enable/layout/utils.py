@@ -3,7 +3,6 @@
 #  All rights reserved.
 #------------------------------------------------------------------------------
 
-
 STRENGTHS = set(['required', 'strong', 'medium', 'weak'])
 
 

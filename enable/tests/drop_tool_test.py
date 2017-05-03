@@ -5,7 +5,6 @@ from enable.tools.base_drop_tool import BaseDropTool
 
 
 class DummyTool(BaseDropTool):
-
     def accept_drop(self, position, obj):
         """ Simple rule which allows testing of different cases
 
@@ -22,7 +21,6 @@ class DummyTool(BaseDropTool):
 
 
 class DropToolTestCase(EnableTestAssistant, unittest.TestCase):
-
     def setUp(self):
         self.tool = DummyTool()
 

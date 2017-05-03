@@ -10,8 +10,6 @@
 # ------------------------------------------------------------------------------
 """ This is the QPainter backend for kiva. """
 
-
-
 from functools import partial
 
 import numpy as np
@@ -59,6 +57,7 @@ gradient_spread_modes['reflect'] = QtGui.QGradient.ReflectSpread
 class GraphicsContext(object):
     """ Simple wrapper around a Qt QPainter object.
     """
+
     def __init__(self, size, *args, **kwargs):
         super(GraphicsContext, self).__init__()
         self._width = size[0]
@@ -146,8 +145,8 @@ class GraphicsContext(object):
                                        the current coordinate matrix.
         """
         m11, m12, m21, m22, tx, ty = transform
-        self.gc.setTransform(QtGui.QTransform(m11, m12, m21, m22, tx, ty),
-                             True)
+        self.gc.setTransform(
+            QtGui.QTransform(m11, m12, m21, m22, tx, ty), True)
 
     def get_ctm(self):
         """ Return the current coordinate transform matrix.
@@ -439,8 +438,8 @@ class GraphicsContext(object):
 
             Region should be a 4-tuple or a sequence.
         """
-        self.gc.setClipRect(QtCore.QRectF(x, y, w, h),
-                            operation=QtCore.Qt.IntersectClip)
+        self.gc.setClipRect(
+            QtCore.QRectF(x, y, w, h), operation=QtCore.Qt.IntersectClip)
 
     def clip_to_rects(self, rects):
         """
@@ -519,24 +518,38 @@ class GraphicsContext(object):
     def _apply_gradient(self, grad, stops, spread_method, units):
         """ Configures a gradient object and sets it as the current brush.
         """
-        grad.setSpread(gradient_spread_modes.get(spread_method,
-                                                 QtGui.QGradient.PadSpread))
-        grad.setCoordinateMode(gradient_coord_modes.get(
-            units, QtGui.QGradient.LogicalMode))
+        grad.setSpread(
+            gradient_spread_modes.get(spread_method,
+                                      QtGui.QGradient.PadSpread))
+        grad.setCoordinateMode(
+            gradient_coord_modes.get(units, QtGui.QGradient.LogicalMode))
 
         for stop in stops:
             grad.setColorAt(stop[0], QtGui.QColor.fromRgbF(*stop[1:]))
 
         self.gc.setBrush(QtGui.QBrush(grad))
 
-    def linear_gradient(self, x1, y1, x2, y2, stops, spread_method,
+    def linear_gradient(self,
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        stops,
+                        spread_method,
                         units='userSpaceOnUse'):
         """ Sets a linear gradient as the current brush.
         """
         grad = QtGui.QLinearGradient(x1, y1, x2, y2)
         self._apply_gradient(grad, stops, spread_method, units)
 
-    def radial_gradient(self, cx, cy, r, fx, fy, stops, spread_method,
+    def radial_gradient(self,
+                        cx,
+                        cy,
+                        r,
+                        fx,
+                        fy,
+                        stops,
+                        spread_method,
                         units='userSpaceOnUse'):
         """ Sets a radial gradient as the current brush.
         """
@@ -577,16 +590,15 @@ class GraphicsContext(object):
                 format = QtGui.QImage.Format_RGB32
             width, height = img.shape[:2]
             copy_array = copy_padded(img)
-            draw_img = QtGui.QImage(img.astype(np.uint8), copy_array.shape[1],
-                                    height, format)
+            draw_img = QtGui.QImage(
+                img.astype(np.uint8), copy_array.shape[1], height, format)
             pixmap = QtGui.QPixmap.fromImage(draw_img)
         elif isinstance(img, agg.GraphicsContextArray):
             converted_img = img.convert_pixel_format('bgra32', inplace=0)
             copy_array = copy_padded(converted_img.bmp_array)
             width, height = img.width(), img.height()
-            draw_img = QtGui.QImage(copy_array.flatten(),
-                                    copy_array.shape[1], height,
-                                    QtGui.QImage.Format_RGB32)
+            draw_img = QtGui.QImage(copy_array.flatten(), copy_array.shape[1],
+                                    height, QtGui.QImage.Format_RGB32)
             pixmap = QtGui.QPixmap.fromImage(draw_img)
         elif (isinstance(img, GraphicsContext) and
               isinstance(img.qt_dc, QtGui.QPixmap) and img.gc.isActive()):
@@ -850,11 +862,12 @@ class CompiledPath(object):
         self.path.moveTo(x, y)
 
     def arc(self, x, y, r, start_angle, end_angle, clockwise=False):
-        sweep_angle = (end_angle-start_angle if not clockwise
-                       else start_angle-end_angle)
+        sweep_angle = (end_angle - start_angle
+                       if not clockwise else start_angle - end_angle)
         self.path.moveTo(x, y)
-        self.path.arcTo(QtCore.QRectF(x-r, y-r, r*2, r*2),
-                        np.rad2deg(start_angle), np.rad2deg(sweep_angle))
+        self.path.arcTo(
+            QtCore.QRectF(x - r, y - r, r * 2, r * 2),
+            np.rad2deg(start_angle), np.rad2deg(sweep_angle))
 
     def arc_to(self, x1, y1, x2, y2, r):
         # get the current pen position

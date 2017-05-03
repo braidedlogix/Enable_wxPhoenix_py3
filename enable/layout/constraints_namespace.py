@@ -15,6 +15,7 @@ class ConstraintsNamespace(object):
     with them, without having to specifically update this client code.
 
     """
+
     def __init__(self, name, owner):
         """ Initialize a ConstraintsNamespace.
 

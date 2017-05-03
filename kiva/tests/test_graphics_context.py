@@ -1,8 +1,7 @@
 from traits.testing.unittest_tools import unittest
 
-from numpy import (
-    alltrue, array, concatenate, dtype,
-    fromstring, newaxis, ravel, ones, zeros)
+from numpy import (alltrue, array, concatenate, dtype, fromstring, newaxis,
+                   ravel, ones, zeros)
 from PIL import Image as PILImage
 from hypothesis import given
 from hypothesis.strategies import sampled_from
@@ -19,7 +18,6 @@ Int32 = dtype('int32')
 
 
 class TestAlphaBlackImage(unittest.TestCase):
-
     def setUp(self):
         self.size = (1, 1)
         self.color = 0.0
@@ -66,8 +64,7 @@ class TestAlphaBlackImage(unittest.TestCase):
         desired = self.alpha_blend(
             gc_background, orig, ambient_alpha=amb_alpha)
         # alpha blending is approximate, allow channel differences of to 2.
-        self.assert_images_close(
-            desired, actual, diff_allowed=slop_allowed)
+        self.assert_images_close(desired, actual, diff_allowed=slop_allowed)
 
     @given(sampled_from([1.0, 0.0, 0.5]))
     def test_ambient_plus_image_alpha(self, color):
@@ -134,8 +131,8 @@ class TestAlphaBlackImage(unittest.TestCase):
         return GraphicsContext(img, "bgra32", interpolation_scheme)
 
     def alpha_blend(self, src1, src2, alpha=1.0, ambient_alpha=1.0):
-        alpha_ary = src2[:, :, 3]/255. * alpha * ambient_alpha
-        res = src1[:, :, :] * (1-alpha_ary) + src2[:, :, :] * alpha_ary
+        alpha_ary = src2[:, :, 3] / 255. * alpha * ambient_alpha
+        res = src1[:, :, :] * (1 - alpha_ary) + src2[:, :, :] * alpha_ary
         # alpha blending preserves the alpha mask channel of the
         # destination (src1)
         res[:, :, -1] = src1[:, :, -1]
@@ -154,8 +151,9 @@ class TestAlphaBlackImage(unittest.TestCase):
         except AssertionError:
             size = sum(array(desired.shape))
             if size < 10:
-                diff = abs(ravel(actual.astype(Int32)) -
-                           ravel(desired.astype(Int32)))
+                diff = abs(
+                    ravel(actual.astype(Int32)) - ravel(
+                        desired.astype(Int32)))
                 msg = '\n'
                 msg += 'desired: %s\n' % ravel(desired)
                 msg += 'actual: %s\n' % ravel(actual)

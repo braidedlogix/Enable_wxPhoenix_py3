@@ -1,6 +1,3 @@
-
-
-
 from numpy import array, pi
 
 # Enthought library imports
@@ -95,10 +92,12 @@ class Compass(Component):
         # Create dict mapping direction to (x, y, x2, y2)
         near = offset - half_length
         far = offset + half_length
-        rects = { "n": array((-half_width, near, half_width, far)),
-                  "e": array((near, -half_width, far, half_width)),
-                  "s": array((-half_width, -far, half_width, -near)),
-                  "w": array((-far, -half_width, -near, half_width)) }
+        rects = {
+            "n": array((-half_width, near, half_width, far)),
+            "e": array((near, -half_width, far, half_width)),
+            "s": array((-half_width, -far, half_width, -near)),
+            "w": array((-far, -half_width, -near, half_width))
+        }
         if self.enable_center:
             rects["c"] = array((-near, -near, near, near))
         for direction, rect in list(rects.items()):
@@ -136,22 +135,20 @@ class Compass(Component):
         if self.fixed_preferred_size is not None:
             return self.fixed_preferred_size
         else:
-            extent = self.scale * 2 * (self.spacing + self.triangle_length/2)
+            extent = self.scale * 2 * (self.spacing + self.triangle_length / 2)
             return [extent + self.hpadding, extent + self.vpadding]
 
     def _draw_mainlayer(self, gc, view_bounds=None, mode="normal"):
         with gc:
             gc.set_stroke_color(self.color_)
             gc.set_line_width(self.line_width)
-            gc.translate_ctm(self.x + self.width/2, self.y + self.height/2)
+            gc.translate_ctm(self.x + self.width / 2, self.y + self.height / 2)
             s = self.spacing
-            points_and_angles = [ ("n", (0, s), 0),
-                                  ("e", (s, 0), -pi/2),
-                                  ("s", (0, -s), pi),
-                                  ("w", (-s, 0), pi/2) ]
+            points_and_angles = [("n", (0, s), 0), ("e", (s, 0), -pi / 2),
+                                 ("s", (0, -s), pi), ("w", (-s, 0), pi / 2)]
 
             gc.scale_ctm(self.scale, self.scale)
-            for dir, (dx,dy), angle in points_and_angles:
+            for dir, (dx, dy), angle in points_and_angles:
                 if self.event_state == "clicked" and self.clicked == dir:
                     gc.set_fill_color(self.clicked_color_)
                 else:
@@ -161,11 +158,9 @@ class Compass(Component):
                 half_height = self.triangle_length / 2
                 half_width = self.triangle_width / 2
                 gc.begin_path()
-                gc.lines( [(-half_width, -half_height),
-                           (0, half_height),
-                           (half_width, -half_height),
-                           (-half_width, -half_height),
-                           (0, half_height)] )
+                gc.lines([(-half_width, -half_height), (0, half_height),
+                          (half_width, -half_height),
+                          (-half_width, -half_height), (0, half_height)])
                 gc.draw_path()
                 gc.rotate_ctm(-angle)
                 gc.translate_ctm(-dx, -dy)
@@ -175,9 +170,8 @@ class Compass(Component):
                 gc.set_fill_color(self.clicked_color_)
                 half_width = self.triangle_width / 2
                 gc.begin_path()
-                gc.lines( [(-half_width, -half_width),
-                           (half_width, -half_height),
-                           (half_width, half_width),
-                           (-half_width, half_width),
-                           (-half_width, -half_width)] )
+                gc.lines(
+                    [(-half_width, -half_width), (half_width, -half_height),
+                     (half_width, half_width), (-half_width, half_width),
+                     (-half_width, -half_width)])
                 gc.draw_path()

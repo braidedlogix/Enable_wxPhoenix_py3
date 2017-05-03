@@ -10,10 +10,10 @@ import sys
 if 'develop' in sys.argv:
     idx = sys.argv.index('develop')
     compiler = []
-    for arg in sys.argv[idx+1:]:
+    for arg in sys.argv[idx + 1:]:
         if arg.startswith('--compiler='):
             compiler = ['-c', arg[11:]]
-            del sys.argv[idx+1:]
+            del sys.argv[idx + 1:]
     # insert extra options right before 'develop'
     sys.argv[idx:idx] = ['build_src', '--inplace', 'build_clib'] + compiler + \
         ['build_ext', '--inplace'] + compiler
@@ -55,6 +55,7 @@ def read_version_py(path):
 
 def git_version():
     """ Return the git revision as a string """
+
     def _minimal_ext_cmd(cmd):
         # construct minimal environment
         env = {}
@@ -67,8 +68,9 @@ def git_version():
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
         out = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, env=env,
-        ).communicate()[0]
+            cmd,
+            stdout=subprocess.PIPE,
+            env=env, ).communicate()[0]
         return out
 
     try:
@@ -127,10 +129,12 @@ if not is_released:
         fullversion += '.dev{0}'.format(dev_num)
 
     with open(filename, "wt") as fp:
-        fp.write(template.format(version=VERSION,
-                                 full_version=fullversion,
-                                 git_revision=git_revision,
-                                 is_released=IS_RELEASED))
+        fp.write(
+            template.format(
+                version=VERSION,
+                full_version=fullversion,
+                git_revision=git_revision,
+                is_released=IS_RELEASED))
 
 
 # Configure python extensions.
@@ -142,8 +146,7 @@ def configuration(parent_package='', top_path=None):
         ignore_setup_xxx_py=True,
         assume_default_configuration=True,
         delegate_options_to_subpackages=True,
-        quiet=True,
-    )
+        quiet=True, )
 
     config.add_subpackage('kiva')
 
@@ -186,6 +189,7 @@ class MyClean(distutils.command.clean.clean):
     numpy.distutils implements a clean command.
 
     '''
+
     def run(self):
         distutils.command.clean.clean.run(self)
 
@@ -223,8 +227,7 @@ class MyClean(distutils.command.clean.clean):
 
             # Misc
             join("agg", "src", "gl", "plat_support_wrap.cpp"),
-            join("agg", "src", "gl", "plat_support.py"),
-            )
+            join("agg", "src", "gl", "plat_support.py"), )
         for f in INPLACE_FILES:
             f = join("kiva", f)
             if os.path.isfile(f):
@@ -239,19 +242,22 @@ if __name__ == "__main__":
     # Build the full set of packages by appending any found by setuptools'
     # find_packages to those discovered by numpy.distutils.
     config = configuration().todict()
-    packages = setuptools.find_packages(exclude=config['packages'] +
-                                        ['docs', 'examples'])
+    packages = setuptools.find_packages(
+        exclude=config['packages'] + ['docs', 'examples'])
     packages += ['enable.savage.trait_defs.ui.wx.data']
     config['packages'] += packages
 
-    setup(name='enable',
-          version=__version__,
-          author='Enthought, Inc',
-          author_email='info@enthought.com',
-          maintainer='ETS Developers',
-          maintainer_email='enthought-dev@enthought.com',
-          url='https://github.com/enthought/enable/',
-          classifiers=[c.strip() for c in """\
+    setup(
+        name='enable',
+        version=__version__,
+        author='Enthought, Inc',
+        author_email='info@enthought.com',
+        maintainer='ETS Developers',
+        maintainer_email='enthought-dev@enthought.com',
+        url='https://github.com/enthought/enable/',
+        classifiers=[
+            c.strip()
+            for c in """\
               Development Status :: 5 - Production/Stable
               Intended Audience :: Developers
               Intended Audience :: Science/Research
@@ -266,32 +272,33 @@ if __name__ == "__main__":
               Topic :: Scientific/Engineering
               Topic :: Software Development
               Topic :: Software Development :: Libraries
-              """.splitlines() if len(c.strip()) > 0],
-          cmdclass={
-              # Work around a numpy distutils bug by forcing the use of the
-              # setuptools' sdist command.
-              'sdist': setuptools.command.sdist.sdist,
-              # Use our customized commands
-              'clean': MyClean,
-              'build_py': MyBuildPy,
-          },
-          description='low-level drawing and interaction',
-          long_description=open('README.rst').read(),
-          # Note that this URL is only valid for tagged releases.
-          download_url=('https://github.com/enthought/enable/archive/'
-                        '{0}.tar.gz'.format(__version__)),
-          install_requires=__requires__,
-          license='BSD',
-          package_data={
-              '': ['*.zip', '*.svg', 'images/*'],
-              'enable': ['tests/primitives/data/PngSuite/*.png'],
-              'kiva': ['tests/agg/doubleprom_soho_full.jpg'],
-          },
-          platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
-          zip_safe=False,
-          use_2to3=True,
-          # The imports fixer makes breaking changes (replacing __builtin__
-          # with builtins) in the auto-generated SWIG files like
-          # kiva/agg/agg.py.
-          use_2to3_exclude_fixers=['lib2to3.fixes.fix_imports'],
-          **config)
+              """.splitlines() if len(c.strip()) > 0
+        ],
+        cmdclass={
+            # Work around a numpy distutils bug by forcing the use of the
+            # setuptools' sdist command.
+            'sdist': setuptools.command.sdist.sdist,
+            # Use our customized commands
+            'clean': MyClean,
+            'build_py': MyBuildPy,
+        },
+        description='low-level drawing and interaction',
+        long_description=open('README.rst').read(),
+        # Note that this URL is only valid for tagged releases.
+        download_url=('https://github.com/enthought/enable/archive/'
+                      '{0}.tar.gz'.format(__version__)),
+        install_requires=__requires__,
+        license='BSD',
+        package_data={
+            '': ['*.zip', '*.svg', 'images/*'],
+            'enable': ['tests/primitives/data/PngSuite/*.png'],
+            'kiva': ['tests/agg/doubleprom_soho_full.jpg'],
+        },
+        platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
+        zip_safe=False,
+        use_2to3=True,
+        # The imports fixer makes breaking changes (replacing __builtin__
+        # with builtins) in the auto-generated SWIG files like
+        # kiva/agg/agg.py.
+        use_2to3_exclude_fixers=['lib2to3.fixes.fix_imports'],
+        **config)

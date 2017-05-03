@@ -23,8 +23,6 @@
 # * BUG: Weird behavior with compound plots
 # * Limitation: text widths are lousy if reportlab is not installed
 # * Missing feature: rotated text
-
-
 """
 Miscellaneous notes:
 
@@ -49,19 +47,21 @@ from .constants import FILL, FILL_STROKE, EOF_FILL_STROKE, EOF_FILL, STROKE
 from . import agg
 from base64 import b64encode
 
+
 def _strpoints(points):
     c = StringIO()
-    for x,y in points:
-        c.write('%3.2f,%3.2f ' % (x,y))
+    for x, y in points:
+        c.write('%3.2f,%3.2f ' % (x, y))
     return c.getvalue()
 
+
 def _mkstyle(kw):
-    return '; '.join([str(k) + ':' + str(v) for k,v in list(kw.items())])
+    return '; '.join([str(k) + ':' + str(v) for k, v in list(kw.items())])
 
 
 def default_filter(kw1):
     kw = {}
-    for (k,v) in list(kw1.items()):
+    for (k, v) in list(kw1.items()):
         if type(v) == type(()):
             if v[0] != v[1]:
                 kw[k] = v[0]
@@ -69,20 +69,20 @@ def default_filter(kw1):
             kw[k] = v
     return kw
 
+
 line_cap_map = {
     constants.CAP_ROUND: 'round',
     constants.CAP_SQUARE: 'square',
     constants.CAP_BUTT: 'butt'
-    }
+}
 
 line_join_map = {
     constants.JOIN_ROUND: 'round',
     constants.JOIN_BEVEL: 'bevel',
     constants.JOIN_MITER: 'miter'
-    }
+}
 
-font_map = {'Arial': 'Helvetica',
-            }
+font_map = {'Arial': 'Helvetica', }
 from . import _fontdata
 
 xmltemplate = """<?xml version="1.0"?>
@@ -118,8 +118,7 @@ htmltemplate = """<html xmlns:svg="http://www.w3.org/2000/svg"
 </html>
 """
 
-font_map = {'Arial': 'Helvetica',
-            }
+font_map = {'Arial': 'Helvetica', }
 try:
     # expensive way of computing string widths
     import reportlab.pdfbase.pdfmetrics as pdfmetrics
@@ -132,13 +131,16 @@ except ImportError:
 
 font_face_map = {'Arial': 'Helvetica', '': 'Helvetica'}
 
+
 # This backend has no compiled path object, yet.
 class CompiledPath(object):
     pass
 
-_clip_counter = 0
-class GraphicsContext(basecore2d.GraphicsContextBase):
 
+_clip_counter = 0
+
+
+class GraphicsContext(basecore2d.GraphicsContextBase):
     def __init__(self, size, *args, **kwargs):
         super(GraphicsContext, self).__init__(self, size, *args, **kwargs)
         self.size = size
@@ -149,7 +151,8 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
     def render(self, format):
         assert format == 'svg'
         height, width = self.size
-        contents = self.contents.getvalue().replace("<svg:", "<").replace("</svg:", "</")
+        contents = self.contents.getvalue().replace("<svg:", "<").replace(
+            "</svg:", "</")
         return xmltemplate % locals()
 
     def clear(self):
@@ -167,21 +170,22 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
         if ext == '.svg':
             template = xmltemplate
             width, height = self.size
-            contents = self.contents.getvalue().replace("<svg:", "<").replace("</svg:", "</")
+            contents = self.contents.getvalue().replace("<svg:", "<").replace(
+                "</svg:", "</")
         elif ext == '.html':
-            width, height = self.size[0]*3, self.size[1]*3
+            width, height = self.size[0] * 3, self.size[1] * 3
             contents = self.contents.getvalue()
             template = htmltemplate
         else:
             raise ValueError("don't know how to write a %s file" % ext)
         f.write(template % locals())
 
-
     # Text handling code
 
     def set_font(self, font):
         self.face_name = font_face_map.get(font.face_name, font.face_name)
-        self.font = pdfmetrics.Font(self.face_name, self.face_name, pdfmetrics.defaultEncoding)
+        self.font = pdfmetrics.Font(self.face_name, self.face_name,
+                                    pdfmetrics.defaultEncoding)
         self.font_size = font.size
 
     # actual implementation =)
@@ -189,23 +193,28 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
     def device_show_text(self, text):
         ttm = self.get_text_matrix()
         ctm = self.get_ctm()  # not device_ctm!!
-        m = affine.concat(ctm,ttm)
+        m = affine.concat(ctm, ttm)
         #height = self.get_full_text_extent(text)[1]
-        a,b,c,d,tx,ty = affine.affine_params(m)
-        transform = 'matrix(%(a)f,%(b)f,%(c)f,%(d)f,%(tx)f,%(ty)f) scale(1,-1)' % locals()
-        self._emit('text', contents=text,
-                   kw={'font-family': self.face_name,
-                       'font-size': str(self.font_size),
-                       'xml:space': 'preserve',
-                       'transform': transform})
+        a, b, c, d, tx, ty = affine.affine_params(m)
+        transform = 'matrix(%(a)f,%(b)f,%(c)f,%(d)f,%(tx)f,%(ty)f) scale(1,-1)' % locals(
+        )
+        self._emit(
+            'text',
+            contents=text,
+            kw={
+                'font-family': self.face_name,
+                'font-size': str(self.font_size),
+                'xml:space': 'preserve',
+                'transform': transform
+            })
 
     def get_full_text_extent(self, text):
-        ascent,descent=_fontdata.ascent_descent[self.face_name]
+        ascent, descent = _fontdata.ascent_descent[self.face_name]
         descent = (-descent) * self.font_size / 1000.0
         ascent = ascent * self.font_size / 1000.0
         height = ascent + descent
         width = pdfmetrics.stringWidth(text, self.face_name, self.font_size)
-        return width, height, descent, height*1.2 # assume leading of 1.2*height
+        return width, height, descent, height * 1.2  # assume leading of 1.2*height
 
     def device_draw_image(self, img, rect):
         """
@@ -229,7 +238,6 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
         # do it nicely (using convert_pixel_format), and if not, we do
         # it brute-force using Agg.
 
-
         if type(img) == type(array([])):
             # Numeric array
             converted_img = agg.GraphicsContextArray(img, pix_format='rgba32')
@@ -245,14 +253,13 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
             # Should probably take this into account
             # interp = img.get_image_interpolation()
         else:
-            warnings.warn("Cannot render image of type %r into SVG context."
-                          % type(img))
+            warnings.warn("Cannot render image of type %r into SVG context." %
+                          type(img))
             return
 
         # converted_img now holds an Agg graphics context with the image
-        pil_img = pilfromstring(format,
-                                (converted_img.width(),
-                                 converted_img.height()),
+        pil_img = pilfromstring(format, (converted_img.width(),
+                                         converted_img.height()),
                                 piltostring(converted_img.bmp_array))
         if rect == None:
             rect = (0, 0, img.width(), img.height())
@@ -260,7 +267,8 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
         left, top, width, height = rect
         if width != img.width() or height != img.height():
             # This is not strictly required.
-            pil_img = pil_img.resize((int(width), int(height)), PilImage.NEAREST)
+            pil_img = pil_img.resize(
+                (int(width), int(height)), PilImage.NEAREST)
 
         png_buffer = StringIO()
         pil_img.save(png_buffer, 'png')
@@ -272,13 +280,17 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
         # Place the image on the page.
         # Using bottom instead of top here to account for the y-flip.
         m = affine.translate(m, left, height + top)
-        transform = 'matrix(%f,%f,%f,%f,%f,%f) scale(1,-1)' % affine.affine_params(m)
+        transform = 'matrix(%f,%f,%f,%f,%f,%f) scale(1,-1)' % affine.affine_params(
+            m)
         # Flip y to reverse the flip at the start of the document.
         image_data = 'data:image/png;base64,' + b64_img_data
-        self._emit('image', transform=transform,
-                   width=str(width), height=str(height),
-                   preserveAspectRatio='none',
-                   kw={ 'xlink:href': image_data })
+        self._emit(
+            'image',
+            transform=transform,
+            width=str(width),
+            height=str(height),
+            preserveAspectRatio='none',
+            kw={'xlink:href': image_data})
 
     def device_fill_points(self, points, mode):
         points = self._fixpoints(points)
@@ -300,39 +312,51 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
         width = '%3.3f' % self.state.line_width
         clip_id = getattr(self.state, '_clip_id', None)
         if clip_id:
-            clip = 'url(#' + clip_id +')'
+            clip = 'url(#' + clip_id + ')'
         else:
             clip = None
-        a,b,c,d,tx,ty = affine.affine_params(self.get_ctm())
+        a, b, c, d, tx, ty = affine.affine_params(self.get_ctm())
         transform = 'matrix(%(a)f,%(b)f,%(c)f,%(d)f,%(tx)f,%(ty)f)' % locals()
         if mode == STROKE:
             opacity = '%1.3f' % self.state.line_color[-1]
-            self._emit('polyline',
-                        transform=transform,
-                        points=_strpoints(points),
-                        kw=default_filter({'clip-path': (clip, None)}),
-                        style=_mkstyle(default_filter({'opacity': (opacity, "1.000"),
-                                        'stroke': stroke,
-                                        'fill': 'none',
-                                        'stroke-width': (width, "1.000"),
-                                        'stroke-linejoin': (linejoin, 'miter'),
-                                        'stroke-linecap': (linecap, 'butt'),
-                                        'stroke-dasharray': (dasharray, 'none')})))
+            self._emit(
+                'polyline',
+                transform=transform,
+                points=_strpoints(points),
+                kw=default_filter({
+                    'clip-path': (clip, None)
+                }),
+                style=_mkstyle(
+                    default_filter({
+                        'opacity': (opacity, "1.000"),
+                        'stroke': stroke,
+                        'fill': 'none',
+                        'stroke-width': (width, "1.000"),
+                        'stroke-linejoin': (linejoin, 'miter'),
+                        'stroke-linecap': (linecap, 'butt'),
+                        'stroke-dasharray': (dasharray, 'none')
+                    })))
 
         else:
             opacity = '%1.3f' % self.state.fill_color[-1]
-            self._emit('polygon',
-                        transform=transform,
-                        points=_strpoints(points),
-                        kw=default_filter({'clip-path': (clip, None)}),
-                        style=_mkstyle(default_filter({'opacity': (opacity, "1.000"),
-                                        'stroke-width': (width, "1.000"),
-                                        'fill': fill,
-                                        'fill-rule': rule,
-                                        'stroke': stroke,
-                                        'stroke-linejoin': (linejoin, 'miter'),
-                                        'stroke-linecap': (linecap, 'butt'),
-                                        'stroke-dasharray': (dasharray, 'none')})))
+            self._emit(
+                'polygon',
+                transform=transform,
+                points=_strpoints(points),
+                kw=default_filter({
+                    'clip-path': (clip, None)
+                }),
+                style=_mkstyle(
+                    default_filter({
+                        'opacity': (opacity, "1.000"),
+                        'stroke-width': (width, "1.000"),
+                        'fill': fill,
+                        'fill-rule': rule,
+                        'stroke': stroke,
+                        'stroke-linejoin': (linejoin, 'miter'),
+                        'stroke-linecap': (linecap, 'butt'),
+                        'stroke-dasharray': (dasharray, 'none')
+                    })))
 
     def device_stroke_points(self, points, mode):
         # handled by device_fill_points
@@ -340,7 +364,7 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
 
     def _build(self, elname, contents=None, **kw):
         x = '<' + elname + ' '
-        for k,v in list(kw.items()):
+        for k, v in list(kw.items()):
             if type(v) == type(0.0):
                 v = '%3.3f' % v
             elif type(v) == type(0):
@@ -355,17 +379,24 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
             if elname != 'text':
                 x += '\n'
             x += contents
-            x += '</'+elname+'>\n'
+            x += '</' + elname + '>\n'
         return x
 
     def _debug_draw_clipping_path(self, x, y, width, height):
-        a,b,c,d,tx,ty = affine.affine_params(self.get_ctm())
+        a, b, c, d, tx, ty = affine.affine_params(self.get_ctm())
         transform = 'matrix(%(a)f,%(b)f,%(c)f,%(d)f,%(tx)f,%(ty)f)' % locals()
-        self._emit('rect', x=x, y=y, width=width, height=height,
-                   transform=transform,
-                   style=_mkstyle({'stroke-width': 5,
-                                   'fill':'none',
-                                   'stroke': 'green'}))
+        self._emit(
+            'rect',
+            x=x,
+            y=y,
+            width=width,
+            height=height,
+            transform=transform,
+            style=_mkstyle({
+                'stroke-width': 5,
+                'fill': 'none',
+                'stroke': 'green'
+            }))
 
     def device_set_clipping_path(self, x, y, width, height):
         #self._debug_draw_clipping_path(x, y, width, height)
@@ -373,11 +404,12 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
         global _clip_counter
         self.state._clip_id = 'clip_%d' % _clip_counter
         _clip_counter += 1
-        x,y = self._fixpoints([[x,y]])[0]
-        a,b,c,d,tx,ty = affine.affine_params(self.get_ctm())
+        x, y = self._fixpoints([[x, y]])[0]
+        a, b, c, d, tx, ty = affine.affine_params(self.get_ctm())
         transform = 'matrix(%(a)f,%(b)f,%(c)f,%(d)f,%(tx)f,%(ty)f)' % locals()
         rect = self._build('rect', x=x, y=y, width=width, height=height)
-        clippath = self._build('clipPath', contents=rect, id=self.state._clip_id)
+        clippath = self._build(
+            'clipPath', contents=rect, id=self.state._clip_id)
         self._emit('g', transform=transform, contents=clippath)
 
     def device_destroy_clipping_path(self):
@@ -392,8 +424,8 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
         # "global" sizing.
         # XXX this should be made more efficient for NumPy arrays
         np = []
-        for (x,y) in points:
-            np.append((x,self._height-y))
+        for (x, y) in points:
+            np.append((x, self._height - y))
         return np
 
     def _emit(self, name, contents=None, kw={}, **otherkw):
@@ -409,11 +441,11 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
             if name != 'text':
                 self.contents.write('\n')
             self.contents.write(contents)
-            self.contents.write('</svg:'+name+'>\n')
+            self.contents.write('</svg:' + name + '>\n')
 
     def _color(self, color):
-        r,g,b,a = color
-        return '#%02x%02x%02x' % (int(r*255),int(g*255),int(b*255))
+        r, g, b, a = color
+        return '#%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255))
 
     def _dasharray(self):
         dasharray = ''
@@ -435,7 +467,7 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
 
 
 def font_metrics_provider():
-    return GraphicsContext((1,1))
+    return GraphicsContext((1, 1))
 
 
-SVGGC = GraphicsContext # for b/w compatibility
+SVGGC = GraphicsContext  # for b/w compatibility

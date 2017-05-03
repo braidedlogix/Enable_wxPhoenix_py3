@@ -45,7 +45,6 @@ class AbstractOverlay(Component):
         """
         pass
 
-
     #----------------------------------------------------------------------
     # Concrete methods / reimplementations of Component methods
     #----------------------------------------------------------------------
@@ -89,5 +88,6 @@ class AbstractOverlay(Component):
             self.component.request_redraw()
         super(AbstractOverlay, self)._request_redraw()
         return
+
 
 # EOF

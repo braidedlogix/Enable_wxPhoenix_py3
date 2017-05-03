@@ -5,7 +5,6 @@
 # This file is open source software distributed according to the terms in
 # LICENSE.txt
 #
-
 """ This is a minimum example for adding a context menu to plot.
 
 """

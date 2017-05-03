@@ -13,6 +13,7 @@
 
 from enable.api import Component, Window
 
+
 class _DummyComponent(Component):
     def __init__(self, draw_func, *args, **kwargs):
         super(_DummyComponent, self).__init__(*args, **kwargs)

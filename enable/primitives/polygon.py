@@ -1,6 +1,5 @@
 """A filled polygon component"""
 
-
 # Major package imports.
 from numpy import array
 
@@ -51,7 +50,8 @@ class Polygon(Component):
 
     # The rule to use to determine the inside of the polygon.
     inside_rule = Trait('winding',
-                        {'winding':FILL_STROKE, 'oddeven':EOF_FILL_STROKE })
+                        {'winding': FILL_STROKE,
+                         'oddeven': EOF_FILL_STROKE})
 
     # The points that make up this polygon.
     model = Instance(PolygonModel, ())
@@ -65,13 +65,19 @@ class Polygon(Component):
     # The size of each vertex.
     vertex_size = Float(3.0)
 
-    traits_view = View(Group('<component>', id = 'component'),
-                       Group('<links>', id = 'links'),
-                       Group('background_color', '_',
-                             'border_color', '_',
-                             'border_size',
-                             id = 'Box',
-                             style = 'custom'))
+    traits_view = View(
+        Group(
+            '<component>', id='component'),
+        Group(
+            '<links>', id='links'),
+        Group(
+            'background_color',
+            '_',
+            'border_color',
+            '_',
+            'border_size',
+            id='Box',
+            style='custom'))
 
     colorchip_map = {'color': 'color', 'alt_color': 'border_color'}
 
@@ -115,7 +121,7 @@ class Polygon(Component):
 
         http://softsurfer.com/Archive/algorithm_0103/algorithm_0103.htm
         """
-        point_array = array((point,))
+        point_array = array((point, ))
         vertices = array(self.model.points)
         winding = self.inside_rule == 'winding'
         result = points_in_polygon(point_array, vertices, winding)
@@ -151,21 +157,22 @@ class Polygon(Component):
 
         return
 
-    def _draw_open ( self, gc ):
+    def _draw_open(self, gc):
         "Draw this polygon as an open polygon"
 
         if len(self.model.points) > 2:
             # Set the drawing parameters.
-            gc.set_fill_color( self.background_color_ )
-            gc.set_stroke_color( self.border_color_ )
-            gc.set_line_width( self.border_size )
-            gc.set_line_dash( self.border_dash )
+            gc.set_fill_color(self.background_color_)
+            gc.set_stroke_color(self.border_color_)
+            gc.set_line_width(self.border_size)
+            gc.set_line_dash(self.border_dash)
 
             # Draw the path.
             gc.begin_path()
             gc.move_to(self.model.points[0][0] - self.x,
                        self.model.points[0][1] + self.y)
-            offset_points = [(x - self.x, y + self.y) for x, y in self.model.points ]
+            offset_points = [(x - self.x, y + self.y)
+                             for x, y in self.model.points]
             gc.lines(offset_points)
             gc.draw_path(self.inside_rule_)
 
@@ -190,8 +197,8 @@ class Polygon(Component):
 
         else:
             for x, y in offset_points:
-                gc.draw_rect((x - offset, y - offset,
-                             self.vertex_size, self.vertex_size), FILL)
+                gc.draw_rect((x - offset, y - offset, self.vertex_size,
+                              self.vertex_size), FILL)
         return
 
 
