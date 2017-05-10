@@ -296,7 +296,7 @@ if __name__ == "__main__":
         },
         platforms=["Windows", "Linux", "Mac OS-X", "Unix", "Solaris"],
         zip_safe=False,
-        use_2to3=True,
+        use_2to3=False,
         # The imports fixer makes breaking changes (replacing __builtin__
         # with builtins) in the auto-generated SWIG files like
         # kiva/agg/agg.py.

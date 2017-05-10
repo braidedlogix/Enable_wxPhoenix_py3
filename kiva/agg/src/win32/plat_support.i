@@ -122,7 +122,11 @@ namespace agg24
         window_dc = getattr(window,'_dc',None)
         if window_dc is None:
             window_dc = wx.PaintDC(window)
-        self.draw(window_dc.GetHDC(), x, y, width, height)
+        #self.draw(window_dc.GetHDC(), x, y, width, height) #deprecated
+        import ctypes
+        self.draw(ctypes.c_ulong(window_dc.GetHandle()).value, 
+                  x, y, width, height)
+
         return
 
       %}

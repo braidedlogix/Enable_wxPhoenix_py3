@@ -26,10 +26,16 @@ from traitsui.api import View, Group
 
 # Local relative imports
 from .component import Component
-from .base import LEFT, RIGHT, TOP, BOTTOM, HCENTER, VCENTER, EMBOSSED, ENGRAVED, \
+#from .base import LEFT, RIGHT, TOP, BOTTOM, HCENTER, VCENTER, EMBOSSED, #ENGRAVED, \
+#                 transparent_color, xy_in_bounds, add_rectangles
+from .base import LEFT, RIGHT, TOP, BOTTOM, HCENTER, VCENTER,\
                  transparent_color, xy_in_bounds, add_rectangles
+EMBOSSED=-10000
+ENGRAVED=-10001
+
+
 from .enable_traits import spacing_trait, padding_trait, margin_trait,\
-                          border_size_trait, image_trait
+                          border_size_trait#, image_trait
 from .enable_traits import position_trait, font_trait, engraving_trait
 from .radio_group import RadioStyle, RadioGroup
 
@@ -53,7 +59,7 @@ class LabelTraits(HasTraits):
     shadow_color = ColorTrait("white")
     style = engraving_trait
 
-    image = image_trait
+    #image = image_trait
     image_position = position_trait("left")
     image_orientation = orientation_trait
 
@@ -107,8 +113,7 @@ class LabelTraits(HasTraits):
             'image_position',
             '_',
             'image_orientation',
-            ' ',
-            'image',
+            ' ', #'image',
             id='position',
             style='custom'),
         Group(

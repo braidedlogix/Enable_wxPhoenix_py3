@@ -13,7 +13,7 @@ from traitsui.api import Group, View
 
 # Relative imports
 from .component import Component
-from .enable_traits import layout_style_trait
+#from .enable_traits import layout_style_trait
 from functools import reduce
 
 #------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ class ScrollBar(Component):
 
     position = Trait(0.0, valid_position)
     range = Trait((0.0, 100.0, 10.0, 1.0), valid_range)
-    style = layout_style_trait
+    #style = layout_style_trait
 
     line_up = Event
     line_down = Event
@@ -100,7 +100,7 @@ class ScrollBar(Component):
         Group(
             '<links>', id='links'),
         Group(
-            'style',
+            #'style',
             ' ',
             'position',
             'low',

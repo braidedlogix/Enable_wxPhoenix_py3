@@ -717,7 +717,7 @@ namespace kiva {
             %feature("shadow")  draw_image(kiva::graphics_context_base* img,
                                            double rect[4], bool force_copy=false)
             %{
-            def draw_image(self, img, rect=None, force_copy=False):
+            def _draw_image(self, img, rect=None, force_copy=False):
                 if isinstance(img, ndarray):
                     # The C++ implementation only handles other
                     # GraphicsContexts, so create one.
@@ -728,16 +728,77 @@ namespace kiva {
                     img = GraphicsContextArray(img, pix_format=pix_format)
                 if rect is None:
                     rect = array((0,0,img.width(),img.height()),float)
-                # The following if block is required to prevent substantial 
-                # segfaulting. It does not really work completely though
-                if isinstance (img, GraphicsContextSystem ):
-                    pass
-                else:
-                    img2 = GraphicsContextSystem((img.width(),img.height()), pix_format=img.format())
-                    img2.bmp_array=img.bmp_array
-                    img2.pixel_map.bmp_array=img.bmp_array
-                    img=img2
                 return _agg.GraphicsContextArray_draw_image(self,img,rect,force_copy)
+            # original is creating segfaults on Linux and Python 3 when 
+            #   img and self are not the same format or depth or required shape
+            # The following very ugly hack works on Windows and Linux under Python 3
+            #  interpolation type is stuck at bilinear for now, but a simple dict to
+            #  translate gc.get_image_interpolation() to corresponding PIL/scipy 
+            #  imresize format could easily be fixed
+ 
+            def bgra_to_from_rgba(self, ary, bottom_up=0, formatin=None):
+                d1,d2,depth=ary.shape
+                pixfmt_out=self.format()
+                if pixfmt_out[-2:]=='32':
+                    ary_out= zeros((d1, d2, 4), uint8)
+                    dout=4
+                else:
+                    ary_out= zeros((d1, d2, 3), uint8)
+                    dout=3
+                selfbottom=self.bottom_up()
+
+                if self.get_ctm()[3]<0:
+                    direction=-1
+                else:
+                    direction=1
+                
+                if(formatin[0:-3]==pixfmt_out[0:-3]):
+                    ary_out[:,:,0]=ary[::direction,::1,0]#.T
+                    ary_out[:,:,2]=ary[::direction,::1,2]#.T
+                    ary_out[:,:,1]=ary[::direction,::1,1]#.T
+                else:
+                    ary_out[:,:,0]=ary[::direction,::1,2]#.T
+                    ary_out[:,:,2]=ary[::direction,::1,0]#.T
+                    ary_out[:,:,1]=ary[::direction,::1,1]#.T
+                if (depth==3) and (dout==4):
+                    ary_out[:,:,3]=255
+                elif (depth==4) and (dout==4):
+                    ary_out[:,:,3]=ary[::direction,:,3]#.T
+                else:
+                    pass
+                return ary_out
+
+            def draw_image(self, img, rect=None, force_copy=True):
+                if isinstance(img, ndarray):
+            # The C++ implementation only handles other
+            # GraphicsContexts, so create one.
+                    if img.shape[-1] == 3:
+                        pix_format = 'rgb24'
+                    else:
+                        pix_format = 'rgba32'
+                    img = GraphicsContextArray(img, pix_format=pix_format)
+                if rect is None:
+                    rect = array((0,0,img.width(),img.height()),float)
+                    rect1 = array(rect, float)
+                    bmp_array=img.bmp_array
+                else:
+                    rect1 = array(rect, float)
+                    if( (img.width(),img.height())==(rect[2],rect[3])):
+                       bmp_array=img.bmp_array
+                    else:
+                       from scipy.misc import imresize
+                       bmp_array=imresize(img.bmp_array, (int(rect[3]),int(rect[2])), interp='bilinear')
+                if((img.format()==self.format())):#&(self.bottom_up()==img.bottom_up())):
+                    img2=GraphicsContextArray(bmp_array, pix_format=self.format(), bottom_up=img.bottom_up())
+                else:
+                    img2=GraphicsContextArray(self.bgra_to_from_rgba(bmp_array, bottom_up=img.bottom_up(),
+                              formatin=img.format()), pix_format=self.format(), bottom_up=img.bottom_up())
+
+
+                if self.get_ctm()[3]<0:
+                    rect1 = array((rect1[0],rect1[3], rect1[2],rect1[3]),float)
+                return _agg.GraphicsContextArray_draw_image(self,img2,rect1,force_copy)
+            
             %}
 
             int draw_image(kiva::graphics_context_base* img,
@@ -952,57 +1013,6 @@ class Image(GraphicsContextArray):
             return self
         else:
             return new_img
-
-
-    # The following from __init__.py file to get namespace defined in agg.py
-    pix_format_string_map = {}
-    pix_format_string_map["gray8"] = pix_format_gray8
-    pix_format_string_map["rgb555"] = pix_format_rgb555
-    pix_format_string_map["rgb565"] = pix_format_rgb565
-    pix_format_string_map["rgb24"] = pix_format_rgb24
-    pix_format_string_map["bgr24"] = pix_format_bgr24
-    pix_format_string_map["rgba32"] = pix_format_rgba32
-    pix_format_string_map["argb32"] = pix_format_argb32
-    pix_format_string_map["abgr32"] = pix_format_abgr32
-    pix_format_string_map["bgra32"] = pix_format_bgra32
-
-    default_pix_format = "bgra32"
-
-    import types
-
-    try:
-        # Define a system-dependent GraphicsContext if there is a PixelMap
-        # class defined for the system (i.e. if plat_support was built)
-        from .plat_support import PixelMap
-
-        class GraphicsContextSystem(GraphicsContextArray):
-            def __init__(self,
-                         size,
-                         pix_format=default_pix_format,
-                         interpolation="nearest",
-                         bottom_up=True):
-                assert isinstance(size, tuple), repr(size)
-                width,height = size
-                pixel_map = PixelMap(
-                    width,
-                    height,
-                    pix_format_string_map[pix_format],
-                    255,
-                    bool(bottom_up)
-                ).set_bmp_array()
-                GraphicsContextArray.__init__(self, pixel_map.bmp_array,
-                                              pix_format, interpolation,
-                                              bottom_up)
-                self.pixel_map = pixel_map
-
-    except ImportError as ex:
-        # warn to stderr containing the exception. The warning should
-        # be an ImportWarning, but that is python 2.5+ specific
-        import warnings
-        warnings.warn("Error initializing Agg: %s" % ex, Warning, 2)
-
-        GraphicsContextSystem = None
-
 
 
 %}

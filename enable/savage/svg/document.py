@@ -143,7 +143,7 @@ def pathHandler(func):
 
         # the results willbe None, unless the path has something which affects
         # the render stack, such as clipping
-        if results != None:
+        if results is not None:
             cpath, cops = results
             path = cpath
             ops = cops + ops
