@@ -33,8 +33,8 @@ def main():
             gc.fill_path()
         gc.rotate_ctm(1)
     t2 = now()
-    print('total time, sec/image, img/sec:', t2 - t1,
-          (t2 - t1) / Nimages, Nimages / (t2 - t1))
+    print('total time, sec/image, img/sec:', t2 - t1, (t2 - t1) / Nimages,
+          Nimages / (t2 - t1))
     gc.save('lion.bmp')
 
 

@@ -377,8 +377,8 @@ PFB_EOF = chr(3)
 
 def _pfbSegLen(p, d):
     '''compute a pfb style length from the first 4 bytes of string d'''
-    return ((((ord(d[p + 3]) << 8) | ord(d[p + 2]) << 8) | ord(d[p + 1])) <<
-            8) | ord(d[p])
+    return ((((ord(d[p + 3]) << 8) | ord(d[p + 2]) << 8) | ord(d[p + 1]))
+            << 8) | ord(d[p])
 
 
 def _pfbCheck(p, d, m, fn):

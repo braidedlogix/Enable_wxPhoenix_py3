@@ -267,8 +267,8 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
         left, top, width, height = rect
         if width != img.width() or height != img.height():
             # This is not strictly required.
-            pil_img = pil_img.resize(
-                (int(width), int(height)), PilImage.NEAREST)
+            pil_img = pil_img.resize((int(width), int(height)),
+                                     PilImage.NEAREST)
 
         png_buffer = StringIO()
         pil_img.save(png_buffer, 'png')

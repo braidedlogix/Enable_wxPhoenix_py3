@@ -191,8 +191,8 @@ if ETSConfig.toolkit == 'wx':
     # Mostly copied from traits/ui/wx/color_trait.py
     def convert_from_wx_color(obj, name, value):
         if isinstance(value, ColourPtr) or isinstance(value, wx.Colour):
-            return (value.Red() / 255.0, value.Green() / 255.0, value.Blue() /
-                    255.0, 1.0)
+            return (value.Red() / 255.0, value.Green() / 255.0,
+                    value.Blue() / 255.0, 1.0)
         elif type(value) is int:
             num = int(value)
             return ((num >> 16) / 255.0, ((num >> 8) & 0xFF) / 255.0,

@@ -232,8 +232,8 @@ class SVGPathParser(object):
             y = float(token[1])
 
             token = next()
-            arguments.append((
-                (rx, ry), axis_rotation, large_arc_flag, sweep_flag, (x, y)))
+            arguments.append(((rx, ry), axis_rotation, large_arc_flag,
+                              sweep_flag, (x, y)))
 
         return (command, arguments), token
 

@@ -30,8 +30,8 @@ from .component import Component
 #                 transparent_color, xy_in_bounds, add_rectangles
 from .base import LEFT, RIGHT, TOP, BOTTOM, HCENTER, VCENTER,\
                  transparent_color, xy_in_bounds, add_rectangles
-EMBOSSED=-10000
-ENGRAVED=-10001
+EMBOSSED = -10000
+ENGRAVED = -10001
 
 
 from .enable_traits import spacing_trait, padding_trait, margin_trait,\
@@ -113,7 +113,7 @@ class LabelTraits(HasTraits):
             'image_position',
             '_',
             'image_orientation',
-            ' ', #'image',
+            ' ',  #'image',
             id='position',
             style='custom'),
         Group(

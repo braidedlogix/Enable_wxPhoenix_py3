@@ -109,8 +109,8 @@ def main2():
     print((shape(img)))
     gc = agg.GraphicsContextArray((1000, 1000))
     gc.draw_image(img)
-    print((pil_img.getpixel(
-        (300, 300)), img[300, 300], gc.bmp_array[300, 300]))
+    print((pil_img.getpixel((300, 300)), img[300, 300],
+           gc.bmp_array[300, 300]))
     gc.save('sun.bmp')
 
 

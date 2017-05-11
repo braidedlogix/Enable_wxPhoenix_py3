@@ -147,5 +147,5 @@ class ScrollBarTest(unittest.TestCase):
                 # set the scroll & redraw
                 scrollbar.scroll_position = 200
                 scrollbar._draw_mainlayer(self, self.window._gc)
-                self.assertEqual(scrollbar._control.value(), 700 - 375 -
-                                 (200 - 100))
+                self.assertEqual(scrollbar._control.value(),
+                                 700 - 375 - (200 - 100))

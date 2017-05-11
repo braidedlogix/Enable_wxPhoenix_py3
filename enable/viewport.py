@@ -171,8 +171,8 @@ class Viewport(Component):
             # inside of the viewport outwards.
             if self.enable_zoom and self.zoom != 1.0:
                 transform = affine.translate(transform, *self.view_position)
-                transform = affine.scale(transform, 1 / self.zoom, 1 /
-                                         self.zoom)
+                transform = affine.scale(transform, 1 / self.zoom,
+                                         1 / self.zoom)
                 transform = affine.translate(transform,
                                              -self.outer_position[0],
                                              -self.outer_position[1])

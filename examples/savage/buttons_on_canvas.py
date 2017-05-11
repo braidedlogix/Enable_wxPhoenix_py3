@@ -54,8 +54,8 @@ class CanvasButton(Component):
         with gc:
             gc.translate_ctm(self.x, self.y + self.height)
             doc_size = document.getSize()
-            gc.scale_ctm(self.width / float(doc_size[0]), -self.height /
-                         float(doc_size[1]))
+            gc.scale_ctm(self.width / float(doc_size[0]),
+                         -self.height / float(doc_size[1]))
             document.render(gc)
 
     def _draw_label(self, gc):

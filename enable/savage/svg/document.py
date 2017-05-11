@@ -966,8 +966,9 @@ class SVGDocument(object):
         try:
             brush = self.brushCache[(r, g, b, a)]
         except KeyError:
-            brush = self.brushCache.setdefault(
-                (r, g, b, a), self.renderer.createBrush((r, g, b, a)))
+            brush = self.brushCache.setdefault((r, g, b, a),
+                                               self.renderer.createBrush(
+                                                   (r, g, b, a)))
         return brush
 
     def addStrokeToPath(self, path, stroke):

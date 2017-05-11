@@ -87,8 +87,8 @@ class Renderer(NullRenderer):
 
         def convert_stop(stop):
             offset, red, green, blue, opacity = stop
-            color = wx.Colour(red * 255, green * 255, blue * 255, opacity *
-                              255)
+            color = wx.Colour(red * 255, green * 255, blue * 255,
+                              opacity * 255)
             return offset, color
 
         if wx.VERSION > (2, 9):
@@ -130,8 +130,8 @@ class Renderer(NullRenderer):
 
         def convert_stop(stop):
             offset, red, green, blue, opacity = stop
-            color = wx.Colour(red * 255, green * 255, blue * 255, opacity *
-                              255)
+            color = wx.Colour(red * 255, green * 255, blue * 255,
+                              opacity * 255)
             return offset, color
 
         if wx.VERSION > (2, 9):

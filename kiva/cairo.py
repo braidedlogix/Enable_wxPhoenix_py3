@@ -716,8 +716,8 @@ class GraphicsContext(basecore2d.GraphicsContextBase):
         current_point = self.get_path_current_point()
 
         # Get the endpoints on the curve where it touches the line segments
-        t1, t2 = arc_to_tangent_points(current_point, (x1, y1),
-                                       (x2, y2), radius)
+        t1, t2 = arc_to_tangent_points(current_point, (x1, y1), (x2, y2),
+                                       radius)
 
         # draw!
         self._ctx.line_to(*t1)
