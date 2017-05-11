@@ -70,7 +70,7 @@ def configuration(parent_package='', top_path=None):
         depends=["mac_context.h"], )
 
     wx_info = get_info('wx')
-    if wx_info:
+    """if wx_info:
         wx_release = '2.6'
         for macro, value in wx_info['define_macros']:
             if macro.startswith('WX_RELEASE_'):
@@ -99,5 +99,5 @@ def configuration(parent_package='', top_path=None):
             dict_append(info, define_macros=[("__WXMAC__", 1)])
             dict_append(info, **wx_info)
             config.add_extension(
-                'macport', [get_macport_cpp], depends=[macport_cpp], **wx_info)
+                'macport', [get_macport_cpp], depends=[macport_cpp], **wx_info)"""
     return config
