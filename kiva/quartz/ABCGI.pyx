@@ -1627,7 +1627,7 @@ cdef class CGBitmapContext(CGContext):
         if 'A' in mode:
             # Check the output format to see if it can handle an alpha channel.
             no_alpha_formats = ('jpg', 'bmp', 'eps', 'jpeg')
-            if ((isinstance(filename, basestring) and
+            if ((isinstance(filename, str) and
                  os.path.splitext(filename)[1][1:] in no_alpha_formats) or
                 (file_format.lower() in no_alpha_formats)):
                 img = img.convert('RGB')
@@ -1824,7 +1824,7 @@ cdef class CGImageFile(CGImage):
 
         data = self.bmp_array.data
         s = piltostring(img)
-        py_data = PyString_AsString(s)
+        py_data = PyUnicode_AsUTF8(s)
 
         memcpy(<void*>data, <void*>py_data, len(s))
 
@@ -2766,7 +2766,7 @@ cdef CTLineRef _create_ct_line(object the_string, CTFontRef font, object stroke_
         return NULL
 
     the_string = the_string.encode('utf-8')
-    c_string = PyString_AsString(the_string)
+    c_string = PyUnicode_AsUTF8(the_string)
 
     cf_string = CFStringCreateWithCString(NULL, c_string, kCFStringEncodingUTF8)
     cf_attr_string = CFAttributedStringCreateMutable(NULL, 0)

@@ -7,10 +7,10 @@ ctypedef void (*cobject_destr)(void *)
 cdef extern from "Python.h":
     ctypedef int size_t
     ctypedef int Py_ssize_t
-    char* PyString_AsString(object string)
-    object PyString_FromString(char* c_string)
-    object PyString_FromStringAndSize(char* v, Py_ssize_t len)
-    int PyString_AsStringAndSize(object obj, char **buffer, Py_ssize_t *length)
+    char* PyUnicode_AsUTF8(object string)
+    object PyUnicode_FromString(char* c_string)
+    object PyUnicode_FromStringAndSize(char* v, Py_ssize_t len)
+    int PyBytes_AsStringAndSize(object obj, char **buffer, Py_ssize_t *length)
     int PyObject_AsCharBuffer(object obj, char **buffer, Py_ssize_t *buffer_len)
     int PyObject_AsReadBuffer(object obj, void **buffer, Py_ssize_t *buffer_len)
     int PyObject_CheckReadBuffer(object o)
@@ -31,7 +31,7 @@ cdef extern from "Python.h":
     ctypedef int Py_UNICODE
     Py_UNICODE *PyUnicode_AS_UNICODE(ob)
     int PyUnicode_GET_SIZE(ob)
-    char *PyString_AS_STRING(ob)
+    char *PyBytes_AS_STRING(ob)
 
 
     object PyCObject_FromVoidPtr(void* cobj, cobject_destr destr)

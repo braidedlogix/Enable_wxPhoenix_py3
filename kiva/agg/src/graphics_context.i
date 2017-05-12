@@ -900,7 +900,7 @@ namespace kiva {
                 if fmt.endswith("32"):
                     pilformat = "RGBA"
                     pixelformat = "rgba32"
-                    if (isinstance(filename, basestring) and filename[-3:].lower() in FmtsWithoutAlpha) or \
+                    if (isinstance(filename, str) and filename[-3:].lower() in FmtsWithoutAlpha) or \
                        (file_format is not None and file_format.lower() in FmtsWithoutAlpha):
                         pilformat = "RGB"
                         pixelformat = "rgb24"
