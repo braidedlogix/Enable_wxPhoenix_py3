@@ -11,7 +11,7 @@ if sys.platform == "darwin":
         Returns the Port or the CGContext of a wxDC (or child class) instance.
         """
         if 'GetCGContext' in dir(dc):
-            ptr = dc.GetCGContext()
+            ptr = dc.GetHandle()#dc.GetCGContext()
             return int(ptr)
         else:
             from macport import get_macport as _get_macport

@@ -77,7 +77,7 @@ class Window(BaseWindow):
 
     def _create_gc(self, size, pix_format="bgra32"):
         self.dc = wx.ClientDC(self.control)
-        gc = _WindowGraphicsContext(self.dc.GetSizeTuple(),
+        gc = _WindowGraphicsContext(self.dc.GetSize().Get(),
                                     get_macport(self.dc))
         gc.begin()
         return gc

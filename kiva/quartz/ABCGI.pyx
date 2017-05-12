@@ -2619,28 +2619,28 @@ cdef class PiecewiseLinearColorFunction(ShadingFunction):
 
     def dump(self):
         cdef int i
-        print 'PiecewiseLinearColorFunction'
-        print '  num_stops = %i' % self.num_stops
-        print '  stops = ',
+        print('PiecewiseLinearColorFunction')
+        print('  num_stops = %i' % self.num_stops)
+        print('  stops = ',)
         for i from 0 <= i < self.num_stops:
-            print self.stops[i],
-        print
-        print '  red = ',
+            print(self.stops[i],)
+        print(' ')
+        print('  red = ',)
         for i from 0 <= i < self.num_stops:
-            print self.red[i],
-        print
-        print '  green = ',
+            print(self.red[i],)
+        print(" ")
+        print('  green = ',)
         for i from 0 <= i < self.num_stops:
-            print self.green[i],
-        print
-        print '  blue = ',
+            print(self.green[i],)
+        print(" ")
+        print('  blue = ',)
         for i from 0 <= i < self.num_stops:
-            print self.blue[i],
-        print
-        print '  alpha = ',
+            print(self.blue[i],)
+        print(" ")
+        print('  alpha = ',)
         for i from 0 <= i < self.num_stops:
-            print self.alpha[i],
-        print
+            print(self.alpha[i],)
+        print(" ")
 
     def __dealloc__(self):
         safe_free(self.stops)
@@ -2765,7 +2765,7 @@ cdef CTLineRef _create_ct_line(object the_string, CTFontRef font, object stroke_
     if text_len == 0:
         return NULL
 
-    the_string = the_string.encode('utf-8')
+    #the_string = the_string.encode('utf-8')
     c_string = PyUnicode_AsUTF8(the_string)
 
     cf_string = CFStringCreateWithCString(NULL, c_string, kCFStringEncodingUTF8)
