@@ -14,8 +14,10 @@
 # been on my list of things to do.
 #------------------------------------------------------------------------------
 
+
 # Qt imports.
 from pyface.qt import QtCore, QtGui, QtOpenGL
+from PyQt5 import QtWidgets
 
 # Enthought library imports.
 from enable.abstract_window import AbstractWindow
@@ -24,7 +26,6 @@ from traits.api import Instance
 
 # Local imports.
 from .constants import BUTTON_NAME_MAP, KEY_MAP, POINTER_MAP, DRAG_RESULTS_MAP
-
 
 class _QtWindowHandler(object):
     def __init__(self, qt_window, enable_window):
@@ -38,8 +39,8 @@ class _QtWindowHandler(object):
         qt_window.setAutoFillBackground(True)
         qt_window.setFocusPolicy(QtCore.Qt.WheelFocus)
         qt_window.setMouseTracking(True)
-        qt_window.setSizePolicy(QtGui.QSizePolicy.Expanding,
-                                QtGui.QSizePolicy.Expanding)
+        qt_window.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                QtWidgets.QSizePolicy.Expanding)
 
     def closeEvent(self, event):
         self._enable_window.cleanup()
@@ -151,6 +152,7 @@ class _QtWindowHandler(object):
 
         return qt_size_hint
 
+
     #------------------------------------------------------------------------
     # Qt Drag and drop event handlers
     #------------------------------------------------------------------------
@@ -181,7 +183,7 @@ class _QtWindowHandler(object):
             event.accept()
 
 
-class _QtWindow(QtGui.QWidget):
+class _QtWindow(QtWidgets.QWidget):
     """ The Qt widget that implements the enable control. """
 
     def __init__(self, parent, enable_window):
@@ -307,14 +309,14 @@ class _QtGLWindow(QtOpenGL.QGLWidget):
 
 class _Window(AbstractWindow):
 
-    control = Instance(QtGui.QWidget)
+    control = Instance(QtWidgets.QWidget)
 
     def __init__(self, parent, wid=-1, pos=None, size=None, **traits):
         AbstractWindow.__init__(self, **traits)
 
         self._mouse_captured = False
 
-        if isinstance(parent, QtGui.QLayout):
+        if isinstance(parent, QtWidgets.QLayout):
             parent = parent.parentWidget()
         self.control = self._create_control(parent, self)
 
@@ -334,16 +336,16 @@ class _Window(AbstractWindow):
         self._drag_result = DRAG_RESULTS_MAP[result]
         return
 
-    def _capture_mouse(self):
+    def _capture_mouse ( self ):
         "Capture all future mouse events"
         # Nothing needed with Qt.
         pass
 
-    def _release_mouse(self):
+    def _release_mouse ( self ):
         "Release the mouse capture"
         # Nothing needed with Qt.
         pass
-
+    
     def _create_key_event(self, event_type, event):
         focus_owner = self.focus_owner
 
@@ -360,7 +362,7 @@ class _Window(AbstractWindow):
             # Convert the keypress to a standard enable key if possible, otherwise
             # to text.
             key_code = event.key()
-            key = KEY_MAP.get(key_code)
+            key = KEY_MAP.get(key_code)    
             if key is None:
                 key = chr(key_code).lower()
 
@@ -372,16 +374,13 @@ class _Window(AbstractWindow):
 
         modifiers = event.modifiers()
 
-        return KeyEvent(
-            event_type=event_type,
-            character=key,
-            x=x,
-            y=self._flip_y(y),
-            alt_down=bool(modifiers & QtCore.Qt.AltModifier),
-            shift_down=bool(modifiers & QtCore.Qt.ShiftModifier),
-            control_down=bool(modifiers & QtCore.Qt.ControlModifier),
-            event=event,
-            window=self)
+        return KeyEvent(event_type=event_type, character=key, x=x,
+                        y=self._flip_y(y),
+                        alt_down=bool(modifiers & QtCore.Qt.AltModifier),
+                        shift_down=bool(modifiers & QtCore.Qt.ShiftModifier),
+                        control_down=bool(modifiers & QtCore.Qt.ControlModifier),
+                        event=event,
+                        window=self)
 
     def _create_mouse_event(self, event):
         # If the control no longer exists, don't send mouse event
@@ -412,20 +411,17 @@ class _Window(AbstractWindow):
         else:
             mouse_wheel = 0
 
-        return MouseEvent(
-            x=x,
-            y=self._flip_y(y),
-            mouse_wheel=mouse_wheel,
-            alt_down=bool(modifiers & QtCore.Qt.AltModifier),
-            shift_down=bool(modifiers & QtCore.Qt.ShiftModifier),
-            control_down=bool(modifiers & QtCore.Qt.ControlModifier),
-            left_down=bool(buttons & QtCore.Qt.LeftButton),
-            middle_down=bool(buttons & QtCore.Qt.MidButton),
-            right_down=bool(buttons & QtCore.Qt.RightButton),
-            window=self)
+        return MouseEvent(x=x, y=self._flip_y(y), mouse_wheel=mouse_wheel,
+                alt_down=bool(modifiers & QtCore.Qt.AltModifier),
+                shift_down=bool(modifiers & QtCore.Qt.ShiftModifier),
+                control_down=bool(modifiers & QtCore.Qt.ControlModifier),
+                left_down=bool(buttons & QtCore.Qt.LeftButton),
+                middle_down=bool(buttons & QtCore.Qt.MidButton),
+                right_down=bool(buttons & QtCore.Qt.RightButton),
+                window=self)
 
     def _create_drag_event(self, event):
-
+        
         # If the control no longer exists, don't send mouse event
         if self.control is None:
             return None
@@ -440,21 +436,16 @@ class _Window(AbstractWindow):
             y = pos.y()
 
         self.control.handler.last_mouse_pos = (x, y)
-
+        
         # extract an object from the event, if we can
         try:
             mimedata = event.mimeData()
             copy = event.proposedAction() == QtCore.Qt.CopyAction
         except AttributeError:
             # this is a DragLeave event
-            return DragEvent(
-                x=x,
-                y=self._flip_y(y),
-                obj=None,
-                copy=False,
-                window=self,
-                mimedata=None)
-
+            return DragEvent(x=x, y=self._flip_y(y), obj=None, copy=False,
+                        window=self, mimedata=None)
+            
         try:
             from traitsui.qt4.clipboard import PyMimeData
         except ImportError:
@@ -473,14 +464,9 @@ class _Window(AbstractWindow):
                         obj = [File(path=path) for path in files]
                     except ImportError:
                         pass
-
-        return DragEvent(
-            x=x,
-            y=self._flip_y(y),
-            obj=obj,
-            copy=copy,
-            window=self,
-            mimedata=mimedata)
+        
+        return DragEvent(x=x, y=self._flip_y(y), obj=obj, copy=copy,
+                        window=self, mimedata=mimedata)
 
     def _redraw(self, coordinates=None):
         if self.control:
@@ -520,12 +506,13 @@ class _Window(AbstractWindow):
 
     def _on_key_pressed(self, event):
         return self._handle_key_event('key_pressed', event)
-
+    
     def get_pointer_position(self):
         pos = self.control.mapFromGlobal(QtGui.QCursor.pos())
         x = pos.x()
         y = self._flip_y(pos.y())
         return x, y
+            
 
     #------------------------------------------------------------------------
     # Private methods
