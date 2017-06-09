@@ -102,9 +102,9 @@ namespace agg24
             window_dc = wx.PaintDC(window)
         arr = self.convert_to_rgbarray()
         sz = arr.shape[:2]
-        image = wx.EmptyImage(*sz)
+        image = wx.Image(*sz)
         image.SetDataBuffer(arr.data)
-        bmp = wx.BitmapFromImage(image)#, depth=-1)
+        bmp = wx.Bitmap(image)#, depth=-1)
 
         #window_dc.BeginDrawing()
         window_dc.DrawBitmap(bmp,x,y)
