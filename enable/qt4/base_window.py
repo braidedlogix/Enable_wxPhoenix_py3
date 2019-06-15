@@ -405,7 +405,7 @@ class _Window(AbstractWindow):
         # A bit crap, because AbstractWindow was written with wx in mind, and
         # we treat wheel events like mouse events.
         if isinstance(event, QtGui.QWheelEvent):
-            delta = event.delta()
+            delta = event.angleDelta()
             degrees_per_step = 15.0
             mouse_wheel = delta / float(8 * degrees_per_step)
         else:
